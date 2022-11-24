@@ -14,10 +14,8 @@ void resign() {}
 
 void setUp() {}
 
-
-
-
 int main() {
+    ScoreBoard sb{0,0};
     bool inGame = false;
     std::string command;
     char board[8][8];
@@ -34,5 +32,9 @@ int main() {
         } else if (command == "setup") {
             setUp();
         }
+    }
+
+    if (std::cin.eof()){
+        std::cout << sb;
     }
 }
