@@ -7,12 +7,15 @@
 
 class ScoreBoard {
     int white;
-    int blank;
+    int black;
 
 public:
     ScoreBoard(int white, int black);
     ~ScoreBoard();
     std::ostream &operator<<(std::ostream & out);
+public:
+    void addToWhite(int value);
+    void addToBlack(int value);
 };
 
 
