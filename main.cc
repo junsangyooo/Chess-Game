@@ -6,8 +6,13 @@
 #include <utility>
 #include <stdexcept>
 #include <vector>
+#include "scoreboard.h"
 
-newGame();
+void newGame() {}
+
+void resign() {}
+
+void setUp() {}
 
 
 
