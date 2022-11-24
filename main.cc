@@ -7,6 +7,8 @@
 #include <stdexcept>
 #include <vector>
 
+newGame();
+
 
 
 
