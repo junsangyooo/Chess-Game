@@ -22,7 +22,7 @@ int main() {
     std::string command;
     char board[8][8];
     while (std::cin >> command) {
-        if (command == "gmae"){
+        if (command == "game"){
             for (int i = 0; i < 8; i ++) {
                 for (int j = 0; j < 8; j++) {
                     board[i][j] = '-';
