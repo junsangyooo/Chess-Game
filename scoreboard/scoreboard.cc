@@ -6,10 +6,12 @@
 
 ScoreBoard::ScoreBoard(int white, int black): white(white), black(black) {}
 ScoreBoard::~ScoreBoard() {}
-std::ostream& ScoreBoard::operator<<(std::ostream &out) {
-    out << "Final Score:" << std::endl;
-    out << "White: " << white << std::endl;
-    out << "Black: " << black << std::endl;
+
+int ScoreBoard::getWhite() {
+    return white;
+}
+int ScoreBoard::getBlack() {
+    return black;
 }
 
 void ScoreBoard::addToWhite(int value) {
@@ -17,4 +19,10 @@ void ScoreBoard::addToWhite(int value) {
 }
 void ScoreBoard::addToBlack(int value) {
     black += value;
+}
+
+std::ostream& operator<<(std::ostream &out, const ScoreBoard& sb) {
+    out << "Final Score:" << std::endl;
+    out << "White: " << sb.white << std::endl;
+    out << "Black: " << sb.black << std::endl;
 }

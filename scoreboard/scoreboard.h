@@ -8,15 +8,18 @@
 class ScoreBoard {
     int white;
     int black;
-
+    friend std::ostream &operator<<(std::ostream &out, const ScoreBoard &sb);
 public:
     ScoreBoard(int white, int black);
     ~ScoreBoard();
-    std::ostream &operator<<(std::ostream & out);
 public:
+    int getWhite();
+    int getBlack();
     void addToWhite(int value);
     void addToBlack(int value);
 };
+
+std::ostream& operator<<(std::ostream &out, const ScoreBoard& sb);
 
 
 #endif
