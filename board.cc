@@ -37,3 +37,10 @@ Board::Board() {
     bd[7][6] = 'N';
     bd[7][7] = 'R';
 }
+
+char Board::charAt(Position posn) {
+    int col = posn % 10;
+    int row = posn / 10;
+    char piece = bd[row][col];
+    return piece;
+}
