@@ -10,8 +10,6 @@
 #include <vector>
 
 class Piece {
-    int xpos;
-    int ypos;
 public:
     virtual bool validMove() const = 0;
     virtual ~Piece();

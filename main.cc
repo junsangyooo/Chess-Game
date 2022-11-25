@@ -8,12 +8,13 @@
 #include <vector>
 #include "scoreboard.h"
 #include "pieces.h"
+#include "board.h"
 
 void newGame() {}
 
 void resign() {}
 
-void setUp(Piece[8][8] *board) {
+void setUp(Board &board) {
 
 }
 
@@ -21,7 +22,8 @@ int main() {
     ScoreBoard sb{0, 0};
     bool inGame = false;
     std::string command;
-    Piece* board[8][8];
+    Board board{};
+    
     while (std::cin >> command) {
         if (command == "game"){
             newGame();
