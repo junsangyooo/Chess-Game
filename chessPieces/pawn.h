@@ -3,10 +3,9 @@
 #include "pieces.h"
 
 class Pawn : public Piece {
-    bool firstMove;
     std::string colour;
 public:
-    Pawn(bool isMoved, std::string colour);
+    Pawn(std::string colour);
     bool validMove(Position org_posn, Position new_posn) const override;
     ~Pawn();
 };
