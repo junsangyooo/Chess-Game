@@ -4,13 +4,14 @@
 #include <memory>
 #include <string>
 #include "position.h"
+#include "subject.h"
 
+enum Position;
 class Observer;
 
 class Subject {
     std::vector<std::shared_ptr<Observer>> observers;
-protected:
-    enum Position;
+
 public:
     void attach(std::shared_ptr<Observer> ob);
     void detach(std::shared_ptr<Observer> ob);

@@ -10,9 +10,9 @@
 #include <vector>
 #include "position.h"
 
+enum Position;
+
 class Piece {
-protected:
-    enum Position;
 public:
     virtual bool validMove(Position org_posn, Position new_posn) const = 0;
     virtual ~Piece() = 0;

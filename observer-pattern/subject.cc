@@ -1,15 +1,5 @@
 #include "subject.h"
 
-class Subject {
-    enum Position;
-    std::vector<std::shared_ptr<Observer>> observers;
-public:
-    void attach(std::shared_ptr<Observer> ob);
-    void detach(std::shared_ptr<Observer> ob);
-    void notify();
-    virtual char getPiece(Position posn) const;
-};
-
 void Subject::attach(std::shared_ptr<Observer> ob) {
     observers.emplace_back(ob);
 }

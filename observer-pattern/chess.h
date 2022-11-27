@@ -11,8 +11,14 @@
 #include <memory>
 #include "subject.h"
 #include "board.h"
+#include "king.h"
+#include "queen.h"
+#include "knight.h"
+#include "bishop.h"
+#include "rook.h"
+#include "pawn.h"
 
-class Chess : Subject{
+class Chess : public Subject{
     std::vector<std::shared_ptr<Board>> boards;
     std::shared_ptr<Board> board;
     bool isCheck(std::shared_ptr<Board> bd);
@@ -22,6 +28,8 @@ public:
     void movePiece(Position org_posn, Position new_posn);
     char getPiece(Position posn) const override;
     std::shared_ptr<Board> getBoard() {return boards.back();}
+public:
+    Chess(std::shared_ptr<Board> bd);
 };
 
 #endif
