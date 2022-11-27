@@ -2,6 +2,7 @@
 #define _CONTROLLER_H_
 #include <string>
 #include <utility>
+#include <memory>
 #include "chess.h"
 
 class Controller {

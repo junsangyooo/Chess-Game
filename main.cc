@@ -6,6 +6,7 @@
 #include <utility>
 #include <stdexcept>
 #include <vector>
+#include <memory>
 #include "scoreboard.h"
 #include "pieces.h"
 #include "board.h"
