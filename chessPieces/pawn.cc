@@ -1,11 +1,11 @@
 #include "pawn.h"
 
-Pawn::Pawn(std::string colour): colour{colour} {}
+Pawn::Pawn(char piece, std::string colour): piece{piece}, colour{colour} {}
 
 bool Pawn::validMove(Position org_posn, Position new_posn) const {
     if (org_posn == new_posn) return false;
     bool firstMove = false;
-    if (colour == "white") {
+    if (colour == "White") {
         if (60 <= org_posn && org_posn <= 67) {
             firstMove = true;
         }

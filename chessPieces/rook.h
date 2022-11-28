@@ -3,9 +3,15 @@
 #include "pieces.h"
 
 class Rook : public Piece {
+    char piece;
+    std::string colour;
+public:
+    Rook(char piece, std::string colour);
+    ~Rook();
 public:
     bool validMove(Position org_posn, Position new_posn) const override;
-    ~Rook();
+    char getPiece() const override {return piece;}
+    std::string getColour() const override{return colour;}
 };
 
 #endif

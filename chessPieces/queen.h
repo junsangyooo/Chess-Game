@@ -3,9 +3,15 @@
 #include "pieces.h"
 
 class Queen : public Piece {
+    char piece;
+    std::string colour;
+public:
+    Queen(char piece, std::string colour);
+    ~Queen();
 public:
     bool validMove(Position org_posn, Position new_posn) const override;
-    ~Queen();
+    char getPiece() const override {return piece;}
+    std::string getColour() const override{return colour;}
 };
 
 #endif

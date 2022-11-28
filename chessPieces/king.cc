@@ -1,5 +1,7 @@
 #include "king.h"
 
+King::King(char piece, std::string colour): piece{piece}, colour{colour} {}
+
 bool King::validMove(Position org_posn, Position new_posn) const {
     if (org_posn == new_posn) return false;
     if (new_posn + 1 == org_posn || new_posn - 1 == org_posn) {

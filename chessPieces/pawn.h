@@ -3,11 +3,15 @@
 #include "pieces.h"
 
 class Pawn : public Piece {
+    char piece;
     std::string colour;
 public:
-    Pawn(std::string colour);
-    bool validMove(Position org_posn, Position new_posn) const override;
+    Pawn(char piece, std::string colour);
     ~Pawn();
+public:
+    bool validMove(Position org_posn, Position new_posn) const override;
+    char getPiece() const override {return piece;}
+    std::string getColour() const override{return colour;}
 };
 
 #endif

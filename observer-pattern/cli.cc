@@ -21,6 +21,6 @@ Cli::Cli(std::shared_ptr<Chess> chess): chess{chess} {
 }
 
 Cli::~Cli() {
-    auto tmp = std::make_shared<Cli>{this};
+    auto tmp = std::make_shared<Cli>(this);
     chess->detach(this);
 }

@@ -14,8 +14,11 @@ enum Position;
 
 class Piece {
 public:
-    virtual bool validMove(Position org_posn, Position new_posn) const = 0;
     virtual ~Piece() = 0;
+public:
+    virtual bool validMove(Position org_posn, Position new_posn) const = 0;
+    virtual char getPiece() const = 0;
+    virtual std::string getColour() const = 0;
 };
 
 #endif
