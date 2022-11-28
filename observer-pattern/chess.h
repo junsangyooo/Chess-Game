@@ -9,6 +9,7 @@
 #include <stdexcept>
 #include <vector>
 #include <memory>
+#include "move.h"
 #include "subject.h"
 #include "board.h"
 #include "king.h"
@@ -19,15 +20,16 @@
 #include "pawn.h"
 
 class Chess : public Subject{
-    std::vector<std::shared_ptr<Board>> boards;
+    std::vector<std::shared_ptr<Move>> moves;
     std::shared_ptr<Board> board;
     bool isCheck(std::shared_ptr<Board> bd);
     bool isCheckMate(std::shared_ptr<Board> bd);
     bool isStaleMate(std::shared_ptr<Board> bd);
+    bool whiteTurn = true;
 public:
     void movePiece(Position org_posn, Position new_posn);
     char getPiece(Position posn) const override;
-    std::shared_ptr<Board> getBoard() {return boards.back();}
+    std::shared_ptr<Board> getBoard() {return board;}
 public:
     Chess(std::shared_ptr<Board> bd);
 };

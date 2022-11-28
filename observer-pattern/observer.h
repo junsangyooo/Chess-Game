@@ -1,6 +1,7 @@
 #ifndef _OBSERVER_H_
 #define _OBSERVER_H_
 #include <string>
+#include "subject.h"
 class Subject;
 
 class Observer {

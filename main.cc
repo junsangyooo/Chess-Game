@@ -14,7 +14,11 @@
 enum Position;
 
 void newGame(std::shared_ptr<Board> &board) {
-
+    std::string player1;
+    std::string player2;
+    std::cin >> player1 >> player2;
+    
+    auto chess = std::make_shared<Chess>(board);
 }
 
 void resign() {}
@@ -30,7 +34,6 @@ int main() {
     bool inGame = false;
     std::string command;
     auto board = std::make_shared<Board>();
-    
     while (std::cin >> command) {
         if (command == "exit") {
             std::cout << sb;
