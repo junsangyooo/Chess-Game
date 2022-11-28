@@ -44,8 +44,8 @@ Board::Board() {
 
     auto king_b = std::make_shared<King>('k', "Black");
     auto queen_b = std::make_shared<Queen>('q', "Black");
-    bd[0][3] = king_b;
-    bd[0][4] = queen_b;
+    bd[0][4] = king_b;
+    bd[0][3] = queen_b;
 
     auto king_w = std::make_shared<King>('K', "White");
     auto queen_w = std::make_shared<Queen>('Q', "White");
@@ -86,4 +86,24 @@ void Board::move(Position org_posn, Position new_posn) {
         auto empty = std::make_shared<Empty>('-');
         bd[org_row][org_col] = empty;
     }
+}
+
+std::shared_ptr<Piece> Board::pieceAt(Position posn) {
+    int col = posn % 10;
+    int row = posn / 10;
+    return bd[row][col];
+}
+
+std::string Board::colourAt(Position posn) {
+    int col = posn % 10;
+    int row = posn / 10;
+    std::string colour = bd[row][col]->getColour();
+    return colour;
+}
+
+bool Board::getFirstMove(Position posn) {
+    int col = posn % 10;
+    int row = posn / 10;
+    bool firstMove = bd[row][col]->getFirstMove();
+    return firstMove;
 }

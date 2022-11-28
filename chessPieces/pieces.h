@@ -16,9 +16,10 @@ class Piece {
 public:
     virtual ~Piece() = 0;
 public:
-    virtual bool validMove(Position org_posn, Position new_posn) const = 0;
     virtual char getPiece() const = 0;
     virtual std::string getColour() const = 0;
+    virtual bool getFirstMove() const = 0;
+    virtual void setFirstMove(bool value) = 0;
 };
 
 #endif

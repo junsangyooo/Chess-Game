@@ -5,13 +5,15 @@
 class Knight : public Piece {
     char piece;
     std::string colour;
+    bool firstMove = true;
 public:
     Knight(char piece, std::string colour);
     ~Knight();
 public:
-    bool validMove(Position org_posn, Position new_posn) const override;
     char getPiece() const override {return piece;}
     std::string getColour() const override{return colour;}
+    bool getFirstMove() const override {return firstMove;}
+    void setFirstMove(bool value) override {firstMove = value;}
 };
 
 #endif

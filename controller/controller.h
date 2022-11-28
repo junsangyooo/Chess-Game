@@ -4,10 +4,12 @@
 #include <utility>
 #include <memory>
 #include "chess.h"
+#include "move.h"
 
 class Controller {
-    auto chess = std::make_shared<Chess>();
+    std::shared_ptr<Chess> chess;
 public:
+    Controller(std::shared_ptr<Chess> cs);
     void move(std::string org_posn, std::string new_posn);
     void computerMove();
 };

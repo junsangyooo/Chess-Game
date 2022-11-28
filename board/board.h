@@ -10,6 +10,9 @@ public:
     ~Board();
     char charAt(Position posn);
     void move(Position org_posn, Position new_posn);
+    std::shared_ptr<Piece> pieceAt(Position posn);
+    std::string colourAt(Position posn);
+    bool getFirstMove(Position posn);
 };
 
 #endif
