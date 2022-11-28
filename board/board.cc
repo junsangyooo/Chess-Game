@@ -65,6 +65,75 @@ Board::Board() {
     }
 }
 
+Board::Board(const std::shared_ptr<Board> other) {
+    for(int i = 0; i < 7; ++i) {
+        for (int j = 0; j < 7; ++j) {
+            auto piece = std::make_shared<Piece>(other->getPiece(Position(i*10 + j)));
+            bd[i][j] = piece;
+        }
+    }
+}
+Board::~Board() {}
+
+void Board::enPassant(Position org_posn, Position new_posn) {
+    int org_col = org_posn % 10;
+    int org_row = org_posn / 10;
+    int new_col = new_posn % 10;
+    int new_row = new_posn / 10;
+    bd[new_row][new_col] = bd[org_row][org_col];    
+    int blank = org_col + org_row;
+    if (blank % 2 == 0) {
+        auto empty = std::make_shared<Empty>(' ');
+        bd[org_row][org_col] = empty;
+    } else {
+        auto empty = std::make_shared<Empty>('-');
+        bd[org_row][org_col] = empty;
+    }
+    if ((org_row + new_col) % 2 == 0) {
+        auto empty = std::make_shared<Empty>(' ');
+        bd[org_row][new_col] = empty;
+    } else {
+        auto empty = std::make_shared<Empty>('-');
+        bd[org_row][new_col] = empty;
+    }
+}
+
+void Board::castling(Position org_posn, Position new_posn) {
+    int org_col = org_posn % 10;
+    int org_row = org_posn / 10;
+    int new_col = new_posn % 10;
+    int org_blank = org_col + org_row;
+    bd[org_row][new_col] = bd[org_row][org_col];
+    if (org_blank % 2 == 0) {
+        auto empty = std::make_shared<Empty>(' ');
+        bd[org_row][org_col] = empty;
+    } else {
+        auto empty = std::make_shared<Empty>('-');
+        bd[org_row][org_col] = empty;
+    }
+    if (new_posn > org_posn) {
+        bd[org_row][new_col - 1] = bd[org_row][new_col + 1];
+        int new_blank = org_row + new_col + 1;
+        if (new_blank % 2 == 0) {
+            auto empty = std::make_shared<Empty>(' ');
+            bd[org_row][new_col + 1] = empty;
+        } else {
+            auto empty = std::make_shared<Empty>('-');
+            bd[org_row][new_col + 1] = empty;
+        }
+    } else {
+        bd[org_row][new_col + 1] = bd[org_row][new_col - 2];
+        int new_blank = org_row + new_col - 2;
+        if (new_blank % 2 == 0) {
+            auto empty = std::make_shared<Empty>(' ');
+            bd[org_row][new_col - 2] = empty;
+        } else {
+            auto empty = std::make_shared<Empty>('-');
+            bd[org_row][new_col - 2] = empty;
+        }
+    }
+}
+
 char Board::charAt(Position posn) {
     int col = posn % 10;
     int row = posn / 10;
@@ -106,4 +175,16 @@ bool Board::getFirstMove(Position posn) {
     int row = posn / 10;
     bool firstMove = bd[row][col]->getFirstMove();
     return firstMove;
+}
+
+void Board::setFirstMove(Position posn, bool value) {
+    int col = posn % 10;
+    int row = posn / 10;
+    bd[row][col]->setFirstMove(value);
+}
+
+std::shared_ptr<Piece> Board::getPiece(Position posn) {
+    int col = posn % 10;
+    int row = posn / 10;
+    return bd[row][col];
 }
