@@ -7,11 +7,33 @@ void exception() {
 }
 
 std::string Chess::isCheck(std::shared_ptr<Board> bd) {
+    bool check = false;
+    std::string colour = "White";
+    Position whiteKing;
+    Position blackKing;
+    for (int i = 0; i < 8; ++i) {
+        for (int j = 0; j < 8; ++j) {
+            if (bd->charAt(Position(i*10 + j)) == 'K'){
+                whiteKing = Position(i*10 + j);
+            } else if (bd->charAt(Position(i*10 + j)) == 'k'){
+                blackKing = Position(i*10 + j);
+            }
+        }
+    }
+    for (int i = 0; i < 8; ++i) {
+        for (int j = 0; j < 8; ++j) {
+            Position posn = Position(i*10 + j);
+            char piece = bd->charAt(posn);
+            if (piece == 'p') {
+                if (posn )
+            }
+        }
+    }
 
 }
 
 std::string Chess::isStaleMate() {
-    
+
 }
 
 void Chess::enPassant(std::shared_ptr<Move> movement) {
