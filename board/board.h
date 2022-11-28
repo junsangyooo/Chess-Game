@@ -5,6 +5,8 @@
 
 class Board {
     std::shared_ptr<Piece> bd[8][8];
+    Position whiteKing;
+    Position blackKing;
 public:
     Board();
     ~Board();
@@ -18,6 +20,12 @@ public:
     void enPassant(Position org_posn, Position new_posn);
     void castling(Position org_posn, Position new_posn);
     std::shared_ptr<Piece> getPiece(Position posn);
+    bool getIsChecked(Position posn) const;
+    void setIsChecked(Position posn, bool value);
+    Position getWhiteKing() const {return whiteKing;}
+    Position getBlickKing() const {return blackKing;}
+    void setWhiteKing(Position value) {whiteKing = value;}
+    void setBlackKing(Position value) {blackKing = value;}
 };
 
 #endif

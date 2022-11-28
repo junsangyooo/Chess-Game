@@ -20,6 +20,8 @@ public:
     virtual std::string getColour() const = 0;
     virtual bool getFirstMove() const = 0;
     virtual void setFirstMove(bool value) = 0;
+    virtual bool getIsChecked() const = 0;
+    virtual void setIsChecked(bool value) = 0;
 };
 
 #endif

@@ -26,7 +26,6 @@ class Chess : public Subject{
     std::string isStaleMate();
     void enPassant(std::shared_ptr<Move> movement);
     void castling(std::shared_ptr<Move> movement);
-    void validMove(std::shared_ptr<Move> movement);
     void validPawn(std::shared_ptr<Move> movement);
     void validKing(std::shared_ptr<Move> movement);
     void validQueen(std::shared_ptr<Move> movement);

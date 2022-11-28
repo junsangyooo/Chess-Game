@@ -45,12 +45,14 @@ Board::Board() {
     auto king_b = std::make_shared<King>('k', "Black");
     auto queen_b = std::make_shared<Queen>('q', "Black");
     bd[0][4] = king_b;
+    blackKing = Position(4);
     bd[0][3] = queen_b;
 
     auto king_w = std::make_shared<King>('K', "White");
     auto queen_w = std::make_shared<Queen>('Q', "White");
     bd[7][3] = queen_w;
     bd[7][4] = king_w;
+    whiteKing = Position(74);
 
     for (int i = 2; i < 5; i++) {
         for (int j = 0; j < 8; j++) {
@@ -187,4 +189,16 @@ std::shared_ptr<Piece> Board::getPiece(Position posn) {
     int col = posn % 10;
     int row = posn / 10;
     return bd[row][col];
+}
+
+
+bool Board::getIsChecked(Position posn) const {
+    int col = posn % 10;
+    int row = posn / 10;
+    return bd[row][col]->getIsChecked(); 
+}
+void Board::setIsChecked(Position posn, bool value) {
+    int col = posn % 10;
+    int row = posn / 10;
+    bd[row][col]->setIsChecked(value);
 }

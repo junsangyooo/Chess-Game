@@ -98,6 +98,7 @@ void Chess::validBishop(std::shared_ptr<Move> movement) {
         char piece = board->charAt(Position(i));
         if (piece != ' ' && piece != '-') {exception();}
     }
+
     return;
 }
 void Chess::validKing(std::shared_ptr<Move> movement) {
@@ -199,12 +200,17 @@ void Chess::validPawn(std::shared_ptr<Move> movement) {
     return;
 }
 
-void Chess::validMove(std::shared_ptr<Move> movement) {
+//Controller calls movePiece function with the movement of next turn.
+void Chess::movePiece(std::shared_ptr<Move> movement) {
     Position org_posn = movement->getOrg();
     Position new_posn = movement->getNew();
+
+     // Check whether the move does not change anything.
     if (org_posn == new_posn) {
         throw std::out_of_range {"Move a piece!!"};
     }
+
+    // Check whether the piece would be captured has the same colour of the moving piece.
     std::string colour = board->colourAt(org_posn);
     std::string colour_new = board->colourAt(new_posn);
     if (whiteTurn) {
@@ -218,60 +224,95 @@ void Chess::validMove(std::shared_ptr<Move> movement) {
         }
         if (colour_new == "Black") {exception();}
     }
-    char piece = board->charAt(org_posn);
-    if (piece == ' ' || piece == '-') {exception();}
-    else if (piece == 'k' || piece == 'K') {validKing(movement);}
-    else if (piece == 'q' || piece == 'Q') {validQueen(movement);}
-    else if (piece == 'b' || piece == 'B') {validBishop(movement);}
-    else if (piece == 'n' || piece == 'N') {validKnight(movement);}
-    else if (piece == 'r' || piece == 'R') {validRook(movement);}
-    else {validPawn(movement);}
-    return;
-}
 
-void Chess::movePiece(std::shared_ptr<Move> movement) {
-    Position org_posn = movement->getOrg();
-    Position new_posn = movement->getNew();
-    try {
-        validMove(movement);
-    }
-    catch(const std::out_of_range& e) {throw e;}
+    // Check valid movement based on each moving piece type.
     char piece = board->charAt(org_posn);
-    if (piece == 'p' || piece == 'P') {
-        if (org_posn - 11 == new_posn || new_posn == org_posn - 9 || 
-        org_posn + 9 == new_posn || new_posn == org_posn + 11) {
-            if (board->colourAt(new_posn) == "") {
-                try{enPassant(movement);} 
-                catch (const std::out_of_range& e) {throw e;}
-            }
-        }
-        Position captured;
-        if (piece == 'p') {
-            captured = Position(new_posn - 10);
-        } else {
-            captured = Position(new_posn + 10);
-        }
-        movement->setCaptured(board->getPiece(captured));
-        board->enPassant(org_posn, new_posn);
-    } else if (piece == 'k' || piece == 'K') {
-        if (new_posn + 2 == org_posn || new_posn - 2 == org_posn) {
+    // If the moving piece is Empty, throw an exception.
+    if (piece == ' ' || piece == '-') {exception();}
+    else if (piece == 'k' || piece == 'K') {    //Check King move
+        try {validKing(movement);}      // Check general valid move
+        catch (std::out_of_range &e) {throw e;}
+        if (new_posn + 2 == org_posn || new_posn - 2 == org_posn) { // Check Castling
             try {castling(movement);}
             catch(const std::out_of_range& e) {throw e;}
+            movement->setCaptured(board->getPiece(new_posn));   // If castling is valid
+            board->castling(org_posn, new_posn);    // Change board in castling form
+        } else {
+            movement->setCaptured(board->getPiece(new_posn));// If the movement is not castling and valid
+            board->move(org_posn, new_posn);    // Change the board
         }
-        movement->setCaptured(board->getPiece(new_posn));
-        board->castling(org_posn, new_posn);
-    } else {
-        board->move(org_posn, new_posn);
-        movement->setCaptured(board->getPiece(new_posn));
+        if (piece == 'k') {
+            board->setBlackKing(new_posn);  // Change the position of King piece
+        } else {
+            board->setWhiteKing(new_posn);  // Change the position of King piece
+        }
     }
+    else if (piece == 'q' || piece == 'Q') {    //Check Queen move
+        try{validQueen(movement);}  //Check general valid move of Queen piece.
+        catch (std::out_of_range &e) {throw e;} //If the move is invalid, throw and exception.
+        movement->setCaptured(board->getPiece(new_posn));
+        board->move(org_posn, new_posn);
+    }
+    else if (piece == 'b' || piece == 'B') {    //Check Bishop move
+        try{validBishop(movement);}  //Check general valid move of Bishop piece.
+        catch (std::out_of_range &e) {throw e;} //If the move is invalid, throw and exception.
+        movement->setCaptured(board->getPiece(new_posn));
+        board->move(org_posn, new_posn);
+    }
+    else if (piece == 'n' || piece == 'N') {    //Check Knight move
+        try{validKnight(movement);}  //Check general valid move of Knight piece.
+        catch (std::out_of_range &e) {throw e;} //If the move is invalid, throw and exception.
+        movement->setCaptured(board->getPiece(new_posn));
+        board->move(org_posn, new_posn);
+    }
+    else if (piece == 'r' || piece == 'R') {    //Check Rook move
+        try{validRook(movement);}  //Check general valid move of Rook piece.
+        catch (std::out_of_range &e) {throw e;} //If the move is invalid, throw and exception.
+        movement->setCaptured(board->getPiece(new_posn));
+        board->move(org_posn, new_posn);
+    }
+    else {  //Check Pawn move
+        try{validPawn(movement);}  //Check general valid move of Pawn piece.
+        catch (std::out_of_range &e) {throw e;}
+        //Check En Passant
+        if (org_posn - 11 == new_posn || new_posn == org_posn - 9 || org_posn + 9 == new_posn || new_posn == org_posn + 11) {
+            if (board->colourAt(new_posn) == "") { //Check whether there is no piece on new_posn.
+                try{enPassant(movement);}   // Check whether the enPassant is valid.
+                catch (const std::out_of_range& e) {throw e;}
+                Position captured;
+                if (piece == 'p') {
+                    captured = Position(new_posn - 10);
+                } else {
+                    captured = Position(new_posn + 10);
+                }
+                movement->setCaptured(board->getPiece(captured));
+                board->enPassant(org_posn, new_posn);
+            } else {    //If the movement is not En Passant and the pawn captured other piece.
+                movement->setCaptured(board->getPiece(new_posn));
+                board->move(org_posn, new_posn);
+            }
+        } else {    //If the movement is valid and moved ahead (no caputre)
+            movement->setCaptured(board->getPiece(new_posn));
+            board->move(org_posn, new_posn);
+        }
+    }
+
+    //Now we know the movement is valid
+    //Store the movement in the vector, moves.
     moves.emplace_back(movement);
+    //Change the turn
+    whiteTurn = !whiteTurn;
+
+    //Now determines whether there is check, checkmate, or stalemate
     std::string check = isCheck(board);
     if (check == "") {
         check = isStaleMate();
     }
+    //Notify to the observers to display the board.
     notify(check);
 }
 
+// Observers call getPiece function to get the piece which is on the Position
 char Chess::getPiece(Position posn) const {
     return board->charAt(posn);
 }
