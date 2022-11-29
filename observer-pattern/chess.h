@@ -36,9 +36,9 @@ class Chess : public Subject{
     bool validBishop(std::shared_ptr<Move> movement);
     bool validKnight(std::shared_ptr<Move> movement);
     bool validMove(std::shared_ptr<Move> movement, bool whiteTurn);
+    void undo();
     //bool whiteTurn = true;
 public:
-    void undo(bool notify);
     bool movePiece(std::shared_ptr<Move> movement, bool whiteTurn);
     char getPiece(Position posn) const override;
     std::shared_ptr<Board> getBoard() {return board;}
