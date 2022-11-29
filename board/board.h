@@ -23,7 +23,7 @@ public:
     bool getIsChecked(Position posn) const;
     void setIsChecked(Position posn, bool value);
     Position getWhiteKing() const {return whiteKing;}
-    Position getBlickKing() const {return blackKing;}
+    Position getBlackKing() const {return blackKing;}
     void setWhiteKing(Position value) {whiteKing = value;}
     void setBlackKing(Position value) {blackKing = value;}
     void setPiece(Position posn, std::shared_ptr<Piece> piece);

@@ -10,7 +10,7 @@ class Controller {
     std::shared_ptr<Chess> chess;
 public:
     Controller(std::shared_ptr<Chess> cs);
-    void move(std::string org_posn, std::string new_posn);
+    bool move(std::string org_posn, std::string new_posn);
     void computerMove();
 };
 

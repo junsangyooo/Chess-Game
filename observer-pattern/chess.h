@@ -28,12 +28,12 @@ class Chess : public Subject{
     std::string isStaleMate();
     void enPassant(std::shared_ptr<Move> movement);
     void castling(std::shared_ptr<Move> movement);
-    void validPawn(std::shared_ptr<Move> movement);
-    void validKing(std::shared_ptr<Move> movement);
-    void validQueen(std::shared_ptr<Move> movement);
-    void validRook(std::shared_ptr<Move> movement);
-    void validBishop(std::shared_ptr<Move> movement);
-    void validKnight(std::shared_ptr<Move> movement);
+    bool validPawn(std::shared_ptr<Move> movement);
+    bool validKing(std::shared_ptr<Move> movement);
+    bool validQueen(std::shared_ptr<Move> movement);
+    bool validRook(std::shared_ptr<Move> movement);
+    bool validBishop(std::shared_ptr<Move> movement);
+    bool validKnight(std::shared_ptr<Move> movement);
     bool whiteTurn = true;
 public:
     void undo(bool notify);
@@ -41,7 +41,7 @@ public:
     char getPiece(Position posn) const override;
     std::shared_ptr<Board> getBoard() {return board;}
 public:
-    Chess(std::shared_ptr<Board> bd);
+    Chess(std::shared_ptr<Board> bd, std::shared_ptr<ScoreBoard> scoreboard);
 };
 
 #endif

@@ -1,40 +1,181 @@
 #include "chess.h"
 
-Chess::Chess(std::shared_ptr<Board> bd): board{bd} {}
+Chess::Chess(std::shared_ptr<Board> bd, std::shared_ptr<ScoreBoard> sb): board{bd}, score{sb} {}
 
 void exception() {
     throw std::out_of_range {"Invalid Move!"};
 }
 
-std::string Chess::isCheck() {
-    bool check = false;
-    std::string colour = "White";
-    Position whiteKing;
-    Position blackKing;
-    for (int i = 0; i < 8; ++i) {
-        for (int j = 0; j < 8; ++j) {
-            if (bd->charAt(Position(i*10 + j)) == 'K'){
-                whiteKing = Position(i*10 + j);
-            } else if (bd->charAt(Position(i*10 + j)) == 'k'){
-                blackKing = Position(i*10 + j);
-            }
-        }
-    }
-    for (int i = 0; i < 8; ++i) {
-        for (int j = 0; j < 8; ++j) {
-            Position posn = Position(i*10 + j);
-            char piece = bd->charAt(posn);
-            if (piece == 'p') {
-                if (posn )
-            }
-        }
-    }
-
-}
-
 std::string Chess::isStaleMate() {
 
 }
+
+
+bool Chess::validBishop(std::shared_ptr<Move> movement) {
+    Position org_posn = movement->getOrg();
+    Position new_posn = movement->getNew();
+    int diff = abs(org_posn - new_posn);
+    int posn = org_posn;
+    int tmp;
+    if (diff% 9 == 0) {tmp = 9;}
+    else if (diff % 11 == 0) {tmp = 11;}
+    else {return false;}
+
+    for (int i = org_posn - tmp; i > new_posn; i -= tmp) {
+        char piece = board->charAt(Position(i));
+        if (piece != ' ' && piece != '-') {return false;}
+    }
+    for (int i = org_posn + tmp; i < new_posn; i += tmp) {
+        char piece = board->charAt(Position(i));
+        if (piece != ' ' && piece != '-') {return false;}
+    }
+
+    return true;
+}
+bool Chess::validKing(std::shared_ptr<Move> movement) {
+    Position org_posn = movement->getOrg();
+    Position new_posn = movement->getNew();
+    if (new_posn + 1 == org_posn || new_posn - 1 == org_posn) {
+        return true;
+    } else if (org_posn - 11 <= new_posn && new_posn <= org_posn - 9) {
+        return true;
+    } else if (org_posn + 9 <= new_posn && new_posn <= org_posn + 11) {
+        return true;
+    } else {return false;}
+}
+bool Chess::validQueen(std::shared_ptr<Move> movement) {
+    Position org_posn = movement->getOrg();
+    Position new_posn = movement->getNew();
+    int diff = abs(org_posn - new_posn);
+    int org_row = org_posn / 10;
+    org_row *= 10;
+    int tmp;
+    if (diff% 9 == 0) {tmp = 9;}
+    else if (diff % 10 == 0) {tmp = 10;}
+    else if (diff % 11 == 0) {tmp = 11;}
+    else if (org_row <= new_posn && new_posn <= org_row+ 7) {tmp = 1;}
+    else {return false;}
+
+    for (int i = org_posn - tmp; i > new_posn; i -= tmp) {
+        char piece = board->charAt(Position(i));
+        if (piece != ' ' && piece != '-') {return false;}
+    }
+    for (int i = org_posn + tmp; i < new_posn; i += tmp) {
+        char piece = board->charAt(Position(i));
+        if (piece != ' ' && piece != '-') {return false;}
+    }
+    return true;
+}
+bool Chess::validRook(std::shared_ptr<Move> movement) {
+    Position org_posn = movement->getOrg();
+    Position new_posn = movement->getNew();
+    int diff = abs(org_posn - new_posn);
+    int org_row = org_posn / 10;
+    org_row *= 10;
+    int tmp;
+    if (diff % 10 == 0) {tmp = 10;}
+    else if (org_row <= new_posn && new_posn <= org_row+ 7) {tmp = 1;}
+    else {return false;}
+    for (int i = org_posn - tmp; i > new_posn; i -= tmp) {
+        char piece = board->charAt(Position(i));
+        if (piece != ' ' && piece != '-') {return false;}
+    }
+    for (int i = org_posn + tmp; i < new_posn; i += tmp) {
+        char piece = board->charAt(Position(i));
+        if (piece != ' ' && piece != '-') {return false;}
+    }
+    return true;
+}
+bool Chess::validKnight(std::shared_ptr<Move> movement) {
+    Position org_posn = movement->getOrg();
+    Position new_posn = movement->getNew();
+    if (new_posn == org_posn - 21 || new_posn == org_posn - 19) {
+        return true;
+    } else if (new_posn == org_posn - 12 || new_posn == org_posn - 8) {
+        return true;
+    } else if (new_posn == org_posn + 8 || new_posn == org_posn + 12) {
+        return true;
+    } else if (new_posn == org_posn + 19 || new_posn == org_posn + 21) {
+        return true;
+    } else {
+        return false;
+    }
+}
+bool Chess::validPawn(std::shared_ptr<Move> movement) {
+    Position org_posn = movement->getOrg();
+    Position new_posn = movement->getNew();
+    std::string colour = board->colourAt(org_posn);
+    char piece = board->charAt(new_posn);
+    bool firstMove = board->getFirstMove(org_posn);
+    if (colour == "White") {
+        if (org_posn - 11 == new_posn || new_posn == org_posn - 9) {
+            return;
+        } else if (org_posn - 10 == new_posn){
+            if (piece != ' ' && piece != '-') {return false;}
+        } else if (firstMove && new_posn == org_posn - 20) {
+            if (piece != ' ' && piece != '-') {return false;}
+        } else {return false;}
+    } else {
+        if (org_posn + 9 == new_posn || new_posn == org_posn + 11) {
+            return;
+        } else if (org_posn + 10 == new_posn) {
+            if (piece != ' ' && piece != '-') {return false;}
+        } else if (firstMove && new_posn == org_posn + 20) {
+            if (piece != ' ' && piece != '-') {return false;}
+        } else {return false;}
+    }
+    return true;
+}
+
+std::string Chess::isCheck() {
+    Position whiteKing = board->getWhiteKing();
+    Position blackKing = board->getBlackKing();
+    bool whiteInCheck = false;
+    bool blackInCheck = false;
+    //Now check whether the King is under check
+    for (int i = 0; i < 8; ++i) {
+        for (int j = 0; j < 8; ++j) {
+            Position posn = Position(i*10 + j);
+            char piece = board->charAt(posn);
+            if (piece ==' ' || piece == '-'){continue;}
+            auto tmp_move_white = std::make_shared<Move>(posn, whiteKing);
+            auto tmp_move_black = std::make_shared<Move>(posn, blackKing);
+            if (piece == 'k') {
+                if (validKing(tmp_move_white)) {whiteInCheck = true;}
+            } else if (piece == 'b') {
+                if (validBishop(tmp_move_white)) {whiteInCheck = true;}
+            } else if (piece == 'q') {
+                if (validQueen(tmp_move_white)) {whiteInCheck = true;}
+            } else if (piece == 'r') {
+                if (validRook(tmp_move_white)) {whiteInCheck = true;}
+            } else if (piece == 'n') {
+                if (validKnight(tmp_move_white)) {whiteInCheck = true;}
+            } else if (piece == 'p') {
+                if (validPawn(tmp_move_white)) {whiteInCheck = true;}
+            } else if (piece == 'K') {
+                if (validKing(tmp_move_black)) {blackInCheck = true;}
+            } else if (piece == 'B') {
+                if (validBishop(tmp_move_black)) {blackInCheck = true;}
+            } else if (piece == 'Q') {
+                if (validQueen(tmp_move_black)) {blackInCheck = true;}
+            } else if (piece == 'R') {
+                if (validRook(tmp_move_black)) {blackInCheck = true;}
+            } else if (piece == 'N') {
+                if (validKnight(tmp_move_black)) {blackInCheck = true;}
+            } else if (piece == 'P') {
+                if (validPawn(tmp_move_black)) {blackInCheck = true;}
+            }
+        }
+    }
+    if (whiteTurn && whiteInCheck) {return "White is in check.";}
+    else if (!whiteTurn && blackInCheck) {return "Black is in check.";}
+    else if (whiteInCheck) {    //Check a checkmate for white King
+        board->setIsChecked(whiteKing, true);
+    } else if (blackInCheck) {  //Check a checkmate for black King
+        board->setIsChecked(blackKing, true);
+    }
+}
+
 
 void Chess::enPassant(std::shared_ptr<Move> movement) {
     std::shared_ptr<Move> preMove = moves.back();
@@ -49,7 +190,6 @@ void Chess::enPassant(std::shared_ptr<Move> movement) {
     else if (board->charAt(Position(new_posn + 10)) != 'p') {exception();}
     return;
 }
-
 void Chess::castling(std::shared_ptr<Move> movement) {
     Position org_posn = movement->getOrg();
     Position new_posn = movement->getNew();
@@ -76,126 +216,6 @@ void Chess::castling(std::shared_ptr<Move> movement) {
     }
     if (new_posn < org_posn && board->colourAt(Position(new_posn - 1)) != "") {
         exception();
-    }
-    return;
-}
-
-void Chess::validBishop(std::shared_ptr<Move> movement) {
-    Position org_posn = movement->getOrg();
-    Position new_posn = movement->getNew();
-    int diff = abs(org_posn - new_posn);
-    int posn = org_posn;
-    int tmp;
-    if (diff% 9 == 0) {tmp = 9;}
-    else if (diff % 11 == 0) {tmp = 11;}
-    else {exception();}
-
-    for (int i = org_posn - tmp; i > new_posn; i -= tmp) {
-        char piece = board->charAt(Position(i));
-        if (piece != ' ' && piece != '-') {exception();}
-    }
-    for (int i = org_posn + tmp; i < new_posn; i += tmp) {
-        char piece = board->charAt(Position(i));
-        if (piece != ' ' && piece != '-') {exception();}
-    }
-
-    return;
-}
-void Chess::validKing(std::shared_ptr<Move> movement) {
-    Position org_posn = movement->getOrg();
-    Position new_posn = movement->getNew();
-    if (new_posn + 1 == org_posn || new_posn - 1 == org_posn) {
-        return;
-    } else if (org_posn - 11 <= new_posn && new_posn <= org_posn - 9) {
-        return;
-    } else if (org_posn + 9 <= new_posn && new_posn <= org_posn + 11) {
-        return;
-    } else if (new_posn + 2 == org_posn || new_posn - 2 == org_posn) {
-        return;
-    } else {exception();}
-    return;
-}
-void Chess::validQueen(std::shared_ptr<Move> movement) {
-    Position org_posn = movement->getOrg();
-    Position new_posn = movement->getNew();
-    int diff = abs(org_posn - new_posn);
-    int org_row = org_posn / 10;
-    org_row *= 10;
-    int tmp;
-    if (diff% 9 == 0) {tmp = 9;}
-    else if (diff % 10 == 0) {tmp = 10;}
-    else if (diff % 11 == 0) {tmp = 11;}
-    else if (org_row <= new_posn && new_posn <= org_row+ 7) {tmp = 1;}
-    else {exception();}
-
-    for (int i = org_posn - tmp; i > new_posn; i -= tmp) {
-        char piece = board->charAt(Position(i));
-        if (piece != ' ' && piece != '-') {exception();}
-    }
-    for (int i = org_posn + tmp; i < new_posn; i += tmp) {
-        char piece = board->charAt(Position(i));
-        if (piece != ' ' && piece != '-') {exception();}
-    }
-    return;
-}
-void Chess::validRook(std::shared_ptr<Move> movement) {
-    Position org_posn = movement->getOrg();
-    Position new_posn = movement->getNew();
-    int diff = abs(org_posn - new_posn);
-    int org_row = org_posn / 10;
-    org_row *= 10;
-    int tmp;
-    if (diff % 10 == 0) {tmp = 10;}
-    else if (org_row <= new_posn && new_posn <= org_row+ 7) {tmp = 1;}
-    else {exception();}
-    for (int i = org_posn - tmp; i > new_posn; i -= tmp) {
-        char piece = board->charAt(Position(i));
-        if (piece != ' ' && piece != '-') {exception();}
-    }
-    for (int i = org_posn + tmp; i < new_posn; i += tmp) {
-        char piece = board->charAt(Position(i));
-        if (piece != ' ' && piece != '-') {exception();}
-    }
-    return;
-}
-void Chess::validKnight(std::shared_ptr<Move> movement) {
-    Position org_posn = movement->getOrg();
-    Position new_posn = movement->getNew();
-    if (new_posn == org_posn - 21 || new_posn == org_posn - 19) {
-        return;
-    } else if (new_posn == org_posn - 12 || new_posn == org_posn - 8) {
-        return;
-    } else if (new_posn == org_posn + 8 || new_posn == org_posn + 12) {
-        return;
-    } else if (new_posn == org_posn + 19 || new_posn == org_posn + 21) {
-        return;
-    } else {
-        exception();
-    }
-    return;
-}
-void Chess::validPawn(std::shared_ptr<Move> movement) {
-    Position org_posn = movement->getOrg();
-    Position new_posn = movement->getNew();
-    std::string colour = board->colourAt(org_posn);
-    char piece = board->charAt(new_posn);
-    bool firstMove = board->getFirstMove(org_posn);
-    if (colour == "White") {
-        if (org_posn - 11 == new_posn || new_posn == org_posn - 9) {
-            return;
-        } else if (org_posn - 10 == new_posn){
-            if (piece != ' ' && piece != '-') {exception();}
-        } else if (firstMove && new_posn == org_posn - 20) {
-            if (piece != ' ' && piece != '-') {exception();}
-        } else {exception();}
-    } else {
-        if (org_posn + 9 == new_posn || new_posn == org_posn + 11) {
-            return;
-        } else if (org_posn + 10 == new_posn) {
-            if (piece != ' ' && piece != '-') {exception();}
-        } else if (firstMove && new_posn == org_posn + 20) {
-            if (piece != ' ' && piece != '-') {exception();}
-        } else {exception();}
     }
     return;
 }
@@ -231,36 +251,31 @@ bool Chess::movePiece(std::shared_ptr<Move> movement) {
     // If the moving piece is Empty, throw an exception.
     if (piece == ' ' || piece == '-') {exception();}
     else if (piece == 'k' || piece == 'K') {    //Check King move
-        try {validKing(movement);}      // Check general valid move
-        catch (std::out_of_range &e) {throw e;}
-        if (new_posn + 2 == org_posn || new_posn - 2 == org_posn) { // Check Castling
-            try {castling(movement);}
-            catch(const std::out_of_range& e) {throw e;}
-            specialCase = true;
-            movement->setCaptured(board->getPiece(new_posn));   // If castling is valid
-            board->castling(org_posn, new_posn);
+        if (!validKing(movement)) {
+            if (new_posn + 2 == org_posn || new_posn - 2 == org_posn) {
+                try {castling(movement);}
+                catch(const std::out_of_range& e) {throw e;}
+                specialCase = true;
+                movement->setCaptured(board->getPiece(new_posn));   // If castling is valid
+                board->castling(org_posn, new_posn);
+            } else {
+                exception();
+            }
         }
     }
     else if (piece == 'q' || piece == 'Q') {    //Check Queen move
-        try{validQueen(movement);}  //Check general valid move of Queen piece.
-        catch (std::out_of_range &e) {throw e;} //If the move is invalid, throw and exception.
+        if (!validQueen(movement)) {exception();}
     }
     else if (piece == 'b' || piece == 'B') {    //Check Bishop move
-        try{validBishop(movement);}  //Check general valid move of Bishop piece.
-        catch (std::out_of_range &e) {throw e;} //If the move is invalid, throw and exception.
+        if (!validBishop(movement)) {exception();}
     }
     else if (piece == 'n' || piece == 'N') {    //Check Knight move
-        try{validKnight(movement);}  //Check general valid move of Knight piece.
-        catch (std::out_of_range &e) {throw e;} //If the move is invalid, throw and exception.
+        if (!validKnight(movement)) {exception();}
     }
     else if (piece == 'r' || piece == 'R') {    //Check Rook move
-        try{validRook(movement);}  //Check general valid move of Rook piece.
-        catch (std::out_of_range &e) {throw e;} //If the move is invalid, throw and exception.
+        if (!validRook(movement)) {exception();}    
     }
-    else {  //Check Pawn move
-        try{validPawn(movement);}  //Check general valid move of Pawn piece.
-        catch (std::out_of_range &e) {throw e;}
-        //Check En Passant
+    else if (!validPawn(movement)) { //Check Pawn move
         if (org_posn - 11 == new_posn || new_posn == org_posn - 9 || org_posn + 9 == new_posn || new_posn == org_posn + 11) {
             if (board->colourAt(new_posn) == "") { //Check whether there is no piece on new_posn.
                 try{enPassant(movement);}   // Check whether the enPassant is valid.
@@ -278,13 +293,14 @@ bool Chess::movePiece(std::shared_ptr<Move> movement) {
         }
     }
 
+    if (piece == 'k') {
+        board->setBlackKing(new_posn);  // Change the position of King piece
+    } else if (piece == 'K') {
+        board->setWhiteKing(new_posn);  // Change the position of King piece
+    }
+
     //If the movement is not En Passant or Castling, move in general
     if (!specialCase) { 
-        if (piece == 'k') {
-            board->setBlackKing(new_posn);  // Change the position of King piece
-        } else if (piece == 'K') {
-            board->setWhiteKing(new_posn);  // Change the position of King piece
-        }
         movement->setCaptured(board->getPiece(new_posn)); // Store captured piece into the movement
         board->move(org_posn, new_posn);    // Change the board
     }
@@ -293,7 +309,7 @@ bool Chess::movePiece(std::shared_ptr<Move> movement) {
     //If so, undo
     std::string status = isCheck();
     if (whiteTurn) {
-        if (status == "White is in check." || status == "Checkmate! Black wins!") {
+        if (status == "White is in check.") {
             if (piece == 'k') {
                 board->setBlackKing(org_posn);  // Change the position of King piece
             } else if (piece == 'K') {
@@ -304,7 +320,7 @@ bool Chess::movePiece(std::shared_ptr<Move> movement) {
             movement->setCaptured(nullptr);
             exception();
         }
-    } else if (status == "Black is in check." || status == "Checkmate! White wins!") {
+    } else if (status == "Black is in check.") {
         if (piece == 'k') {
             board->setBlackKing(org_posn);  // Change the position of King piece
         } else if (piece == 'K') {
