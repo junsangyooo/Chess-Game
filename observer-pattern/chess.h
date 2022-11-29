@@ -24,7 +24,8 @@ class Chess : public Subject{
     std::shared_ptr<ScoreBoard> score;
     std::vector<std::shared_ptr<Move>> moves;
     std::shared_ptr<Board> board;
-    std::string isCheck();
+    std::string whiteInCheck();
+    std::string blackInCheck();
     std::string isStaleMate();
     void enPassant(std::shared_ptr<Move> movement);
     void castling(std::shared_ptr<Move> movement);

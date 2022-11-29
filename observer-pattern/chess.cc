@@ -6,10 +6,6 @@ void exception() {
     throw std::out_of_range {"Invalid Move!"};
 }
 
-std::string Chess::isStaleMate() {
-
-}
-
 
 bool Chess::validBishop(std::shared_ptr<Move> movement) {
     Position org_posn = movement->getOrg();
@@ -127,53 +123,104 @@ bool Chess::validPawn(std::shared_ptr<Move> movement) {
     return true;
 }
 
-std::string Chess::isCheck() {
-    Position whiteKing = board->getWhiteKing();
+std::string Chess::isStaleMate() {
+
+}
+
+std::string Chess::blackInCheck() {
     Position blackKing = board->getBlackKing();
-    bool whiteInCheck = false;
-    bool blackInCheck = false;
+    bool inCheck = false;
+    int whites = 0;
+    int blacks = 0;
+    std::vector<std::shared_ptr<Position>> blackPieces;
+    std::vector<std::shared_ptr<Position>> whitePieces;
+    for (int i = 0; i < 8; ++i) {
+        for (int j = 0; j < 8; ++j) {
+            Position posn = Position(i*10 + j);
+            char piece = board->charAt(posn);
+            auto tmp_move_black = std::make_shared<Move>(posn, blackKing);
+            if (piece == ' ' || piece == '-') {continue;}
+            else if (piece == 'K') {
+                whitePieces.emplace_back(posn);
+                whites++;
+                if (validKing(tmp_move_black)) {blackInCheck = true;}
+            } else if (piece == 'B') {
+                whitePieces.emplace_back(posn);
+                whites++;
+                if (validBishop(tmp_move_black)) {blackInCheck = true;}
+            } else if (piece == 'Q') {
+                whitePieces.emplace_back(posn);
+                whites++;
+                if (validQueen(tmp_move_black)) {blackInCheck = true;}
+            } else if (piece == 'R') {
+                whitePieces.emplace_back(posn);
+                whites++;
+                if (validRook(tmp_move_black)) {blackInCheck = true;}
+            } else if (piece == 'N') {
+                whitePieces.emplace_back(posn);
+                whites++;
+                if (validKnight(tmp_move_black)) {blackInCheck = true;}
+            } else if (piece == 'P') {
+                whitePieces.emplace_back(posn);
+                whites++;
+                if (validPawn(tmp_move_black)) {blackInCheck = true;}
+            } else {
+                blackPieces.emplace_back(posn);
+                blacks++;
+            }
+        }
+    }
+    if (!whiteTurn && blackInCheck) {return "Black is in check.";}
+    else if (blackInCheck) {board->setIsChecked(blackKing, true);}
+
+}
+
+std::string Chess::whiteInCheck() {
+    Position whiteKing = board->getWhiteKing();
+    bool inCheck = false;
+    std::vector<std::shared_ptr<Position>> blackPieces;
+    std::vector<std::shared_ptr<Position>> whitePieces;
+    int blacks = 0;
+    int whites = 0;
     //Now check whether the King is under check
     for (int i = 0; i < 8; ++i) {
         for (int j = 0; j < 8; ++j) {
             Position posn = Position(i*10 + j);
             char piece = board->charAt(posn);
-            if (piece ==' ' || piece == '-'){continue;}
             auto tmp_move_white = std::make_shared<Move>(posn, whiteKing);
-            auto tmp_move_black = std::make_shared<Move>(posn, blackKing);
-            if (piece == 'k') {
+            if (piece ==' ' || piece == '-'){continue;}
+            else if (piece == 'k') {
+                blackPieces.emplace_back(posn);
+                blacks++;
                 if (validKing(tmp_move_white)) {whiteInCheck = true;}
             } else if (piece == 'b') {
+                blackPieces.emplace_back(posn);
+                blacks++;
                 if (validBishop(tmp_move_white)) {whiteInCheck = true;}
             } else if (piece == 'q') {
+                blackPieces.emplace_back(posn);
+                blacks++;
                 if (validQueen(tmp_move_white)) {whiteInCheck = true;}
             } else if (piece == 'r') {
+                blackPieces.emplace_back(posn);
+                blacks++;
                 if (validRook(tmp_move_white)) {whiteInCheck = true;}
             } else if (piece == 'n') {
+                blackPieces.emplace_back(posn);
+                blacks++;
                 if (validKnight(tmp_move_white)) {whiteInCheck = true;}
             } else if (piece == 'p') {
+                blackPieces.emplace_back(posn);
+                blacks++;
                 if (validPawn(tmp_move_white)) {whiteInCheck = true;}
-            } else if (piece == 'K') {
-                if (validKing(tmp_move_black)) {blackInCheck = true;}
-            } else if (piece == 'B') {
-                if (validBishop(tmp_move_black)) {blackInCheck = true;}
-            } else if (piece == 'Q') {
-                if (validQueen(tmp_move_black)) {blackInCheck = true;}
-            } else if (piece == 'R') {
-                if (validRook(tmp_move_black)) {blackInCheck = true;}
-            } else if (piece == 'N') {
-                if (validKnight(tmp_move_black)) {blackInCheck = true;}
-            } else if (piece == 'P') {
-                if (validPawn(tmp_move_black)) {blackInCheck = true;}
+            } else {
+                whites++;
+                whitePieces.emplace_back(posn);
             }
         }
     }
     if (whiteTurn && whiteInCheck) {return "White is in check.";}
-    else if (!whiteTurn && blackInCheck) {return "Black is in check.";}
-    else if (whiteInCheck) {    //Check a checkmate for white King
-        board->setIsChecked(whiteKing, true);
-    } else if (blackInCheck) {  //Check a checkmate for black King
-        board->setIsChecked(blackKing, true);
-    }
+    else if (whiteInCheck) {board->setIsChecked(whiteKing, true);}
 }
 
 
@@ -307,8 +354,9 @@ bool Chess::movePiece(std::shared_ptr<Move> movement) {
 
     //Now, we check whether the movement put the king under check
     //If so, undo
-    std::string status = isCheck();
+    std::string status;
     if (whiteTurn) {
+        status = whiteInCheck();
         if (status == "White is in check.") {
             if (piece == 'k') {
                 board->setBlackKing(org_posn);  // Change the position of King piece
@@ -319,17 +367,20 @@ bool Chess::movePiece(std::shared_ptr<Move> movement) {
             board->setPiece(new_posn, movement->getCaptured());
             movement->setCaptured(nullptr);
             exception();
-        }
-    } else if (status == "Black is in check.") {
-        if (piece == 'k') {
-            board->setBlackKing(org_posn);  // Change the position of King piece
-        } else if (piece == 'K') {
-            board->setWhiteKing(org_posn);  // Change the position of King piece
-        }
-        board->move(new_posn, org_posn);
-        board->setPiece(new_posn, movement->getCaptured());
-        movement->setCaptured(nullptr);
-        exception();
+        }else {status = blackInCheck();}
+    } else {
+        status = blackInCheck();
+        if (status == "Black is in check.") {
+            if (piece == 'k') {
+                board->setBlackKing(org_posn);  // Change the position of King piece
+            } else if (piece == 'K') {
+                board->setWhiteKing(org_posn);  // Change the position of King piece
+            }
+            board->move(new_posn, org_posn);
+            board->setPiece(new_posn, movement->getCaptured());
+            movement->setCaptured(nullptr);
+            exception();
+        } else {status = whiteInCheck();}
     }
 
     //Now we know the movement is valid
