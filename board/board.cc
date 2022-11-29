@@ -83,7 +83,7 @@ void Board::enPassant(Position org_posn, Position new_posn) {
     int org_row = org_posn / 10;
     int new_col = new_posn % 10;
     int new_row = new_posn / 10;
-    bd[new_row][new_col] = bd[org_row][org_col];    
+    bd[new_row][new_col] = bd[org_row][org_col];
     int blank = org_col + org_row;
     if (blank % 2 == 0) {
         auto empty = std::make_shared<Empty>(' ');
@@ -145,6 +145,21 @@ char Board::charAt(Position posn) {
 }
 
 void Board::move(Position org_posn, Position new_posn) {
+    char movingPiece = charAt(org_posn);
+    char captured = charAt(new_posn);
+    if (movingPiece == 'p' || movingPiece == 'P') {
+        if (org_posn - 11 == new_posn || new_posn == org_posn - 9 || org_posn + 9 == new_posn || new_posn == org_posn + 11) {
+            if (captured == '-' || captured == ' '){
+                enPassant(org_posn, new_posn);
+                return;
+            }
+        }
+    } else if (movingPiece == 'k' || movingPiece == 'K') {
+        if (new_posn + 2 == org_posn || new_posn - 2 == org_posn) {
+            castling(org_posn, new_posn);
+            return;
+        }
+    }
     int org_col = org_posn % 10;
     int org_row = org_posn / 10;
     int new_col = new_posn % 10;
@@ -209,4 +224,25 @@ void Board::setPiece(Position posn, std::shared_ptr<Piece> piece) {
     int col = posn % 10;
     int row = posn / 10;
     bd[row][col] = piece;
+}
+
+void Board::setEnPassant(Position posn, bool value) {
+    int col = posn % 10;
+    int row = posn / 10;
+    bd[row][col]->setEnPassant(value);
+}
+bool Board::getEnPassant(Position posn) {
+    int col = posn % 10;
+    int row = posn / 10;
+    return bd[row][col]->getEnPassant();
+}
+void Board::setCastling(Position posn, bool value) {
+    int col = posn % 10;
+    int row = posn / 10;
+    bd[row][col]->setCastling(value);
+}
+bool Board::getCastling(Position posn) {
+    int col = posn % 10;
+    int row = posn / 10;
+    return bd[row][col]->getCastling();
 }

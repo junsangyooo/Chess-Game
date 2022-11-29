@@ -27,6 +27,10 @@ public:
     void setWhiteKing(Position value) {whiteKing = value;}
     void setBlackKing(Position value) {blackKing = value;}
     void setPiece(Position posn, std::shared_ptr<Piece> piece);
+    void setEnPassant(Position posn, bool value);
+    bool getEnPassant(Position posn);
+    void setCastling(Position posn, bool value);
+    bool getCastling(Position posn);
 };
 
 #endif

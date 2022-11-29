@@ -6,7 +6,7 @@ class Rook : public Piece {
     char piece;
     std::string colour;
     bool firstMove = true;
-    bool isChecked = false;
+    bool castling = false;
 public:
     Rook(char piece, std::string colour);
     ~Rook();
@@ -15,8 +15,12 @@ public:
     std::string getColour() const override{return colour;}
     bool getFirstMove() {return firstMove;}
     void setFirstMove(bool value) override {firstMove = value;}
-    bool getIsChecked() const override {return isChecked;}
-    void setIsChecked(bool value) override {isChecked = value;}
+    bool getIsChecked() const override {return false;}
+    void setIsChecked(bool value) override {}
+    bool getEnPassant() const override {return false;}
+    void setEnPassant(bool value) override {}
+    bool getCastling() const override {return castling;}
+    void setCastling(bool value) override {castling = value;}
 };
 
 #endif

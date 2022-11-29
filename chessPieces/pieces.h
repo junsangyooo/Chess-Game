@@ -22,6 +22,10 @@ public:
     virtual void setFirstMove(bool value) = 0;
     virtual bool getIsChecked() const = 0;
     virtual void setIsChecked(bool value) = 0;
+    virtual bool getEnPassant() const = 0;
+    virtual void setEnPassant(bool value) = 0;
+    virtual bool getCastling() const = 0;
+    virtual void setCastling(bool value) = 0;
 };
 
 #endif

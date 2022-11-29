@@ -35,10 +35,11 @@ class Chess : public Subject{
     bool validRook(std::shared_ptr<Move> movement);
     bool validBishop(std::shared_ptr<Move> movement);
     bool validKnight(std::shared_ptr<Move> movement);
-    bool whiteTurn = true;
+    bool validMove(std::shared_ptr<Move> movement, bool whiteTurn);
+    //bool whiteTurn = true;
 public:
     void undo(bool notify);
-    bool movePiece(std::shared_ptr<Move> movement);
+    bool movePiece(std::shared_ptr<Move> movement, bool whiteTurn);
     char getPiece(Position posn) const override;
     std::shared_ptr<Board> getBoard() {return board;}
 public:
