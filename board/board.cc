@@ -75,6 +75,7 @@ Board::Board(const std::shared_ptr<Board> other) {
         }
     }
 }
+
 Board::~Board() {}
 
 void Board::enPassant(Position org_posn, Position new_posn) {
@@ -197,6 +198,7 @@ bool Board::getIsChecked(Position posn) const {
     int row = posn / 10;
     return bd[row][col]->getIsChecked(); 
 }
+
 void Board::setIsChecked(Position posn, bool value) {
     int col = posn % 10;
     int row = posn / 10;

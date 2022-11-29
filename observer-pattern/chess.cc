@@ -224,47 +224,96 @@ std::string Chess::whiteInCheck() {
 }
 
 
-void Chess::enPassant(std::shared_ptr<Move> movement) {
+bool Chess::enPassant(std::shared_ptr<Move> movement) {
     std::shared_ptr<Move> preMove = moves.back();
     Position org_posn = movement->getOrg();
     Position new_posn = movement->getNew();
     char piece = board->charAt(org_posn);
-    bool rightPosn = false;
+    Position pre_org_posn = preMove->getOrg();
+    Position pre_new_posn = preMove->getNew();
     if (piece == 'p') {
-        if (40 > org_posn || org_posn > 47) {exception();}
-        if (board->charAt(Position(new_posn - 10)) != 'P') {exception();}
-    } else if (30 > org_posn || org_posn > 37) {exception();}
-    else if (board->charAt(Position(new_posn + 10)) != 'p') {exception();}
-    return;
+        Position captured = Position(new_posn - 10);
+        if (40 > org_posn || org_posn > 47) {return false;}
+        else if (board->charAt(captured) != 'P') {return false;}
+        else if (pre_new_posn != new_posn - 10) {return false;}
+        else if (pre_org_posn != new_posn + 10) {return false;}
+        movement->setCaptured(board->getPiece(captured));
+        board->enPassant(org_posn, new_posn);
+        if (blackInCheck() != "") {
+            board->move(new_posn, org_posn);
+            board->setPiece(captured, movement->getCaptured());
+            movement->setCaptured(nullptr);
+            return false;
+        }
+    } else {
+        Position captured = Position(new_posn + 10);
+        if (30 > org_posn || org_posn > 37) {return false;}
+        else if (board->charAt(captured) != 'p') {return false;}
+        else if (pre_new_posn != new_posn + 10) {return false;}
+        else if (pre_org_posn != new_posn - 10) {return false;}
+        movement->setCaptured(board->getPiece(captured));
+        board->enPassant(org_posn, new_posn);
+        if (whiteInCheck() != "") {
+            board->move(new_posn, org_posn);
+            board->setPiece(captured, movement->getCaptured());
+            movement->setCaptured(nullptr);
+            return false;
+        }
+    }
+    return true;
 }
-void Chess::castling(std::shared_ptr<Move> movement) {
+
+bool Chess::castling(std::shared_ptr<Move> movement) {
     Position org_posn = movement->getOrg();
     Position new_posn = movement->getNew();
     bool firstMove;
-    if (!board->getFirstMove(org_posn)) {exception();}
-    if (isCheck(board) != "") {exception();}
-    if (new_posn + 2 == org_posn) {
+    if (!board->getFirstMove(org_posn)) {return false;}
+    if (whiteTurn && whiteInCheck() != "") {return false;}
+    else if (!whiteTurn && blackInCheck() != "") {return false;}
+    if (new_posn == org_posn + 2) {
         firstMove = board->getFirstMove(Position(new_posn + 1));
     } else {
+        if (board->colourAt(Position(new_posn - 1)) != "") {return false;}
         firstMove = board->getFirstMove(Position(new_posn - 2));
     }
-    if (!firstMove) {exception();}
+    if (!firstMove) {return false;}
+    //Check whether the path for castling right side is checked
     for(int i = org_posn + 1; i <= new_posn; i++) {
-        if (board->colourAt(Position(i)) != "") {exception();}
-        auto new_board = std::make_shared<Board>(board);
-        new_board->move(org_posn, Position(i));
-        if (isCheck(new_board) != "") {exception();}
+        if (board->colourAt(Position(i)) != "") {return false;}
+        board->move(org_posn, Position(i));
+        if (whiteTurn) {
+            board->setWhiteKing(Position(i));
+            if (whiteInCheck() != "") {
+                board->move(Position(i), org_posn);
+                return false;
+            }
+        } else {
+            board->setBlackKing(Position(i));
+            if (blackInCheck() != "") {
+                board->move(Position(i), org_posn);
+                return false;
+            }
+        }
     }
+    //Check whether the path for castling left side is checked
     for(int i = org_posn - 1; i >= new_posn; i--) {
-        if (board->colourAt(Position(i)) != "") {exception();}
-        auto new_board = std::make_shared<Board>(board);
-        new_board->move(org_posn, Position(i));
-        if (isCheck(new_board) != "") {exception();}
+        if (board->colourAt(Position(i)) != "") {return false;}
+        board->move(org_posn, Position(i));
+        if (whiteTurn) {
+            board->setWhiteKing(Position(i));
+            if (whiteInCheck() != "") {
+                board->move(Position(i), org_posn);
+                return false;
+            }
+        } else {
+            board->setBlackKing(Position(i));
+            if (blackInCheck() != "") {
+                board->move(Position(i), org_posn);
+                return false;
+            }
+        }
     }
-    if (new_posn < org_posn && board->colourAt(Position(new_posn - 1)) != "") {
-        exception();
-    }
-    return;
+    return true;
 }
 
 //Controller calls movePiece function with the movement of next turn.
@@ -300,8 +349,7 @@ bool Chess::movePiece(std::shared_ptr<Move> movement) {
     else if (piece == 'k' || piece == 'K') {    //Check King move
         if (!validKing(movement)) {
             if (new_posn + 2 == org_posn || new_posn - 2 == org_posn) {
-                try {castling(movement);}
-                catch(const std::out_of_range& e) {throw e;}
+                if(!castling(movement)) {exception();}
                 specialCase = true;
                 movement->setCaptured(board->getPiece(new_posn));   // If castling is valid
                 board->castling(org_posn, new_posn);
@@ -325,8 +373,7 @@ bool Chess::movePiece(std::shared_ptr<Move> movement) {
     else if (!validPawn(movement)) { //Check Pawn move
         if (org_posn - 11 == new_posn || new_posn == org_posn - 9 || org_posn + 9 == new_posn || new_posn == org_posn + 11) {
             if (board->colourAt(new_posn) == "") { //Check whether there is no piece on new_posn.
-                try{enPassant(movement);}   // Check whether the enPassant is valid.
-                catch (const std::out_of_range& e) {throw e;}
+                if(!enPassant(movement)) {exception();}// Check whether the enPassant is valid.
                 specialCase = true;
                 Position captured;
                 if (piece == 'p') {
@@ -353,9 +400,8 @@ bool Chess::movePiece(std::shared_ptr<Move> movement) {
     }
 
     //Now, we check whether the movement put the king under check
-    //If so, undo
     std::string status;
-    if (whiteTurn) {
+    if (whiteTurn && !specialCase) {
         status = whiteInCheck();
         if (status == "White is in check.") {
             if (piece == 'k') {
@@ -368,7 +414,7 @@ bool Chess::movePiece(std::shared_ptr<Move> movement) {
             movement->setCaptured(nullptr);
             exception();
         }else {status = blackInCheck();}
-    } else {
+    } else if (!specialCase){
         status = blackInCheck();
         if (status == "Black is in check.") {
             if (piece == 'k') {
@@ -381,7 +427,8 @@ bool Chess::movePiece(std::shared_ptr<Move> movement) {
             movement->setCaptured(nullptr);
             exception();
         } else {status = whiteInCheck();}
-    }
+    } else if (whiteTurn) {status = blackInCheck();} 
+    else {status = whiteInCheck();}
 
     //Now we know the movement is valid
     //Store the movement in the vector, moves.
