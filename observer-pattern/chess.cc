@@ -143,35 +143,35 @@ std::string Chess::blackInCheck() {
             else if (piece == 'K') {
                 whitePieces.emplace_back(posn);
                 whites++;
-                if (validKing(tmp_move_black)) {blackInCheck = true;}
+                if (validKing(tmp_move_black)) {inCheck = true;}
             } else if (piece == 'B') {
                 whitePieces.emplace_back(posn);
                 whites++;
-                if (validBishop(tmp_move_black)) {blackInCheck = true;}
+                if (validBishop(tmp_move_black)) {inCheck = true;}
             } else if (piece == 'Q') {
                 whitePieces.emplace_back(posn);
                 whites++;
-                if (validQueen(tmp_move_black)) {blackInCheck = true;}
+                if (validQueen(tmp_move_black)) {inCheck = true;}
             } else if (piece == 'R') {
                 whitePieces.emplace_back(posn);
                 whites++;
-                if (validRook(tmp_move_black)) {blackInCheck = true;}
+                if (validRook(tmp_move_black)) {inCheck = true;}
             } else if (piece == 'N') {
                 whitePieces.emplace_back(posn);
                 whites++;
-                if (validKnight(tmp_move_black)) {blackInCheck = true;}
+                if (validKnight(tmp_move_black)) {inCheck = true;}
             } else if (piece == 'P') {
                 whitePieces.emplace_back(posn);
                 whites++;
-                if (validPawn(tmp_move_black)) {blackInCheck = true;}
+                if (validPawn(tmp_move_black)) {inCheck = true;}
             } else {
                 blackPieces.emplace_back(posn);
                 blacks++;
             }
         }
     }
-    if (!whiteTurn && blackInCheck) {return "Black is in check.";}
-    else if (blackInCheck) {board->setIsChecked(blackKing, true);}
+    if (!whiteTurn && inCheck) {return "Black is in check.";}
+    else if (inCheck) {board->setIsChecked(blackKing, true);}
 
 }
 
@@ -192,35 +192,35 @@ std::string Chess::whiteInCheck() {
             else if (piece == 'k') {
                 blackPieces.emplace_back(posn);
                 blacks++;
-                if (validKing(tmp_move_white)) {whiteInCheck = true;}
+                if (validKing(tmp_move_white)) {inCheck = true;}
             } else if (piece == 'b') {
                 blackPieces.emplace_back(posn);
                 blacks++;
-                if (validBishop(tmp_move_white)) {whiteInCheck = true;}
+                if (validBishop(tmp_move_white)) {inCheck = true;}
             } else if (piece == 'q') {
                 blackPieces.emplace_back(posn);
                 blacks++;
-                if (validQueen(tmp_move_white)) {whiteInCheck = true;}
+                if (validQueen(tmp_move_white)) {inCheck = true;}
             } else if (piece == 'r') {
                 blackPieces.emplace_back(posn);
                 blacks++;
-                if (validRook(tmp_move_white)) {whiteInCheck = true;}
+                if (validRook(tmp_move_white)) {inCheck = true;}
             } else if (piece == 'n') {
                 blackPieces.emplace_back(posn);
                 blacks++;
-                if (validKnight(tmp_move_white)) {whiteInCheck = true;}
+                if (validKnight(tmp_move_white)) {inCheck = true;}
             } else if (piece == 'p') {
                 blackPieces.emplace_back(posn);
                 blacks++;
-                if (validPawn(tmp_move_white)) {whiteInCheck = true;}
+                if (validPawn(tmp_move_white)) {inCheck = true;}
             } else {
                 whites++;
                 whitePieces.emplace_back(posn);
             }
         }
     }
-    if (whiteTurn && whiteInCheck) {return "White is in check.";}
-    else if (whiteInCheck) {board->setIsChecked(whiteKing, true);}
+    if (whiteTurn && inCheck) {return "White is in check.";}
+    else if (inCheck) {board->setIsChecked(whiteKing, true);}
 }
 
 
