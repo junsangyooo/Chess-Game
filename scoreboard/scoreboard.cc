@@ -4,7 +4,7 @@
 #include <iomanip>
 #include "scoreboard.h"
 
-ScoreBoard::ScoreBoard(int white, int black): white(white), black(black) {}
+ScoreBoard::ScoreBoard(float white, float black): white(white), black(black) {}
 ScoreBoard::~ScoreBoard() {}
 
 int ScoreBoard::getWhite() {
@@ -14,10 +14,10 @@ int ScoreBoard::getBlack() {
     return black;
 }
 
-void ScoreBoard::addToWhite(int value) {
+void ScoreBoard::addToWhite(float value) {
     white += value;
 }
-void ScoreBoard::addToBlack(int value) {
+void ScoreBoard::addToBlack(float value) {
     black += value;
 }
 

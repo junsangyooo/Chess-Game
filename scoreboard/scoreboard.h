@@ -6,17 +6,17 @@
 #include <sstream>
 
 class ScoreBoard {
-    int white;
-    int black;
+    float white;
+    float black;
     friend std::ostream &operator<<(std::ostream &out, const ScoreBoard &sb);
 public:
-    ScoreBoard(int white, int black);
+    ScoreBoard(float white, float black);
     ~ScoreBoard();
 public:
     int getWhite();
     int getBlack();
-    void addToWhite(int value);
-    void addToBlack(int value);
+    void addToWhite(float value);
+    void addToBlack(float value);
 };
 
 std::ostream& operator<<(std::ostream &out, const ScoreBoard& sb);

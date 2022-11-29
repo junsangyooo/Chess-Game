@@ -15,6 +15,7 @@ public:
     Position getOrg();
     Position getNew();
     void setCaptured(std::shared_ptr<Piece> piece);
+    std::shared_ptr<Piece> getCaptured() {return captured;}
 };
 
 

@@ -202,3 +202,9 @@ void Board::setIsChecked(Position posn, bool value) {
     int row = posn / 10;
     bd[row][col]->setIsChecked(value);
 }
+
+void Board::setPiece(Position posn, std::shared_ptr<Piece> piece) {
+    int col = posn % 10;
+    int row = posn / 10;
+    bd[row][col] = piece;
+}

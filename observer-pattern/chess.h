@@ -18,11 +18,13 @@
 #include "bishop.h"
 #include "rook.h"
 #include "pawn.h"
+#include "scoreboard.h"
 
 class Chess : public Subject{
+    std::shared_ptr<ScoreBoard> score;
     std::vector<std::shared_ptr<Move>> moves;
     std::shared_ptr<Board> board;
-    std::string isCheck(std::shared_ptr<Board> bd);
+    std::string isCheck();
     std::string isStaleMate();
     void enPassant(std::shared_ptr<Move> movement);
     void castling(std::shared_ptr<Move> movement);
@@ -34,7 +36,8 @@ class Chess : public Subject{
     void validKnight(std::shared_ptr<Move> movement);
     bool whiteTurn = true;
 public:
-    void movePiece(std::shared_ptr<Move> movement);
+    void undo(bool notify);
+    bool movePiece(std::shared_ptr<Move> movement);
     char getPiece(Position posn) const override;
     std::shared_ptr<Board> getBoard() {return board;}
 public:
