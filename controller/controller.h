@@ -23,7 +23,7 @@ public:
     void display();
     void resign();
     bool move(std::string org_posn, std::string new_posn, bool whiteTurn);
-    void computerMove();
+    bool computerMove();
 
 };
 
