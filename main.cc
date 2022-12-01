@@ -119,7 +119,7 @@ int main() {
             control->setPlayer1(player1);
             control->setPlayer2(player2);
             bool player1IsComputer = false;
-            bool player2IsCoimputer = false;
+            bool player2IsComputer = false;
             std::shared_ptr<Computer> computer;
             if (player1 == "computer1") {
                 player1IsComputer = true;
