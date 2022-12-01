@@ -88,13 +88,45 @@ Position strToPosn(std::string str) {
 }
 
 
-void newGame(std::shared_ptr<Board> &board) {
+void newGame(std::shared_ptr<Board> board, std::shared_ptr<Chess> chess, std::shared_ptr<Controller> control) {
     std::string player1;
     std::string player2;
     std::cin >> player1 >> player2;
+    control->setPlayer1(player1);
+    control->setPlayer2(player2);
+    bool player1IsComputer = false;
+    bool player2IsCoimputer = false;
+    std::shared_ptr<Computer> computer;
     if (player1 == "computer1") {
+        player1IsComputer = true;
+        computer = std::make_shared<Level1>(chess);
+    } else if (player1 == "computer2") {
+        player1IsComputer = true;
+        computer = std::make_shared<Level2>(chess);
+    } else if (player1 == "computer3") {
+        player1IsComputer = true;
+        computer = std::make_shared<Level3>(chess);
+    } else if (player1 == "computer4") {
+        player1IsComputer = true;
+        computer = std::make_shared<Level4>(chess);
+    } else if (player2 == "computer1") {
+        player2IsComputer = true;
+        computer = std::make_shared<Level1>(chess);
+    } else if (player2 == "computer2") {
+        player2IsComputer = true;
+        computer = std::make_shared<Level2>(chess);
+    } else if (player2 == "computer3") {
+        player2IsComputer = true;
+        computer = std::make_shared<Level3>(chess);
+    } else if (player2 == "computer4") {
+        player2IsComputer = true;
+        computer = std::make_shared<Level4>(chess);
+    }
+    std::string command;
+    while(std::cin >> command) {
         
     }
+
 }
 
 int main() {
@@ -122,7 +154,43 @@ int main() {
             std::cout << sb;
             break;
         } else if (command == "game"){
-            newGame(board);
+            std::string player1;
+            std::string player2;
+            std::cin >> player1 >> player2;
+            control->setPlayer1(player1);
+            control->setPlayer2(player2);
+            bool player1IsComputer = false;
+            bool player2IsCoimputer = false;
+            std::shared_ptr<Computer> computer;
+            if (player1 == "computer1") {
+                player1IsComputer = true;
+                computer = std::make_shared<Level1>(chess);
+            } else if (player1 == "computer2") {
+                player1IsComputer = true;
+                computer = std::make_shared<Level2>(chess);
+            } else if (player1 == "computer3") {
+                player1IsComputer = true;
+                computer = std::make_shared<Level3>(chess);
+            } else if (player1 == "computer4") {
+                player1IsComputer = true;
+                computer = std::make_shared<Level4>(chess);
+            } else if (player2 == "computer1") {
+                player2IsComputer = true;
+                computer = std::make_shared<Level1>(chess);
+            } else if (player2 == "computer2") {
+                player2IsComputer = true;
+                computer = std::make_shared<Level2>(chess);
+            } else if (player2 == "computer3") {
+                player2IsComputer = true;
+                computer = std::make_shared<Level3>(chess);
+            } else if (player2 == "computer4") {
+                player2IsComputer = true;
+                computer = std::make_shared<Level4>(chess);
+            }
+            std::string command;
+            while(std::cin >> command) {
+                
+            }
             boardExist = false;
         } else if (command == "resign") {
             control->resign();
