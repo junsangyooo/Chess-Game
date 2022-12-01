@@ -123,31 +123,32 @@ int main() {
             std::shared_ptr<Computer> computer;
             if (player1 == "computer1") {
                 player1IsComputer = true;
-                computer = std::make_shared<LevelOne>(chess);
+                computer = std::make_shared<LevelOne>(chess, board);
             } else if (player1 == "computer2") {
                 player1IsComputer = true;
-                computer = std::make_shared<LevelTwo>(chess);
+                computer = std::make_shared<LevelTwo>(chess, board);
             } else if (player1 == "computer3") {
                 player1IsComputer = true;
-                computer = std::make_shared<LevelThree>(chess);
+                computer = std::make_shared<LevelThree>(chess, board);
             } else if (player1 == "computer4") {
                 player1IsComputer = true;
-                computer = std::make_shared<LevelFour>(chess);
+                computer = std::make_shared<LevelFour>(chess, board);
             } else if (player2 == "computer1") {
                 player2IsComputer = true;
-                computer = std::make_shared<LevelOne>(chess);
+                computer = std::make_shared<LevelOne>(chess, board);
             } else if (player2 == "computer2") {
                 player2IsComputer = true;
-                computer = std::make_shared<LevelTwo>(chess);
+                computer = std::make_shared<LevelTwo>(chess, board);
             } else if (player2 == "computer3") {
                 player2IsComputer = true;
-                computer = std::make_shared<LevelThree>(chess);
+                computer = std::make_shared<LevelThree>(chess, board);
             } else if (player2 == "computer4") {
                 player2IsComputer = true;
-                computer = std::make_shared<LevelFour>(chess);
+                computer = std::make_shared<LevelFour>(chess, board);
             }
             std::string cmd;
-            while(std::cin >> cmd) {
+            bool gameEnd = false;
+            while(!gameEnd) {
                 if (cmd == "resign") {
                     control->resign();
                     if (whiteTurn) {sb->addToBlack(1);}
@@ -155,7 +156,46 @@ int main() {
                     boardExist = false;
                     break;
                 } else if (cmd == "move") {
-                    std::
+                    if (whitTurn && player1IsComputer) {
+                        gameEnd = control->computerMove(whiteTurn);
+                        continue;
+                    } else if (!whiteTurn && player2IsComputer) {
+                        gameEnd = control->computerMove(whiteTurn);
+                        continue;
+                    }
+                    std::string posn1;
+                    std::string posn2;
+                    Position firstPosn;
+                    Position secondPosn;
+                    std::cin >> posn1 >> posn2;
+                    try {firstPosn = strToPosn(posn1);}
+                    catch(std::out_of_range &e) {
+                        std::cerr << e.what() << std::endl;
+                        continue;
+                    }
+                    try {secondPosn = strToPosn(posn2);}
+                    catch(std::out_of_range &e) {
+                        std::cerr << e.what() << std::endl;
+                        continue;
+                    }
+                    char piece = board->charAt(firstPosn);
+                    char promoted;
+                    if ((piece == 'p' && 70 <= secondPosn && secondPosn <= 77) || (piece == 'P' && 0 <= secondPosn && secondPosn <= 7)) {
+                        std::cin >> promoted;
+                        if (promoted == '') {
+                            std::cerr << "Please provide which piece pawn to be promoted to." << std::endl;
+                        }
+                        try {gameEnd = control->pawnPromote(posn1, posn2, piece);}
+                        catch (std::out_of_range &e) {
+                            std::cerr << e.what() << std::endl;
+                            continue;
+                        }
+                        continue;
+                    }
+                    gameEnd = control->move(posn1, posn2, whiteTurn);
+                    if (gameEnd) {break;}
+                    whiteturn = !whiteTurn;
+                    continue;
                 }
             }
             boardExist = false;
