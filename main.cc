@@ -18,7 +18,6 @@ void newGame(std::shared_ptr<Board> &board) {
     std::string player2;
     std::cin >> player1 >> player2;
     
-    auto chess = std::make_shared<Chess>(board);
 }
 
 void resign() {}
@@ -33,8 +32,13 @@ int main() {
     ScoreBoard sb{0, 0};
     bool inGame = false;
     std::string command;
-    auto board = std::make_shared<Board>();
+    bool boardExist = false;
+    std::shared_ptr<Board> board;
     while (std::cin >> command) {
+        if (!boardExist) {
+            board = std::make_shared<Board>();
+            boardExist = false;
+        }
         if (command == "exit") {
             std::cout << sb;
             break;
