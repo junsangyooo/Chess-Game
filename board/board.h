@@ -31,6 +31,8 @@ public:
     bool getEnPassant(Position posn);
     void setCastling(Position posn, bool value);
     bool getCastling(Position posn);
+    void replace(char c, Position posn);
+    void remove(Position posn);
 };
 
 #endif

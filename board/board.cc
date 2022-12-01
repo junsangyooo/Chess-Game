@@ -246,3 +246,46 @@ bool Board::getCastling(Position posn) {
     int row = posn / 10;
     return bd[row][col]->getCastling();
 }
+
+void Board::remove(Position posn) {
+    int col = posn % 10;
+    int row = posn / 10;
+    char piece;
+    if ((col + row) % 2 == 0) {
+        piece = ' ';
+    } else {piece = '-';}
+    auto empty = std::make_shared<Empty>(piece);
+    bd[row][col] = empty;
+}
+
+void Board::replace(char c, Position posn) {
+    std::shared_ptr<Piece> newPiece;
+    if (c == 'p') {
+        newPiece = std::make_shared<Pawn>(c, "Black");
+    } else if (c == 'P') {
+        newPiece = std::make_shared<Pawn>(c, "White");
+    } else if (c == 'r') {
+        newPiece = std::make_shared<Rook>(c, "Black");
+    } else if (c == 'R') {
+        newPiece = std::make_shared<Rook>(c, "White");
+    } else if (c == 'b') {
+        newPiece = std::make_shared<Bishop>(c, "Black");
+    } else if (c == 'B') {
+        newPiece = std::make_shared<Bishop>(c, "White");
+    } else if (c == 'n') {
+        newPiece = std::make_shared<Knight>(c, "Black");
+    } else if (c == 'N') {
+        newPiece = std::make_shared<Knight>(c, "White");
+    } else if (c == 'k') {
+        newPiece = std::make_shared<King>(c, "Black");
+    } else if (c == 'K') {
+        newPiece = std::make_shared<King>(c, "White");
+    } else if (c == 'q') {
+        newPiece = std::make_shared<Queen>(c, "Black");
+    } else if (c == 'Q') {
+        newPiece = std::make_shared<Queen>(c, "White");
+    } else {throw std::out_of_range {"Invalid Piece!"};}
+    remove(posn);
+    setPiece(posn, newPiece);   
+}
+

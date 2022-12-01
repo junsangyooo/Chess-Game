@@ -24,11 +24,11 @@ class Chess : public Subject{
     std::shared_ptr<ScoreBoard> score;
     std::vector<std::shared_ptr<Move>> moves;
     std::shared_ptr<Board> board;
-    std::string whiteInCheck();
-    std::string blackInCheck();
+    std::string whiteInCheck(bool whiteTurn);
+    std::string blackInCheck(bool whiteTurn);
     std::string isStaleMate();
-    bool enPassant(std::shared_ptr<Move> movement);
-    bool castling(std::shared_ptr<Move> movement);
+    bool enPassant(std::shared_ptr<Move> movement, bool whiteTurn);
+    bool castling(std::shared_ptr<Move> movement, bool whiteTurn);
     bool validPawn(std::shared_ptr<Move> movement);
     bool validKing(std::shared_ptr<Move> movement);
     bool validQueen(std::shared_ptr<Move> movement);
