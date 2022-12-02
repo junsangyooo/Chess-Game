@@ -7,10 +7,10 @@
 ScoreBoard::ScoreBoard(float white, float black): white(white), black(black) {}
 ScoreBoard::~ScoreBoard() {}
 
-int ScoreBoard::getWhite() {
+float ScoreBoard::getWhite() {
     return white;
 }
-int ScoreBoard::getBlack() {
+float ScoreBoard::getBlack() {
     return black;
 }
 

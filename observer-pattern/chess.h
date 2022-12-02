@@ -35,7 +35,6 @@ class Chess : public Subject{
     std::string whiteInCheck();
     std::string blackInCheck();
 public:
-    std::shared_ptr<Board> getBoard() {return board;}
     bool validMove(std::shared_ptr<Move> movement, bool whiteTurn);
     bool movePiece(std::shared_ptr<Move> movement, bool whiteTurn);
     bool pawnPromote(std::shared_ptr<Move> movement, char piece);

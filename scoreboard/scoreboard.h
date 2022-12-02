@@ -13,8 +13,8 @@ public:
     ScoreBoard(float white, float black);
     ~ScoreBoard();
 public:
-    int getWhite();
-    int getBlack();
+    float getWhite();
+    float getBlack();
     void addToWhite(float value);
     void addToBlack(float value);
 };

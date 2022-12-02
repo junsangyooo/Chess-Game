@@ -1,8 +1,5 @@
 #include <iostream>
-#include <fstream>
-#include <sstream>
 #include <string>
-#include <iomanip>
 #include <utility>
 #include <stdexcept>
 #include <vector>
@@ -13,32 +10,43 @@
 #include "subject.h"
 #include "chess.h"
 #include "observer.h"
-//#include "gui.h"
+#include "gui.h"
 #include "cli.h"
 #include "controller.h"
+#include "computer.h"
+#include "level1.h"
+#include "level2.h"
+#include "level3.h"
+#include "level4.h"
 
 enum Position;
 
+bool validPiece(char piece) {
+    if (piece == 'p' || piece == 'P' || piece == 'k' || piece == 'K' || piece == 'q' || piece == 'Q' || piece == 'r' || piece == 'R' ||piece == 'b' || piece == 'B' || piece == 'n' || piece == 'N') {
+        return true;
+    }
+    return false;
+}
 
 int main() {
-    std::shared_ptr<ScoreBoard> sb{0, 0};
+    std::shared_ptr<ScoreBoard> sb = std::make_shared<ScoreBoard>(0, 0);
     std::string command;
     bool boardExist = false;
     bool whiteTurn = true;
     std::shared_ptr<Board> board;
-    //Chess chess;
-    //Controller control;
-    //std::shared_ptr<Gui> graphicBoard;
+    std::shared_ptr<Chess> chess;
+    std::shared_ptr<Controller> control;
+    std::shared_ptr<Gui> graphicBoard;
     std::shared_ptr<Cli> textBoard;
     while (std::cin >> command) {
         if (!boardExist) {
             board = std::make_shared<Board>();
-            Chess chess{board, sb};
-            Controller control{chess};
-            graphicBoard = std::make_shared<Gui>(chess);
+            chess = std::make_shared<Chess>(board, sb);
+            control = std::make_shared<Controller>(chess);
             textBoard = std::make_shared<Cli>(chess);
-            chess.attach(graphicBoard);
-            chess.attach(textBoard);
+            //graphicBoard = std::make_shared<Gui>(chess);
+            chess->attach(textBoard);
+            //chess.attach(graphicBoard);
             whiteTurn = true;
             boardExist = true;
         }
@@ -89,7 +97,8 @@ int main() {
             }
             std::string cmd;
             bool gameEnd = false;
-            while(!gameEnd) {
+            while(std::cin >> cmd) {
+                if (gameEnd) {break;}
                 if (cmd == "resign") {
                     control->resign();
                     if (whiteTurn) {sb->addToBlack(1);}
@@ -97,7 +106,7 @@ int main() {
                     boardExist = false;
                     break;
                 } else if (cmd == "move") {
-                    if (whitTurn && player1IsComputer) {
+                    if (whiteTurn && player1IsComputer) {
                         gameEnd = control->computerMove(whiteTurn);
                         continue;
                     } else if (!whiteTurn && player2IsComputer) {
@@ -123,8 +132,9 @@ int main() {
                     char promoted;
                     if ((piece == 'p' && 70 <= secondPosn && secondPosn <= 77) || (piece == 'P' && 0 <= secondPosn && secondPosn <= 7)) {
                         std::cin >> promoted;
-                        if (promoted == '') {
-                            std::cerr << "Please provide which piece pawn to be promoted to." << std::endl;
+                        if (!validPiece(promoted)) {
+                            std::cerr << "Please provide a valid piece." << std::endl;
+                            continue;
                         }
                         try {gameEnd = control->pawnPromote(firstPosn, secondPosn, piece);}
                         catch (std::out_of_range &e) {
@@ -134,7 +144,7 @@ int main() {
                         continue;
                     }
                     gameEnd = control->move(firstPosn, secondPosn, whiteTurn);
-                    whiteturn = !whiteTurn;
+                    whiteTurn = !whiteTurn;
                     continue;
                 } else if (cmd == "undo") {
                     try{control->undo();}
@@ -142,11 +152,14 @@ int main() {
                         std::cerr << e.what() << std::endl;
                         continue;
                     }
-                    whtieturn = !whiteTurn;
+                    whiteTurn = !whiteTurn;
                 }
             }
             board = nullptr;
-            
+            chess = nullptr;
+            control = nullptr;
+            textBoard = nullptr;
+            graphicBoard = nullptr;
             boardExist = false;
         } else if (command == "setup") {
             std::string cmd;
@@ -154,9 +167,8 @@ int main() {
                 if (cmd == "done") {
                     int whiteKing = 0;
                     int blackKing = 0;
-                    bool whiteCheck = control->whiteCheck();
-                    bool blackCheck = control->blackCheck();
-                    if (whiteCheck || blackCheck) {
+                    bool check = control->check();
+                    if (check) {
                         std::cerr << "King should be not in check!!!" << std::endl;
                         continue;
                     }
