@@ -14,7 +14,6 @@ public:
     ~Board();
     Board(const std::shared_ptr<Board> other);
     char charAt(Position posn);
-    std::string colourAt(Position posn); 
     std::shared_ptr<Piece> getPiece(Position posn);
     void setPiece(Position posn, std::shared_ptr<Piece> piece);
     bool getFirstMove(Position posn);

@@ -24,7 +24,7 @@ class Chess : public Subject{
     std::shared_ptr<ScoreBoard> score;
     std::vector<std::shared_ptr<Move>> moves;
     std::shared_ptr<Board> board;
-    bool enPassant(std::shared_ptr<Move> movement, bool whiteTurn);
+    bool enPassant(std::shared_ptr<Move> movement);
     bool castling(std::shared_ptr<Move> movement, bool whiteTurn);
     bool validKing(std::shared_ptr<Move> movement);
     bool validQueen(std::shared_ptr<Move> movement);
