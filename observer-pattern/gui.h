@@ -10,14 +10,15 @@ enum Position;
 class Gui: public Observer {
     std::shared_ptr<Chess> chess;
     Xwindow xw;
-public:
     void drawKing(int col, int row, char piece);
     void drawQueen(int col, int row, char piece);
     void drawRook(int col, int row, char piece);
     void drawBishop(int col, int row, char piece);
     void drawKnight(int col, int row, char piece);
     void drawPawn(int col, int row, char piece);
+public:
     Gui(std::shared_ptr<Chess> chess);
+    void drawBoard() override;
     void notify(std::string value) override;
     ~Gui();
 };

@@ -2,11 +2,46 @@
 
 Controller::Controller(std::shared_ptr<Chess> cs): chess{cs} {}
 
-bool Controller::move(std::string org_posn, std::string new_posn, bool whiteTurn) {
+Controller::~Controller() {
+    chess = nullptr;
+}
+
+bool Controller::move(Position org_posn, Position new_posn, bool whiteTurn) {
     auto movement = std::make_shared<Move>(org_posn, new_posn);
     bool gameEnd;
     try {gameEnd = chess->movePiece(movement, whiteTurn);}
     catch (std::out_of_range &e) {throw e;}
     return gameEnd;
 }
-void Controller::computerMove() {}
+
+bool Controller::check() {
+    std::string check = chess->checkTest();
+    if (check == "") {
+        return false;
+    } else {
+        return true;
+    }
+}
+
+void Controller::display() {
+
+}
+
+void Controller::resign() {
+    
+}
+
+void Controller::undo() {
+    try{chess->undo();}
+    catch(std::out_of_range &e) {
+        throw e;
+    }
+}
+
+bool Controller::pawnPromote(Position org_posn, Position new_posn, char piece) {
+    auto movement = std::make_shared<Move>(org_posn, new_posn);
+    try{chess->pawnPromote(movement, piece);}
+    catch (std::out_of_range &e) {
+        throw e;
+    }
+}

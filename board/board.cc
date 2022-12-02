@@ -286,6 +286,6 @@ void Board::replace(char c, Position posn) {
         newPiece = std::make_shared<Queen>(c, "White");
     } else {throw std::out_of_range {"Invalid Piece!"};}
     remove(posn);
-    setPiece(posn, newPiece);   
+    setPiece(posn, newPiece);
 }
 

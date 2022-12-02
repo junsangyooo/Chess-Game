@@ -141,7 +141,7 @@ void Gui::drawPawn(int col, int row, char piece) {
     xw.fillRectangle(col*30+7, row*30+23, 18, 2, colour);
 }
 
-void Gui::notify(std::string value) {
+void Gui::drawBoard() {
     char piece;
     int colour;
     for (int i = 0; i < 8; ++i) {
@@ -168,16 +168,18 @@ void Gui::notify(std::string value) {
             }
         }
     }
-    if (value != ""){
-        Xwindow w{100, 100};
-        w.drawString(100, 100, value);
-    }
+}
+
+void Gui::notify(std::string value) {
+    Xwindow w{100, 100};
+    w.drawString(100, 100, value);
 }
 
 Gui::Gui(std::shared_ptr<Chess> chess): chess{chess}, xw{240, 240} {
-    notify("");
+    drawBoard();
 }
 
 Gui::~Gui() {
-    chess->detach(this);
+    chess = nullptr;
+    chess->detach("Gui");
 }

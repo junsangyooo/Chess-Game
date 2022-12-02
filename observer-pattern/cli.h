@@ -10,6 +10,7 @@ class Cli: public Observer {
     std::shared_ptr<Chess> chess;
 public:
     Cli(std::shared_ptr<Chess> chess);
+    void drawBoard() override;
     void notify(std::string value) override;
     ~Cli();
 };

@@ -6,6 +6,9 @@ void exception() {
     throw std::out_of_range {"Invalid Move!"};
 }
 
+void Chess::undo() {
+    
+}
 
 bool Chess::validBishop(std::shared_ptr<Move> movement) {
     Position org_posn = movement->getOrg();
@@ -296,11 +299,11 @@ bool Chess::validMove(std::shared_ptr<Move> movement, bool whiteTurn) {
 
 }
 
-std::string Chess::isStaleMate() {
+std::string Chess::stalemateTest() {
 
 }
 
-std::string Chess::blackInCheck(bool whiteTurn) {
+std::string Chess::blackInCheck() {
     Position blackKing = board->getBlackKing();
     bool inCheck = false;
     int whites = 0;
@@ -373,7 +376,7 @@ std::string Chess::blackInCheck(bool whiteTurn) {
     
 }
 
-std::string Chess::whiteInCheck(bool whiteTurn) {
+std::string Chess::whiteInCheck() {
     Position whiteKing = board->getWhiteKing();
     bool inCheck = false;
     std::vector<std::shared_ptr<Position>> blackPieces;
@@ -490,4 +493,12 @@ bool Chess::movePiece(std::shared_ptr<Move> movement, bool whiteTurn) {
 // Observers call getPiece function to get the piece which is on the Position
 char Chess::getPiece(Position posn) const {
     return board->charAt(posn);
+}
+
+Chess::~Chess() {
+    score = nullptr;
+    for(int i = 0; i < moves.size(); ++i) {
+        moves.erase(moves.begin());
+    }
+    board = nullptr;
 }

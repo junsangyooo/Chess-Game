@@ -1,7 +1,7 @@
 #include "cli.h"
 #include <iostream>
 
-void Cli::notify(std::string value) {
+void Cli::drawBoard() {
     char piece;
      for (int i = 0; i < 8; ++i) {
         std::cout << 8 - i << " ";
@@ -14,9 +14,10 @@ void Cli::notify(std::string value) {
     }
     std::cout << std::endl;
     std::cout << "  abcdefgh" << std::endl;
-    if (value != "") {
-        std::cout << value << std::endl;
-    }
+}
+
+void Cli::notify(std::string value) {
+    std::cout << value << std::endl;
 }
 
 Cli::Cli(std::shared_ptr<Chess> chess): chess{chess} {
@@ -24,5 +25,6 @@ Cli::Cli(std::shared_ptr<Chess> chess): chess{chess} {
 }
 
 Cli::~Cli() {
-    chess->detach(this);
+    chess = nullptr;
+    chess->detach("Cli");
 }

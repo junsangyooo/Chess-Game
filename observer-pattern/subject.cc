@@ -1,18 +1,23 @@
 #include "subject.h"
 
-void Subject::attach(Observer* ob) {
+void Subject::attach(std::shared_ptr<Observer> ob) {
     observers.emplace_back(ob);
 }
 
-void Subject::detach(Observer* ob) {
-    for (auto o = observers.begin(); o != observers.end(); ++o) {
-        if (*o == ob) {
-            observers.erase(o);
-            delete ob;
-            break;
-        }
+void Subject::detach(std::string type) {
+    if (type == "Cli") {
+        observers.erase(observers.begin());
+    } else {
+        observers.erase(observers.end());
     }
 }
+
+void Subject::drawBoard() {
+    for (auto ob: observers) {
+        ob->drawBoard();
+    }
+}
+
 void Subject::notify(std::string value) {
     for(auto ob: observers) {
         ob->notify(value);
