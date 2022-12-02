@@ -10,7 +10,8 @@
 
 class Controller {
     std::shared_ptr<Chess> chess;
-    std::shared_ptr<Computer> computer;
+    std::shared_ptr<Computer> computerWhite;
+    std::shared_ptr<Computer> computerBlack;
     std::string whitePlayer;
     std::string blackPlayer;
 public:
@@ -23,6 +24,7 @@ public:
     void display();
     void resign();
     bool move(std::string org_posn, std::string new_posn, bool whiteTurn);
+    bool pawnPromote(std::string org_posn, std::string new_posn, char piece);
     bool computerMove();
 
 };

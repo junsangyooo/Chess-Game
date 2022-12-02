@@ -124,27 +124,35 @@ int main() {
             if (player1 == "computer1") {
                 player1IsComputer = true;
                 computer = std::make_shared<LevelOne>(chess, board);
+                control->setComputerWhite(computer);
             } else if (player1 == "computer2") {
                 player1IsComputer = true;
                 computer = std::make_shared<LevelTwo>(chess, board);
+                control->setComputerWhite(computer);
             } else if (player1 == "computer3") {
                 player1IsComputer = true;
                 computer = std::make_shared<LevelThree>(chess, board);
+                control->setComputerWhite(computer);
             } else if (player1 == "computer4") {
                 player1IsComputer = true;
                 computer = std::make_shared<LevelFour>(chess, board);
+                control->setComputerWhite(computer);
             } else if (player2 == "computer1") {
                 player2IsComputer = true;
                 computer = std::make_shared<LevelOne>(chess, board);
+                control->setComputerBlack(computer);
             } else if (player2 == "computer2") {
                 player2IsComputer = true;
                 computer = std::make_shared<LevelTwo>(chess, board);
+                control->setComputerBlack(computer);
             } else if (player2 == "computer3") {
                 player2IsComputer = true;
                 computer = std::make_shared<LevelThree>(chess, board);
+                control->setComputerBlack(computer);
             } else if (player2 == "computer4") {
                 player2IsComputer = true;
                 computer = std::make_shared<LevelFour>(chess, board);
+                control->setComputerBlack(computer);
             }
             std::string cmd;
             bool gameEnd = false;
@@ -196,6 +204,13 @@ int main() {
                     if (gameEnd) {break;}
                     whiteturn = !whiteTurn;
                     continue;
+                } else if (cmd == "undo") {
+                    try{control->undo;}
+                    catch (std::out_of_range &e) {
+                        std::cerr << e.what() << std::endl;
+                        continue;
+                    }
+                    whtieturn = !whiteTurn;
                 }
             }
             boardExist = false;
