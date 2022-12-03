@@ -1,6 +1,11 @@
 #ifndef _BOARD_H_
 #define _BOARD_H_
+#include <iostream>
 #include <string>
+#include <utility>
+#include <stdexcept>
+#include <vector>
+#include <memory>
 #include "position.h"
 #include "move.h"
 

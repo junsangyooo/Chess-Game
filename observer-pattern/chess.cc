@@ -444,7 +444,7 @@ std::string Chess::whiteInCheck() {
 }
 
 
-//Controller calls movePiece function with the movement of next turn.
+//Controller calls movePiece function with the movement of next turn.  
 bool Chess::movePiece(std::shared_ptr<Move> movement, bool whiteTurn, char promote = '.') {
     Position org_posn = movement->getOrg();
     Position new_posn = movement->getNew();
