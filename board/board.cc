@@ -95,29 +95,29 @@ void Board::remove(Position posn) {
 void Board::replace(char c, Position posn) {
     std::shared_ptr<Piece> newPiece;
     if (c == 'p') {
-        newPiece = std::make_shared<Pawn>(c, "Black");
+        newPiece = std::make_shared<Pawn>(c);
     } else if (c == 'P') {
-        newPiece = std::make_shared<Pawn>(c, "White");
+        newPiece = std::make_shared<Pawn>(c);
     } else if (c == 'r') {
-        newPiece = std::make_shared<Rook>(c, "Black");
+        newPiece = std::make_shared<Rook>(c);
     } else if (c == 'R') {
-        newPiece = std::make_shared<Rook>(c, "White");
+        newPiece = std::make_shared<Rook>(c);
     } else if (c == 'b') {
-        newPiece = std::make_shared<Bishop>(c, "Black");
+        newPiece = std::make_shared<Bishop>(c);
     } else if (c == 'B') {
-        newPiece = std::make_shared<Bishop>(c, "White");
+        newPiece = std::make_shared<Bishop>(c);
     } else if (c == 'n') {
-        newPiece = std::make_shared<Knight>(c, "Black");
+        newPiece = std::make_shared<Knight>(c);
     } else if (c == 'N') {
-        newPiece = std::make_shared<Knight>(c, "White");
+        newPiece = std::make_shared<Knight>(c);
     } else if (c == 'k') {
-        newPiece = std::make_shared<King>(c, "Black");
+        newPiece = std::make_shared<King>(c);
     } else if (c == 'K') {
-        newPiece = std::make_shared<King>(c, "White");
+        newPiece = std::make_shared<King>(c);
     } else if (c == 'q') {
-        newPiece = std::make_shared<Queen>(c, "Black");
+        newPiece = std::make_shared<Queen>(c);
     } else if (c == 'Q') {
-        newPiece = std::make_shared<Queen>(c, "White");
+        newPiece = std::make_shared<Queen>(c);
     } else {throw std::out_of_range {"Invalid Piece!"};}
     remove(posn);
     setPiece(posn, newPiece);
@@ -176,7 +176,6 @@ void Board::castling(std::shared_ptr<Move> movement, int when) {
     int org_col = org_posn % 10;
     int org_row = org_posn / 10;
     int new_col = new_posn % 10;
-    int org_blank = org_col + org_row;
     setFirstMove(org_posn, false);
     setCastling(org_posn, true);
     setWhenFirstMove(org_posn, when);
@@ -332,7 +331,6 @@ void Board::undo(std::shared_ptr<Move> movement, int when) {
 void Board::undoPromoted(std::shared_ptr<Move> movement) {
     Position org_posn = movement->getOrg();
     Position new_posn = movement->getNew();
-    char piece = charAt(new_posn);
     int org_col = org_posn % 10;
     int org_row = org_posn / 10;
     int new_col = new_posn % 10;
@@ -351,7 +349,6 @@ void Board::undoPromoted(std::shared_ptr<Move> movement) {
 void Board::undoEnPassant(std::shared_ptr<Move> movement, int when) {
     Position org_posn = movement->getOrg();
     Position new_posn = movement->getNew();
-    char piece = charAt(new_posn);
     int org_col = org_posn % 10;
     int org_row = org_posn / 10;
     int new_col = new_posn % 10;
@@ -366,7 +363,6 @@ void Board::undoEnPassant(std::shared_ptr<Move> movement, int when) {
 void Board::undoCastling(std::shared_ptr<Move> movement, int when) {
     Position org_posn = movement->getOrg();
     Position new_posn = movement->getNew();
-    char piece = charAt(new_posn);
     int org_col = org_posn % 10;
     int org_row = org_posn / 10;
     int new_col = new_posn % 10;
