@@ -44,9 +44,9 @@ int main() {
             chess = std::make_shared<Chess>(board, sb);
             control = std::make_shared<Controller>(chess);
             textBoard = std::make_shared<Cli>(chess);
-            //graphicBoard = std::make_shared<Gui>(chess);
+            graphicBoard = std::make_shared<Gui>(chess);
             chess->attach(textBoard);
-            //chess.attach(graphicBoard);
+            chess.attach(graphicBoard);
             whiteTurn = true;
             boardExist = true;
         }
