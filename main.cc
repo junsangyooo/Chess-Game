@@ -130,7 +130,7 @@ int main() {
                     }
                     char piece = board->charAt(firstPosn);
                     char promoted;
-                    if ((piece == 'p' && 70 <= secondPosn && secondPosn <= 77) || (piece == 'P' && 0 <= secondPosn && secondPosn <= 7)) {
+                    if ((piece == 'p' && 60 <= secondPosn && secondPosn <= 67) || (piece == 'P' && 10 <= secondPosn && secondPosn <= 17)) {
                         std::cin >> promoted;
                         if (promoted != 'r' && promoted != 'R' && promoted != 'n' && promoted != 'N' && promoted != 'b' && promoted != 'B' && promoted != 'q' && promoted != 'Q') {
                             std::cerr << "Please provide a valid piece." << std::endl;
