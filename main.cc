@@ -132,7 +132,7 @@ int main() {
                     char promoted;
                     if ((piece == 'p' && 70 <= secondPosn && secondPosn <= 77) || (piece == 'P' && 0 <= secondPosn && secondPosn <= 7)) {
                         std::cin >> promoted;
-                        if (!validPiece(promoted)) {
+                        if (promoted != 'r' && promoted != 'R' && promoted != 'n' && promoted != 'N' && promoted != 'b' && promoted != 'B' && promoted != 'q' && promoted != 'Q') {
                             std::cerr << "Please provide a valid piece." << std::endl;
                             continue;
                         }

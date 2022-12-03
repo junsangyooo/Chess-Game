@@ -26,7 +26,7 @@ public:
     void resign();
     void undo();
     bool move(Position org_posn, Position new_posn, bool whiteTurn);
-    bool pawnPromote(Position org_posn, Position new_posn, char piece);
+    bool pawnPromote(Position org_posn, Position new_posn, bool whiteTurn, char piece);
     bool computerMove(bool whiteTurn);
 };
 

@@ -25,6 +25,12 @@ public:
     virtual void setEnPassant(bool value) {}
     virtual bool getCastling() const {}
     virtual void setCastling(bool value) {}
+    virtual bool getPromoted() const {}
+    virtual void setPromoted(bool value) {}
+    virtual void setWhenPromoted(int value) {}
+    virtual int getWhenPromoted() {}
+    virtual void setWhenFirstMove(int value) {}
+    virtual int getWhenFirstMove() {}
 };
 
 #endif

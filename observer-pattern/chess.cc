@@ -7,7 +7,48 @@ void exception() {
 }
 
 void Chess::undo() {
-    
+    if (moves.size() == 0) {
+        throw std::out_of_range {"Cannot undo when the game starts"};
+        return;
+    }
+    std::shared_ptr<Move> move = moves.back();
+    moves.pop_back();
+    Position pre_org_posn = move->getOrg();
+    Position pre_new_posn = move->getNew();
+    auto captured = move->getCaptured();
+    int when = moves.size();
+    board->undo(move, when);
+    char piece = board->charAt(pre_new_posn);
+    if (piece== 'q' || piece == 'Q' || piece == 'n' || piece == 'N' || piece == 'r' || piece == 'R' || piece == 'b' || piece == 'B') {
+        if (board->getPromoted(pre_new_posn)) {
+            int whenPromoted = board->getWhenPromoted(pre_new_posn);
+            if (whenPromoted == when) {
+                board->undoPromoted(move);
+            }
+            else {
+                board->undo(move, when);
+            }
+        }
+    } else if (piece == 'k' || piece == 'K') {
+        int diff = abs(pre_new_posn - pre_org_posn);
+        if (diff == 2) {
+            board->undoCastling(move, when);
+        } else {
+            board->undo(move, when);
+        }
+    } else if (piece == 'p' || piece == 'P') {
+        if (captured->getPiece() == 'p' || captured->getPiece() == 'P') {
+            if (captured->getEnPassant()) {
+                board->undoEnPassant(move, when);
+            } else {
+                board->undo(move, when);
+            }
+        } else {
+            board->undo(move, when);
+        }
+    }
+    drawBoard();
+    notify(move->getChecked());
 }
 
 bool Chess::enPassant(std::shared_ptr<Move> movement) {
@@ -22,28 +63,12 @@ bool Chess::enPassant(std::shared_ptr<Move> movement) {
         if (40 > org_posn || org_posn > 47) {return false;}
         else if (board->charAt(captured) != 'P') {return false;}
         else if (pre_new_posn != new_posn - 10 && pre_org_posn != new_posn + 10) {return false;}
-        /*movement->setCaptured(board->getPiece(captured));
-        board->move(org_posn, new_posn);
-        if (blackInCheck() != "") {
-            board->move(new_posn, org_posn);
-            board->setPiece(captured, movement->getCaptured());
-            movement->setCaptured(nullptr);
-            return false;
-        }*/
     } else {
         Position captured = Position(new_posn + 10);
         if (30 > org_posn || org_posn > 37) {return false;}
         else if (board->charAt(captured) != 'p') {return false;}
         else if (pre_new_posn != new_posn + 10) {return false;}
         else if (pre_org_posn != new_posn - 10) {return false;}
-        /*movement->setCaptured(board->getPiece(captured));
-        board->move(org_posn, new_posn);
-        if (whiteInCheck() != "") {
-            board->move(new_posn, org_posn);
-            board->setPiece(captured, movement->getCaptured());
-            movement->setCaptured(nullptr);
-            return false;
-        }*/
     }
     return true;
 }
@@ -51,50 +76,41 @@ bool Chess::enPassant(std::shared_ptr<Move> movement) {
 bool Chess::castling(std::shared_ptr<Move> movement) {
     Position org_posn = movement->getOrg();
     Position new_posn = movement->getNew();
-    bool firstMove;
+    char piece = board->charAt(org_posn);
+    bool firstMoveKing = board->getFirstMove(org_posn);
+    int when = moves.size();
     if (!board->getFirstMove(org_posn)) {return false;}
-    if (whiteTurn && whiteInCheck(whiteTurn) != "") {return false;}
-    else if (!whiteTurn && blackInCheck(whiteTurn) != "") {return false;}
-    if (new_posn == org_posn + 2) {
-        firstMove = board->getFirstMove(Position(new_posn + 1));
-    } else {
-        if (board->colourAt(Position(new_posn - 1)) != "") {return false;}
-        firstMove = board->getFirstMove(Position(new_posn - 2));
-    }
-    if (!firstMove) {return false;}
-    //Check whether the path for castling right side is checked
-    for(int i = org_posn + 1; i <= new_posn; i++) {
-        if (board->colourAt(Position(i)) != "") {return false;}
-        board->move(org_posn, Position(i));
-        if (whiteTurn) {
-            board->setWhiteKing(Position(i));
-            if (whiteInCheck(whiteTurn) != "") {
-                board->move(Position(i), org_posn);
+    if (new_posn + 2 == org_posn) {
+        if (!board->getFirstMove(Position(new_posn - 2))) {return false;}
+        if (board->charAt(Position(new_posn - 1)) != ' ' && board->charAt(Position(new_posn - 1)) != '-') {return false;}
+        for(int i = org_posn - 1; i >= new_posn; i--) {
+            char tmp_piece = board->charAt(Position(i));
+            if (tmp_piece != ' ' && tmp_piece != '-') {return false;}
+            auto tmp_move = std::make_shared<Move>(org_posn, Position(i));
+            board->move(tmp_move, when);
+            moves.emplace_back(tmp_move);
+            if ((piece == 'k' && blackInCheck() != "") || (piece == 'K' && whiteInCheck() != "")) {
+                undo();
                 return false;
-            }
-        } else {
-            board->setBlackKing(Position(i));
-            if (blackInCheck(whiteTurn) != "") {
-                board->move(Position(i), org_posn);
-                return false;
+            } else {
+                undo();
+                continue;
             }
         }
-    }
-    //Check whether the path for castling left side is checked
-    for(int i = org_posn - 1; i >= new_posn; i--) {
-        if (board->colourAt(Position(i)) != "") {return false;}
-        board->move(org_posn, Position(i));
-        if (whiteTurn) {
-            board->setWhiteKing(Position(i));
-            if (whiteInCheck(whiteTurn) != "") {
-                board->move(Position(i), org_posn);
+    } else {
+        if (!board->getFirstMove(Position(new_posn + 1))) {return false;}
+        for(int i = org_posn + 1; i <= new_posn; i++) {
+            char tmp_piece = board->charAt(Position(i));
+            if (tmp_piece != ' ' && tmp_piece != '-') {return false;}
+            auto tmp_move = std::make_shared<Move>(org_posn, Position(i));
+            board->move(tmp_move, when);
+            moves.emplace_back(tmp_move);
+            if ((piece == 'k' && blackInCheck() != "") || (piece == 'K' && whiteInCheck() != "")) {
+                undo();
                 return false;
-            }
-        } else {
-            board->setBlackKing(Position(i));
-            if (blackInCheck(whiteTurn) != "") {
-                board->move(Position(i), org_posn);
-                return false;
+            } else {
+                undo();
+                continue;
             }
         }
     }
@@ -375,8 +391,7 @@ std::string Chess::blackInCheck() {
             }
         }
     }
-    if (!whiteTurn && inCheck) {return "Black is in check.";}
-    else if (inCheck) {board->setIsChecked(blackKing, true);}
+    if (inCheck) {board->setIsChecked(blackKing, true);}
     int check = checkingPiece.size();
     
 }
@@ -425,71 +440,74 @@ std::string Chess::whiteInCheck() {
             }
         }
     }
-    if (whiteTurn && inCheck) {return "White is in check.";}
-    else if (inCheck) {board->setIsChecked(whiteKing, true);}
+    if (inCheck) {board->setIsChecked(whiteKing, true);}
 }
 
-void Chess::undo() {
-
-}
 
 //Controller calls movePiece function with the movement of next turn.
-bool Chess::movePiece(std::shared_ptr<Move> movement, bool whiteTurn) {
+bool Chess::movePiece(std::shared_ptr<Move> movement, bool whiteTurn, char promote = '.') {
     Position org_posn = movement->getOrg();
     Position new_posn = movement->getNew();
     char piece = board->charAt(org_posn);
+    int when = moves.size();
 
     if (!validMove(movement, whiteTurn)) {
         throw std::out_of_range {"Invalid move!"};
-    }
-
-    moves.emplace_back(movement);   //store the movement for undoing
-    board->setFirstMove(org_posn, false);   //Set the fistMove moving piece to false
-    board->move(org_posn, new_posn);    //move!
-    if (piece == 'k') {
-        board->setBlackKing(new_posn);  // Update the position of King piece
-    } else if (piece == 'K') {
-        board->setWhiteKing(new_posn);  // Update the position of King piece
+    } else if (promote != '.') {
+        board->move(movement, when);
+        board->setWhenPromoted(new_posn, when);
+        board->replace(promote, new_posn);
+        board->setWhenPromoted(new_posn, when);
+        board->setPromoted(new_posn, true);
+    } else {
+        board->move(movement, when);
     }
 
     //Now, we check whether the movement put the king under check
     std::string status;
     if (whiteTurn){
-        status = whiteInCheck(whiteTurn);
+        status = whiteInCheck();
         if (status != "") {  //If thie move makes their king under check, undo
             undo();
-            throw std::out_of_range {"Make King under check."};
+            throw std::out_of_range {"King is under check."};
         }
-        else {status = blackInCheck(whiteTurn);}
+        else {status = blackInCheck();}
     } else {
-        status = blackInCheck(whiteTurn);
+        status = blackInCheck();
         if (status != "") {  //If thie move makes their king under check, undo
             undo();
-            throw std::out_of_range {"Make King under check."};
+            throw std::out_of_range {"King is under check."};
         }
-        else {status = whiteInCheck(whiteTurn);}
+        else {status = whiteInCheck();}
     }
 
     //If it is not check, check stalemate
     if (status == "") {
-        status = isStaleMate();
+        status = stalemateTest();
     }
+    movement->setChecked(status);
+    moves.emplace_back(movement);
+
 
     //Notify to the observers to display the board.
     if (status == "Checkmate! White wins!"){
         score->addToWhite(1);
+        drawBoard();
         notify(status);
         return false;
     } else if (status == "Checkmate! Black wins!") {
         score->addToBlack(1);
+        drawBoard();
         notify(status);
         return false;
     } else if (status == "Stalemate!") {
         score->addToWhite(0.5);
         score->addToBlack(0.5);
+        drawBoard();
         notify(status);
         return false;
     } else {
+        drawBoard();
         notify(status);
         return true;
     }
@@ -501,9 +519,7 @@ char Chess::getPiece(Position posn) const {
 }
 
 Chess::~Chess() {
-    score = nullptr;
     for(int i = 0; i < moves.size(); ++i) {
         moves.erase(moves.begin());
     }
-    board = nullptr;
 }

@@ -7,6 +7,7 @@ class King : public Piece {
     bool firstMove = true;
     bool isChecked = false;
     bool castling = false;
+    int whenFirstMove = -1;
 public:
     King(char piece);
     ~King();
@@ -18,6 +19,8 @@ public:
     void setIsChecked(bool value) override {isChecked = value;}
     bool getCastling() const override {return castling;}
     void setCastling(bool value) override {castling = value;}
+    void setWhenFirstMove(int value) override {whenFirstMove = value;}
+    int getWhenFirstMove() {return whenFirstMove;}
 };
 
 #endif

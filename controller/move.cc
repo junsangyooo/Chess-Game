@@ -11,3 +11,7 @@ Position Move::getNew() {return new_posn;}
 void Move::setCaptured(std::shared_ptr<Piece> piece) {
     captured = piece;
 }
+
+void Move::setPromoted(std::shared_ptr<Piece> piece) {
+    promoted = piece;
+}

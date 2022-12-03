@@ -25,7 +25,7 @@ class Chess : public Subject{
     std::vector<std::shared_ptr<Move>> moves;
     std::shared_ptr<Board> board;
     bool enPassant(std::shared_ptr<Move> movement);
-    bool castling(std::shared_ptr<Move> movement, bool whiteTurn);
+    bool castling(std::shared_ptr<Move> movement);
     bool validKing(std::shared_ptr<Move> movement);
     bool validQueen(std::shared_ptr<Move> movement);
     bool validRook(std::shared_ptr<Move> movement);
@@ -36,7 +36,7 @@ class Chess : public Subject{
     std::string blackInCheck();
 public:
     bool validMove(std::shared_ptr<Move> movement, bool whiteTurn);
-    bool movePiece(std::shared_ptr<Move> movement, bool whiteTurn);
+    bool movePiece(std::shared_ptr<Move> movement, bool whiteTurn, char promote = '.');
     bool pawnPromote(std::shared_ptr<Move> movement, char piece);
     char getPiece(Position posn) const override;
     void undo();
