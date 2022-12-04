@@ -426,35 +426,25 @@ std::string Chess::blackInCheck() {
 
 std::string Chess::whiteInCheck() {
     Position whiteKing;
-    bool kingFound = false;
+    std::vector<Position> blackPieces;
     for (int i = 0; i < 8; ++i) {
         for (int j = 0; j < 8; ++j) {
             Position posn = Position(i*10 + j);
             char piece = board->charAt(posn);
             if (piece == 'K') {
                 whiteKing = posn;
-                kingFound = true;
-                break;
-            } else { continue;}
+            } else if ('a' <= piece && piece <= 'z') {
+                blackPieces.emplace_back(posn);
+            } else {continue;}
         }
-        if (kingFound) {break;}
     }
     bool inCheck = false;
-    std::vector<std::shared_ptr<Position>> blackPieces;
-    for (int i = 0; i < 8; ++i) {
-        for (int j = 0; j < 8; ++j) {
-            Position posn = Position(i*10 + j);
-            char piece = board->charAt(posn);
-            if (piece == ' ' || piece == '-') {continue;}
-            else if ('a' <= piece && piece <= 'z') {
-                auto tmp_move = std::make_shared<Move>(posn, whiteKing);
-                if (validMove(tmp_move, false)) {
-                    inCheck = true;
-                    break;
-                }
-            } else { continue;}
-        }
-        if (inCheck) {break;}
+    int length = blackPieces.size();
+    for (int i = 0; i < length; ++i) {
+        auto tmp_move = std::make_shared<Move>(blackPieces[i], whiteKing);
+        inCheck = validMove(tmp_move, false);
+        if (!inCheck) {break;}
+        else {continue;}
     }
     if (inCheck) {
         return "White is in check.";
