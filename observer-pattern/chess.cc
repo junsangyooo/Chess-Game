@@ -319,7 +319,6 @@ bool Chess::validMove(std::shared_ptr<Move> movement, bool whiteTurn, char promo
         if (!validRook(movement)) {return false;}
     }
     else if (piece == 'p' || piece == 'P') { //Check Pawn move
-        std::cout << 6 << std::endl;
         if (!validPawn(movement, whiteTurn, promote)) {return false;}
     } else {
         return false;
