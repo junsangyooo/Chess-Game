@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 #include "subject.h"
-#include "position.h"
+//#include "position.h"
 class Subject;
 
 class Observer {

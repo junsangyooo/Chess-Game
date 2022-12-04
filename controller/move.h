@@ -9,7 +9,6 @@
 #include <stdexcept>
 #include <vector>
 #include <memory>
-#include "position.h"
 #include "pieces.h"
 
 enum Position;

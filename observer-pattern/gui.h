@@ -12,7 +12,7 @@
 #include "observer.h"
 #include "chess.h"
 #include "window.h"
-#include "position.h"
+//#include "position.h"
 
 enum Position;
 

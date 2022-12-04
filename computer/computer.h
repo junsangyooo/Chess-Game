@@ -4,7 +4,6 @@
 #include <utility>
 #include <memory>
 #include "chess.h"
-#include "board.h"
 
 class Computer {
     std::shared_ptr<Chess> chess;

@@ -23,7 +23,7 @@ bool Controller::check() {
     }
 }
 
-void Controller::display(int posn = -1) {
+void Controller::display(int posn) {
     chess->drawBoard("", posn);
 }
 

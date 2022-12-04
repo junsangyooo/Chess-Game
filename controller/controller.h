@@ -11,7 +11,6 @@
 #include <memory>
 #include "chess.h"
 #include "move.h"
-#include "position.h"
 #include "computer.h"
 
 class Controller {

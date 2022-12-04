@@ -11,7 +11,7 @@
 #include <memory>
 #include "observer.h"
 #include "chess.h"
-#include "position.h"
+//#include "position.h"
 
 enum Position;
 
