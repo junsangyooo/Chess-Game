@@ -4,7 +4,7 @@ void Gui::drawKing(int col, int row, char piece) {
     int colour;
     if (piece == 'K') {
         colour = xw.White;
-    } else {colour == xw.Black;}
+    } else {colour = xw.Black;}
     xw.fillRectangle(col*30+15, row*30+2, 2, 2, colour);
     xw.fillRectangle(col*30+13, row*30+4, 6, 2, colour);
     xw.fillRectangle(col*30+15, row*30+6, 2, 3, colour);
@@ -26,7 +26,7 @@ void Gui::drawQueen(int col, int row, char piece) {
     int colour;
     if (piece == 'Q') {
         colour = xw.White;
-    } else {colour == xw.Black;}
+    } else {colour = xw.Black;}
     xw.fillRectangle(col*30+15, row*30+5, 2, 3, colour);
     xw.fillRectangle(col*30+14, row*30+8, 4, 2, colour);
     xw.fillRectangle(col*30+3, row*30+9, 2, 1, colour);
@@ -53,7 +53,7 @@ void Gui::drawRook(int col, int row, char piece) {
     int colour;
     if (piece == 'R') {
         colour = xw.White;
-    } else {colour == xw.Black;}
+    } else {colour = xw.Black;}
     xw.fillRectangle(col*30+6, row*30+6, 5, 4, colour);
     xw.fillRectangle(col*30+14, row*30+6, 4, 4, colour);
     xw.fillRectangle(col*30+21, row*30+6, 5, 4, colour);
@@ -65,7 +65,7 @@ void Gui::drawBishop(int col, int row, char piece) {
     int colour;
     if (piece == 'B') {
         colour = xw.White;
-    } else {colour == xw.Black;}
+    } else {colour = xw.Black;}
     xw.fillRectangle(col*30+15, row*30+4, 2, 2, colour);
     xw.fillRectangle(col*30+14, row*30+6, 4, 1, colour);
     xw.fillRectangle(col*30+13, row*30+7, 6, 1, colour);
@@ -95,7 +95,7 @@ void Gui::drawKnight(int col, int row, char piece) {
     int colour;
     if (piece == 'N') {
         colour = xw.White;
-    } else {colour == xw.Black;}
+    } else {colour = xw.Black;}
     xw.fillRectangle(col*30+11, row*30+5, 2, 1, colour);
     xw.fillRectangle(col*30+14, row*30+5, 2, 1, colour);
     xw.fillRectangle(col*30+12, row*30+6, 6, 1, colour);
@@ -124,7 +124,7 @@ void Gui::drawPawn(int col, int row, char piece) {
     int colour;
     if (piece == 'P') {
         colour = xw.White;
-    } else {colour == xw.Black;}
+    } else {colour = xw.Black;}
     xw.fillRectangle(col*30+15, row*30+6, 2, 1, colour);
     xw.fillRectangle(col*30+14, row*30+7, 4, 1, colour);
     xw.fillRectangle(col*30+13, row*30+8, 6, 1, colour);
@@ -141,7 +141,7 @@ void Gui::drawPawn(int col, int row, char piece) {
     xw.fillRectangle(col*30+7, row*30+23, 18, 2, colour);
 }
 
-void Gui::drawBoard(std::string value = "", int posn1 = -1, int posn2 = -1, int posn3 = -1, int posn4 = -1) {
+void Gui::drawBoard(std::string value, int posn1, int posn2, int posn3, int posn4) {
     char piece;
     if (posn1 != -1) {
         int row = posn1 / 10;

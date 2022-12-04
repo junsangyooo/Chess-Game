@@ -1,12 +1,4 @@
 #include "board.h"
-#include "pieces.h"
-#include "bishop.h"
-#include "king.h"
-#include "knight.h"
-#include "pawn.h"
-#include "queen.h"
-#include "rook.h"
-#include "empty.h"
 
 Board::Board() {
     for (int i = 0; i < 8; i++) {

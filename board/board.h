@@ -6,6 +6,14 @@
 #include <stdexcept>
 #include <vector>
 #include <memory>
+#include "pieces.h"
+#include "bishop.h"
+#include "king.h"
+#include "knight.h"
+#include "pawn.h"
+#include "queen.h"
+#include "rook.h"
+#include "empty.h"
 #include "position.h"
 #include "move.h"
 
