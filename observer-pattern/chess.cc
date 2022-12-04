@@ -299,10 +299,10 @@ std::string Chess::stalemateTest(bool whiteTurn) {
     }
     int length = pieces.size();
     for (int index = 0; index < length; ++index) {
-        Position org_posn = pieces.at(index);
+        Position org_posn = pieces[index];
         for(int i = 0; i < 8; ++i) {
             for (int j = 0; j < 8; ++j) {
-                int posn_index = i*10- + j;
+                int posn_index = i*10 + j;
                 Position new_posn = Position(posn_index);
                 char c  = board->charAt(new_posn);
                 if (whiteTurn && 'A' <= c && c <= 'Z') {
@@ -319,6 +319,7 @@ std::string Chess::stalemateTest(bool whiteTurn) {
                 }
             }
         }
+
     }
     std::cout << "after valid test returning stalemate" << std::endl;
     return "Stalemate!";
