@@ -141,7 +141,7 @@ void Gui::drawPawn(int col, int row, char piece) {
     xw.fillRectangle(col*30+7, row*30+23, 18, 2, colour);
 }
 
-void Gui::drawBoard(int posn1 = -1, int posn2 = -1, int posn3 = -1, int posn4 = -1) {
+void Gui::drawBoard(std::string value = "", int posn1 = -1, int posn2 = -1, int posn3 = -1, int posn4 = -1) {
     char piece;
     if (posn1 != -1) {
         int row = posn1 / 10;
@@ -241,14 +241,12 @@ void Gui::drawBoard(int posn1 = -1, int posn2 = -1, int posn3 = -1, int posn4 = 
             }
         }
     }
+    if (value != "") {
+        xw.drawString(270, 270, value);
+    }
 }
 
-void Gui::notify(std::string value) {
-    Xwindow w{100, 100};
-    w.drawString(100, 100, value);
-}
-
-Gui::Gui(std::shared_ptr<Chess> chess): chess{chess}, xw{240, 240} {
+Gui::Gui(std::shared_ptr<Chess> chess): chess{chess}, xw{280, 280} {
     drawBoard();
 }
 
