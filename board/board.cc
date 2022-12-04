@@ -222,7 +222,7 @@ bool Board::getCastling(Position posn) {
     return bd[row][col]->getCastling();
 }
 
-void Board::move(std::shared_ptr<Move> movement, int when, char piece = '.') {
+void Board::move(std::shared_ptr<Move> movement, int when, char piece) {
     Position org_posn = movement->getOrg();
     Position new_posn = movement->getNew();
     char movingPiece = charAt(org_posn);
@@ -305,15 +305,6 @@ int Board::getWhenFirstMove(Position posn) {
     return bd[row][col]->getWhenFirstMove();
 }
 
-
-Board::Board(const std::shared_ptr<Board> other) {
-    for(int i = 0; i < 7; ++i) {
-        for (int j = 0; j < 7; ++j) {
-            auto piece = std::make_shared<Piece>(other->getPiece(Position(i*10 + j)));
-            bd[i][j] = piece;
-        }
-    }
-}
 
 void Board::undo(std::shared_ptr<Move> movement, int when) {
     Position org_posn = movement->getOrg();

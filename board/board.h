@@ -18,7 +18,6 @@ class Board {
 public:
     Board();
     ~Board();
-    Board(const std::shared_ptr<Board> other);
     char charAt(Position posn);
     std::shared_ptr<Piece> getPiece(Position posn);
     void setPiece(Position posn, std::shared_ptr<Piece> piece);
