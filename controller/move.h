@@ -24,8 +24,8 @@ public:
     Move(Position org_posn, Position new_posn);
     ~Move();
 public:
-    Position getOrg();
-    Position getNew();
+    Position getOrg(){return org_posn;}
+    Position getNew(){return new_posn;}
     void setCaptured(std::shared_ptr<Piece> piece);
     std::shared_ptr<Piece> getCaptured() {return captured;}
     void setPromoted(std::shared_ptr<Piece> piece);

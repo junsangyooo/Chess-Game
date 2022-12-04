@@ -5,9 +5,6 @@ Move::~Move() {
     captured = nullptr;
 }
 
-Position Move::getOrg() {return org_posn;}
-Position Move::getNew() {return new_posn;}
-
 void Move::setCaptured(std::shared_ptr<Piece> piece) {
     captured = piece;
 }
