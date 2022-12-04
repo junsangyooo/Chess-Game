@@ -134,18 +134,6 @@ void Board::setFirstMove(Position posn, bool value) {
     bd[row][col]->setFirstMove(value);
 }
 
-bool Board::getIsChecked(Position posn) const {
-    int col = posn % 10;
-    int row = posn / 10;
-    return bd[row][col]->getIsChecked(); 
-}
-
-void Board::setIsChecked(Position posn, bool value) {
-    int col = posn % 10;
-    int row = posn / 10;
-    bd[row][col]->setIsChecked(value);
-}
-
 
 void Board::enPassant(std::shared_ptr<Move> movement) {
     Position org_posn = movement->getOrg();
@@ -154,42 +142,25 @@ void Board::enPassant(std::shared_ptr<Move> movement) {
     int org_row = org_posn / 10;
     int new_col = new_posn % 10;
     int new_row = new_posn / 10;
-    setFirstMove(org_posn, false);
-    setEnPassant(Position(org_row*10 + new_col), true);
-    movement->setCaptured(getPiece(Position(org_row*10 + new_col)));
     bd[new_row][new_col] = bd[org_row][org_col];
-    movement->setCell1(org_row*10 + new_col);
     remove(org_posn);
     remove(Position(10*org_row + new_col));
 }
 
-void Board::castling(std::shared_ptr<Move> movement, int when) {
+void Board::castling(std::shared_ptr<Move> movement) {
     Position org_posn = movement->getOrg();
     Position new_posn = movement->getNew();
     int org_col = org_posn % 10;
     int org_row = org_posn / 10;
     int new_col = new_posn % 10;
-    setFirstMove(org_posn, false);
-    setCastling(org_posn, true);
-    setWhenFirstMove(org_posn, when);
     bd[org_row][new_col] = bd[org_row][org_col];
     remove(org_posn);
-    if (new_posn > org_posn) {
-        setWhenFirstMove(Position(new_posn + 1), when);
-        setFirstMove(Position(new_posn + 1), false);
-        setCastling(Position(new_posn + 1), true);
-        bd[org_row][new_col - 1] = bd[org_row][new_col + 1];
-        remove(Position(new_posn + 1));
-        movement->setCell1(org_row*10 + new_col - 1);
-        movement->setCell2(org_row*10 + new_col + 1);
-    } else {
-        setWhenFirstMove(Position(new_posn - 2), when);
-        setFirstMove(Position(new_posn - 2), false);
-        setCastling(Position(new_posn - 2), true);
+    if (new_posn + 2 == org_posn) {
         bd[org_row][new_col + 1] = bd[org_row][new_col - 2];
         remove(Position(new_posn - 2));
-        movement->setCell1(org_row*10 + new_col + 1);
-        movement->setCell2(org_row*10 + new_col - 2);
+    } else {
+        bd[org_row][new_col - 1] = bd[org_row][new_col + 1];
+        remove(Position(new_posn + 1));
     }
 }
 
@@ -203,51 +174,11 @@ bool Board::getEnPassant(Position posn) {
     int row = posn / 10;
     return bd[row][col]->getEnPassant();
 }
-void Board::setCastling(Position posn, bool value) {
-    int col = posn % 10;
-    int row = posn / 10;
-    bd[row][col]->setCastling(value);
-}
-bool Board::getCastling(Position posn) {
-    int col = posn % 10;
-    int row = posn / 10;
-    return bd[row][col]->getCastling();
-}
 
-void Board::move(std::shared_ptr<Move> movement, int when, char piece) {
+
+void Board::move(std::shared_ptr<Move> movement, char piece) {
     Position org_posn = movement->getOrg();
     Position new_posn = movement->getNew();
-    char movingPiece = charAt(org_posn);
-    char captured = charAt(new_posn);
-    if (movingPiece == 'p' || movingPiece == 'P') {
-        if (org_posn - 11 == new_posn || new_posn == org_posn - 9 || org_posn + 9 == new_posn || new_posn == org_posn + 11) {
-            if (captured == '-' || captured == ' '){
-                enPassant(movement);
-                return;
-            }
-        }
-    } else if (movingPiece == 'k' || movingPiece == 'K') {
-        if (new_posn + 2 == org_posn || new_posn - 2 == org_posn) {
-            castling(movement, when);
-            if (movingPiece == 'k') {
-                setBlackKing(new_posn);
-            } else if (movingPiece == 'K') {
-                setWhiteKing(new_posn);
-            }
-            return;
-        }
-    }
-    if (movingPiece == 'p' || movingPiece == 'P' || movingPiece == 'k' || movingPiece == 'K' || movingPiece == 'r' || movingPiece == 'R') {
-        if (getFirstMove(org_posn)) {
-            setWhenFirstMove(org_posn, when);
-            setFirstMove(org_posn, false);
-        }
-        if (movingPiece == 'k') {
-            setBlackKing(new_posn);
-        } else if (movingPiece == 'K') {
-            setWhiteKing(new_posn);
-        }
-    }
     movement->setCaptured(getPiece(new_posn));
     int org_col = org_posn % 10;
     int org_row = org_posn / 10;
@@ -255,11 +186,8 @@ void Board::move(std::shared_ptr<Move> movement, int when, char piece) {
     int new_row = new_posn / 10;
     bd[new_row][new_col] = bd[org_row][org_col];
     remove(org_posn);
-    if ((movingPiece == 'p' || movingPiece == 'P') && piece != '.') {
-        setWhenPromoted(new_posn, when);
+    if (piece != '.') {
         replace(piece, new_posn);
-        setWhenPromoted(new_posn, when);
-        setPromoted(new_posn, true);
     }
 }
 
@@ -298,7 +226,7 @@ int Board::getWhenFirstMove(Position posn) {
 }
 
 
-void Board::undo(std::shared_ptr<Move> movement, int when) {
+void Board::undo(std::shared_ptr<Move> movement) {
     Position org_posn = movement->getOrg();
     Position new_posn = movement->getNew();
     char piece = charAt(new_posn);
@@ -309,17 +237,6 @@ void Board::undo(std::shared_ptr<Move> movement, int when) {
     bd[org_row][org_col] = bd[new_row][new_col];
     bd[new_row][new_col] = movement->getCaptured();
     movement->setCaptured(nullptr);
-    if (piece == 'p' || piece == 'P' || piece == 'k' || piece == 'K' || piece == 'r' || piece == 'R') {
-        if (getWhenFirstMove(org_posn) == when) {
-            setWhenFirstMove(org_posn, -1);
-            setFirstMove(org_posn, true);
-        }
-    }
-    if (piece == 'k') {
-        setBlackKing(org_posn);
-    } else if (piece == 'K') {
-        setWhiteKing(org_posn);
-    }
 }
 
 void Board::undoPromoted(std::shared_ptr<Move> movement) {
@@ -340,7 +257,7 @@ void Board::undoPromoted(std::shared_ptr<Move> movement) {
     movement->setCaptured(nullptr);
 }
 
-void Board::undoEnPassant(std::shared_ptr<Move> movement, int when) {
+void Board::undoEnPassant(std::shared_ptr<Move> movement) {
     Position org_posn = movement->getOrg();
     Position new_posn = movement->getNew();
     int org_col = org_posn % 10;
@@ -354,7 +271,7 @@ void Board::undoEnPassant(std::shared_ptr<Move> movement, int when) {
     setEnPassant(Position(org_row*10 + new_col), false);
 }
 
-void Board::undoCastling(std::shared_ptr<Move> movement, int when) {
+void Board::undoCastling(std::shared_ptr<Move> movement) {
     Position org_posn = movement->getOrg();
     Position new_posn = movement->getNew();
     int org_col = org_posn % 10;

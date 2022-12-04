@@ -146,7 +146,7 @@ void Gui::drawBoard(std::string value, int posn1, int posn2, int posn3, int posn
     if (posn1 != -1) {
         int row = posn1 / 10;
         int col = posn1 % 10;
-        piece = chess->getPiece(Position(posn1));
+        piece = chess->charAt(Position(posn1));
         if (piece == 'k' || piece =='K'){
             drawKing(col, row, piece);
         } else if (piece == 'q' || piece == 'Q') {
@@ -159,7 +159,7 @@ void Gui::drawBoard(std::string value, int posn1, int posn2, int posn3, int posn
             drawKnight(col, row, piece);
         } else if (piece == 'p' || piece == 'P') {
             drawPawn(col, row, piece);
-        } else if (posn1 % 2 == 0) {
+        } else if ((row + col) % 2 == 0) {
             xw.fillRectangle(col*30, row*30, 30, 30, xw.Yellow);
         } else {
             xw.fillRectangle(col*30, row*30, 30, 30, xw.Red);
@@ -168,7 +168,7 @@ void Gui::drawBoard(std::string value, int posn1, int posn2, int posn3, int posn
     if (posn2 != -1) {
         int row = posn2 / 10;
         int col = posn2 % 10;
-        piece = chess->getPiece(Position(posn2));
+        piece = chess->charAt(Position(posn2));
         if (piece == 'k' || piece =='K'){
             drawKing(col, row, piece);
         } else if (piece == 'q' || piece == 'Q') {
@@ -181,7 +181,7 @@ void Gui::drawBoard(std::string value, int posn1, int posn2, int posn3, int posn
             drawKnight(col, row, piece);
         } else if (piece == 'p' || piece == 'P') {
             drawPawn(col, row, piece);
-        } else if (posn2 % 2 == 0) {
+        } else if ((row + col) % 2 == 0) {
             xw.fillRectangle(col*30, row*30, 30, 30, xw.Yellow);
         } else {
             xw.fillRectangle(col*30, row*30, 30, 30, xw.Red);
@@ -190,7 +190,7 @@ void Gui::drawBoard(std::string value, int posn1, int posn2, int posn3, int posn
     if (posn3 != -1) {
         int row = posn3 / 10;
         int col = posn3 % 10;
-        piece = chess->getPiece(Position(posn3));
+        piece = chess->charAt(Position(posn3));
         if (piece == 'k' || piece =='K'){
             drawKing(col, row, piece);
         } else if (piece == 'q' || piece == 'Q') {
@@ -203,7 +203,7 @@ void Gui::drawBoard(std::string value, int posn1, int posn2, int posn3, int posn
             drawKnight(col, row, piece);
         } else if (piece == 'p' || piece == 'P') {
             drawPawn(col, row, piece);
-        } else if (posn3 % 2 == 0) {
+        } else if ((row + col) % 2 == 0) {
             xw.fillRectangle(col*30, row*30, 30, 30, xw.Yellow);
         } else {
             xw.fillRectangle(col*30, row*30, 30, 30, xw.Red);
@@ -212,7 +212,7 @@ void Gui::drawBoard(std::string value, int posn1, int posn2, int posn3, int posn
     if (posn4 != -1) {
         int row = posn4 / 10;
         int col = posn4 % 10;
-        piece = chess->getPiece(Position(posn4));
+        piece = chess->charAt(Position(posn4));
         if (piece == 'k' || piece =='K'){
             drawKing(col, row, piece);
         } else if (piece == 'q' || piece == 'Q') {
@@ -225,7 +225,7 @@ void Gui::drawBoard(std::string value, int posn1, int posn2, int posn3, int posn
             drawKnight(col, row, piece);
         } else if (piece == 'p' || piece == 'P') {
             drawPawn(col, row, piece);
-        } else if (posn4 % 2 == 0) {
+        } else if ((row + col) % 2 == 0) {
             xw.fillRectangle(col*30, row*30, 30, 30, xw.Yellow);
         } else {
             xw.fillRectangle(col*30, row*30, 30, 30, xw.Red);
@@ -240,9 +240,9 @@ void Gui::notify() {
     for (int i = 0; i < 8; ++i) {
         for (int j = 0; j <8;  ++j) {
             int posn = i*10 + j;
-            char piece = chess->getPiece(Position(posn));
-            if (posn % 2 == 0) {
-                xw.fillRectangle(j*30, i*30, 30, 30, xw.Yellow);
+            char piece = chess->charAt(Position(posn));
+            if ((i + j) % 2 == 0) {
+                xw.fillRectangle(j*30, i*30, 30, 30, xw.Blue);
             } else {
                 xw.fillRectangle(j*30, i*30, 30, 30, xw.Red);
             }

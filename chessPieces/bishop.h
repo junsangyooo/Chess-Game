@@ -5,7 +5,7 @@
 class Bishop : public Piece {
     char piece;
     bool promoted = false;
-    int whenPromoted;
+    int whenPromoted = -1;
 public:
     Bishop(char piece);
     ~Bishop();

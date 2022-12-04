@@ -6,9 +6,7 @@ class Pawn : public Piece {
     char piece;
     bool firstMove = true;
     bool en_passant = false;
-    bool promoted = false;
-    int whenPromoted;
-    int whenFirstMove;
+    int whenFirstMove = -1;
 public:
     Pawn(char piece);
     ~Pawn();
@@ -18,10 +16,6 @@ public:
     void setFirstMove(bool value) override {firstMove = value;}
     bool getEnPassant() const override {return en_passant;}
     void setEnPassant(bool value) override {en_passant = value;}
-    bool getPromoted() const override {return promoted;}
-    void setPromoted(bool value) override {promoted = value;}
-    void setWhenPromoted(int value) override {whenPromoted = value;}
-    int getWhenPromoted() {return whenPromoted;}
     void setWhenFirstMove(int value) override {whenFirstMove = value;}
     int getWhenFirstMove() {return whenFirstMove;}
 };

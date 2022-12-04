@@ -19,12 +19,8 @@ public:
     virtual char getPiece() const = 0;
     virtual bool getFirstMove() const {return false;}
     virtual void setFirstMove(bool value) {}
-    virtual bool getIsChecked() const{return false;} 
-    virtual void setIsChecked(bool value) {}
     virtual bool getEnPassant() const {return false;}
     virtual void setEnPassant(bool value) {}
-    virtual bool getCastling() const {return false;}
-    virtual void setCastling(bool value) {}
     virtual bool getPromoted() const {return false;}
     virtual void setPromoted(bool value) {}
     virtual void setWhenPromoted(int value) {}

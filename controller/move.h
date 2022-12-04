@@ -13,7 +13,7 @@
 
 class Move {
     Position org_posn, new_posn;
-    std::shared_ptr<Piece> captured;
+    std::shared_ptr<Piece> captured = nullptr;
     std::shared_ptr<Piece> promoted;
     std::string checked;
     int changed_cell1 = -1;

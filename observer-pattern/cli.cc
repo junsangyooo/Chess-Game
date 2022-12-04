@@ -7,7 +7,7 @@ void Cli::drawBoard(std::string value, int posn1, int posn2, int posn3, int posn
         std::cout << 8 - i << " ";
         for (int j = 0; j <8;  ++j) {
             int posn = i*10 + j;
-            piece = chess->getPiece(Position(posn));
+            piece = chess->charAt(Position(posn));
             std::cout << piece;
         }
         std::cout << std::endl;
@@ -25,7 +25,7 @@ void Cli::notify() {
         std::cout << 8 - i << " ";
         for (int j = 0; j <8;  ++j) {
             int posn = i*10 + j;
-            piece = chess->getPiece(Position(posn));
+            piece = chess->charAt(Position(posn));
             std::cout << piece;
         }
         std::cout << std::endl;

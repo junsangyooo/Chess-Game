@@ -5,7 +5,7 @@
 class Queen : public Piece {
     char piece;
     bool promoted =false;
-    int whenPromoted;
+    int whenPromoted = -1;
 public:
     Queen(char piece);
     ~Queen();
