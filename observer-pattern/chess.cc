@@ -350,14 +350,18 @@ std::string Chess::stalemateTest(bool whiteTurn) {
     return "Stalemate!";
 }
 
-std::string Chess::checkmateTeset() {
-
+std::string Chess::checkmateTest(bool whiteTurn) {
+    std::string stalemate = stalemateTest(whiteTurn);
+    if (stalemate != "" && whiteTurn) {
+        return "Checkmate! Black wins!";
+    } else if (stalemate != "") {
+        return "Checkmate! White wins!";
+    } else {return "";}
 }
 
 std::string Chess::blackInCheck() {
     Position blackKing = board->getBlackKing();
     bool inCheck = false;
-    int kingIndex = 0;
     std::vector<std::shared_ptr<Position>> whitePieces;
     for (int i = 0; i < 8; ++i) {
         for (int j = 0; j < 8; ++j) {
@@ -385,7 +389,6 @@ std::string Chess::whiteInCheck() {
     Position whiteKing = board->getWhiteKing();
     bool inCheck = false;
     std::vector<std::shared_ptr<Position>> blackPieces;
-    //Now check whether the King is under check
     for (int i = 0; i < 8; ++i) {
         for (int j = 0; j < 8; ++j) {
             Position posn = Position(i*10 + j);
@@ -433,10 +436,15 @@ bool Chess::movePiece(std::shared_ptr<Move> movement, bool whiteTurn, char promo
         status = whiteInCheck();
     }
 
-    //If it is not check, check stalemate
-    if (status == "") {
+    if (status != "") {
+        std::string checkmate = checkmateTest(!whiteTurn);
+        if (checkmate != "") {
+            status = checkmate;
+        }
+    } else {
         status = stalemateTest(!whiteTurn);
     }
+
     movement->setChecked(status);
     moves.emplace_back(movement);
 
