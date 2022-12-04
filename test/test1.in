@@ -1,0 +1,17 @@
+setup
+done
+setup
++ K e1
+done
+- e1
+- e8
+done
++ k a8
+done
+setup
++ o a1
++ r a10
+- e9
+= Brown
+= Black
+done

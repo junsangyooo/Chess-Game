@@ -246,9 +246,9 @@ void Gui::notify() {
             int posn = i*10 + j;
             char piece = chess->charAt(Position(posn));
             if ((i + j) % 2 == 0) {
-                xw.fillRectangle(j*30, i*30, 30, 30, xw.Blue);
+                xw.fillRectangle(j*30, i*30, 30, 30, xw.Orange);
             } else {
-                xw.fillRectangle(j*30, i*30, 30, 30, xw.Red);
+                xw.fillRectangle(j*30, i*30, 30, 30, xw.Brown);
             }
             if (piece == 'k' || piece =='K'){
                 drawKing(j, i, piece);
@@ -267,7 +267,7 @@ void Gui::notify() {
     }
 }
 
-Gui::Gui(std::shared_ptr<Chess> chess): chess{chess}, xw{280, 280} {
+Gui::Gui(std::shared_ptr<Chess> chess): chess{chess}, xw{240, 280} {
     notify();
 }
 

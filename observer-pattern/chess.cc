@@ -58,9 +58,9 @@ bool Chess::enPassant(std::shared_ptr<Move> movement, bool whiteTurn) {
     Position pre_new_posn = preMove->getNew();
     Position org_posn = movement->getOrg();
     Position new_posn = movement->getNew();
-    if (Position(40  - (whiteTurn * 10)) > org_posn || org_posn < Position(47 - (whiteTurn * 10))) {
+    if (Position(40  - (whiteTurn * 10)) > org_posn || org_posn > Position(47 - (whiteTurn * 10))) {
         return false;
-    } else if (pre_new_posn == Position((org_posn / 10) + (new_posn % 10))) {
+    } else if (pre_new_posn == Position((org_posn / 10) * 10+ (new_posn % 10))) {
         if (pre_org_posn == Position(pre_new_posn - (whiteTurn * 20) + (!whiteTurn * 20))) {
             return true;
         } else {
@@ -87,7 +87,7 @@ bool Chess::castling(std::shared_ptr<Move> movement, bool whiteTurn) {
     }
     int i = org_posn + index;
     bool valid = true;
-    while(i != new_posn) {
+    while(true) {
         char tmp_piece = board->charAt(Position(i));
         if (tmp_piece != ' ' && tmp_piece != '-') {return false;}
         auto tmp_move = std::make_shared<Move>(org_posn, Position(i));
@@ -97,7 +97,8 @@ bool Chess::castling(std::shared_ptr<Move> movement, bool whiteTurn) {
         }
         tmp_move = std::make_shared<Move>(Position(i), org_posn);
         board->move(tmp_move);
-        if (!valid) {return false;}
+        if (!valid) {return valid;}
+        if (i == new_posn) {break;}
         i += index;
     }
     return valid;
@@ -311,22 +312,21 @@ std::string Chess::stalemateTest(bool whiteTurn) {
                     continue;
                 } else {
                     auto move = std::make_shared<Move>(org_posn, new_posn);
-                    std::cout << "before valid test" << std::endl;
                     if (validMove(move, whiteTurn)) {
-                        std::cout << "after valid test and returning empty" << std::endl;
                         return "";
                     }
                 }
             }
         }
-
     }
     std::cout << "after valid test returning stalemate" << std::endl;
     return "Stalemate!";
 }
 
 std::string Chess::checkmateTest(bool whiteTurn) {
+    std::cout << "checkmate test stalemate" << std::endl;
     std::string stalemate = stalemateTest(whiteTurn);
+    std::cout << "done" << std::endl;
     if (stalemate != "" && whiteTurn) {
         return "Checkmate! Black wins!";
     } else if (stalemate != "") {
@@ -492,7 +492,6 @@ bool Chess::movePiece(std::shared_ptr<Move> movement, bool whiteTurn, char promo
     } else {
         status = whiteInCheck();
     }
-    std::cout << status << std::endl;
     if (status != "") {
         std::string checkmate = checkmateTest(!whiteTurn);
         if (checkmate != "") {
