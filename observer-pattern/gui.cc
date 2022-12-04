@@ -157,8 +157,12 @@ void Gui::drawBoard(std::string value, int posn1, int posn2, int posn3, int posn
             drawBishop(col, row, piece);
         } else if (piece == 'n' || piece == 'N') {
             drawKnight(col, row, piece);
-        } else {
+        } else if (piece == 'p' || piece == 'P') {
             drawPawn(col, row, piece);
+        } else if (posn1 % 2 == 0) {
+            xw.fillRectangle(col*30, row*30, 30, 30, xw.Yellow);
+        } else {
+            xw.fillRectangle(col*30, row*30, 30, 30, xw.Red);
         }
     }
     if (posn2 != -1) {
@@ -175,8 +179,12 @@ void Gui::drawBoard(std::string value, int posn1, int posn2, int posn3, int posn
             drawBishop(col, row, piece);
         } else if (piece == 'n' || piece == 'N') {
             drawKnight(col, row, piece);
-        } else {
+        } else if (piece == 'p' || piece == 'P') {
             drawPawn(col, row, piece);
+        } else if (posn2 % 2 == 0) {
+            xw.fillRectangle(col*30, row*30, 30, 30, xw.Yellow);
+        } else {
+            xw.fillRectangle(col*30, row*30, 30, 30, xw.Red);
         }
     }
     if (posn3 != -1) {
@@ -193,8 +201,12 @@ void Gui::drawBoard(std::string value, int posn1, int posn2, int posn3, int posn
             drawBishop(col, row, piece);
         } else if (piece == 'n' || piece == 'N') {
             drawKnight(col, row, piece);
-        } else {
+        } else if (piece == 'p' || piece == 'P') {
             drawPawn(col, row, piece);
+        } else if (posn3 % 2 == 0) {
+            xw.fillRectangle(col*30, row*30, 30, 30, xw.Yellow);
+        } else {
+            xw.fillRectangle(col*30, row*30, 30, 30, xw.Red);
         }
     }
     if (posn4 != -1) {
@@ -211,8 +223,12 @@ void Gui::drawBoard(std::string value, int posn1, int posn2, int posn3, int posn
             drawBishop(col, row, piece);
         } else if (piece == 'n' || piece == 'N') {
             drawKnight(col, row, piece);
-        } else {
+        } else if (piece == 'p' || piece == 'P') {
             drawPawn(col, row, piece);
+        } else if (posn4 % 2 == 0) {
+            xw.fillRectangle(col*30, row*30, 30, 30, xw.Yellow);
+        } else {
+            xw.fillRectangle(col*30, row*30, 30, 30, xw.Red);
         }
     }
     if (value != "") {
@@ -225,10 +241,10 @@ void Gui::notify() {
         for (int j = 0; j <8;  ++j) {
             int posn = i*10 + j;
             char piece = chess->getPiece(Position(posn));
-            if (piece != '-') {
+            if (posn % 2 == 0) {
                 xw.fillRectangle(j*30, i*30, 30, 30, xw.Yellow);
             } else {
-                xw.fillRectangle(j*30, i*30, 30, 30, xw.Orange);
+                xw.fillRectangle(j*30, i*30, 30, 30, xw.Red);
             }
             if (piece == 'k' || piece =='K'){
                 drawKing(j, i, piece);
@@ -240,7 +256,7 @@ void Gui::notify() {
                 drawBishop(j ,i, piece);
             } else if (piece == 'n' || piece == 'N') {
                 drawKnight(j ,i, piece);
-            } else {
+            } else if (piece == 'p' || piece == 'P'){
                  drawPawn(j, i, piece);
             }
         }
