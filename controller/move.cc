@@ -3,6 +3,7 @@
 Move::Move(Position org_posn, Position new_posn): org_posn{org_posn}, new_posn{new_posn}, captured{nullptr} {}
 Move::~Move() {
     captured = nullptr;
+    promoted = nullptr;
 }
 
 void Move::setCaptured(std::shared_ptr<Piece> piece) {

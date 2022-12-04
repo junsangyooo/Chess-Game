@@ -19,21 +19,16 @@ void Chess::undo() {
             board->undoPromoted(move);
             board->setPromoted(pre_org_posn, false);
             board->setWhenPromoted(pre_org_posn, -1);
-            move->setCaptured(nullptr);
-            move->setPromoted(nullptr);
         } else if ((piece == 'r' || piece == 'R') && board->getWhenFirstMove(pre_new_posn) == when) {
             board->undo(move);
-            move->setCaptured(nullptr);
             board->setFirstMove(pre_org_posn, true);
             board->setWhenFirstMove(pre_org_posn, -1);
         }
     } else if (captured->getEnPassant()) {
         board->undoEnPassant(move);
         board->setEnPassant(Position((pre_org_posn * 10) / 10 + (pre_new_posn % 10)), false);
-        move->setCaptured(nullptr);
     } else if (piece == 'p' || piece == 'P') {
         board->undo(move);
-        move->setCaptured(nullptr);
     } else if (piece == 'k' || piece == 'K') {
         if (pre_new_posn + 2 == pre_org_posn) {
             board->undoCastling(move);
@@ -51,10 +46,8 @@ void Chess::undo() {
             board->undo(move);
             board->setFirstMove(pre_org_posn, true);
             board->setWhenFirstMove(pre_org_posn, -1);
-            move->setCaptured(nullptr);
         } else {
             board->undo(move);
-            move->setCaptured(nullptr);
         }
     }
 }
@@ -265,29 +258,22 @@ bool Chess::validMove(std::shared_ptr<Move> movement, bool whiteTurn, char promo
     }
 
     if (piece == 'k' || piece == 'K') {    //Check King move
-        std::cout << "fuck1" << std::endl;
         if (!validKing(movement, whiteTurn)) {return false;}
     } else if (piece == 'q' || piece == 'Q') {    //Check Queen move
-        std::cout << "fuck2" << std::endl;
         if (!validQueen(movement)) {return false;}
     }
     else if (piece == 'b' || piece == 'B') {    //Check Bishop move
-        std::cout << "fuck3" << std::endl;
         if (!validBishop(movement)) {return false;}
     }
     else if (piece == 'n' || piece == 'N') {    //Check Knight move
-        std::cout << "fuck4" << std::endl;
         if (!validKnight(movement)) {return false;}
     }
     else if (piece == 'r' || piece == 'R') {    //Check Rook move
-        std::cout << "fuck5" << std::endl;
         if (!validRook(movement)) {return false;}
     }
     else if (piece == 'p' || piece == 'P') { //Check Pawn move
-        std::cout << "fuck6" << std::endl;
         if (!validPawn(movement, whiteTurn, promote)) {return false;}
     } else {
-        std::cout << "fuck7" << std::endl;
         return false;
     }
     bool valid = true;

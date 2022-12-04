@@ -250,11 +250,6 @@ int main() {
             std::cout << "Game ended. Do you want to play again? (yes/no)" << std::endl;
             bool restart = newGame();
             if (!restart) {
-                /*board = nullptr;
-                chess = nullptr;
-                control = nullptr;
-                textBoard = nullptr;
-                graphicBoard = nullptr;*/
                 break;
             } else {
                 boardExist = false;
