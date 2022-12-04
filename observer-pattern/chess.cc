@@ -388,7 +388,7 @@ std::string Chess::checkmateTest(bool whiteTurn) {
 }
 
 std::string Chess::blackInCheck() {
-    Position blackKing;
+    /*Position blackKing;
     bool kingFound = false;
     for (int i = 0; i < 8; ++i) {
         for (int j = 0; j < 8; ++j) {
@@ -421,6 +421,31 @@ std::string Chess::blackInCheck() {
     if (inCheck) {
         return "Black is in check.";
     }
+    return "";*/
+    Position blackKing;
+    std::vector<Position> whitePieces;
+    for (int i = 0; i < 8; ++i) {
+        for (int j = 0; j < 8; ++j) {
+            Position posn = Position(i*10 + j);
+            char piece = board->charAt(posn);
+            if (piece == 'k') {
+                blackKing = posn;
+            } else if ('A' <= piece && piece <= 'Z') {
+                whitePieces.emplace_back(posn);
+            } else {continue;}
+        }
+    }
+    bool inCheck = false;
+    int length = whitePieces.size();
+    for (int i = 0; i < length; ++i) {
+        auto tmp_move = std::make_shared<Move>(whitePieces[i], blackKing);
+        inCheck = validMove(tmp_move, false);
+        if (inCheck) {break;}
+        else {continue;}
+    }
+    if (inCheck) {
+        return "Black is in check.";
+    }
     return "";
 }
 
@@ -442,7 +467,7 @@ std::string Chess::whiteInCheck() {
     int length = blackPieces.size();
     for (int i = 0; i < length; ++i) {
         auto tmp_move = std::make_shared<Move>(blackPieces[i], whiteKing);
-        inCheck = !validMove(tmp_move, false);
+        inCheck = validMove(tmp_move, false);
         if (inCheck) {break;}
         else {continue;}
     }
