@@ -11,9 +11,9 @@ class Computer {
     std::string whitePlayer;
     std::string blackPlayer;
 public:
+    Computer(std::shared_ptr<Chess> chess);
+    ~Computer();
 };
 
-
-};
 
 #endif
