@@ -136,7 +136,6 @@ bool Chess::validBishop(std::shared_ptr<Move> movement) {
         char piece = board->charAt(Position(i));
         if (piece != ' ' && piece != '-') {return false;}
     }
-
     return true;
 }
 
@@ -151,7 +150,8 @@ bool Chess::validKing(std::shared_ptr<Move> movement) {
         return true;
     } else if (new_posn + 2 == org_posn || new_posn - 2 == org_posn) {
         return castling(movement);
-    } else {return false;}
+    }
+    return false;
 }
 
 bool Chess::validQueen(std::shared_ptr<Move> movement) {
@@ -210,9 +210,8 @@ bool Chess::validKnight(std::shared_ptr<Move> movement) {
         return true;
     } else if (new_posn == org_posn + 19 || new_posn == org_posn + 21) {
         return true;
-    } else {
-        return false;
     }
+    return false;
 }
 
 bool Chess::validPawn(std::shared_ptr<Move> movement) {
@@ -245,9 +244,8 @@ bool Chess::validPawn(std::shared_ptr<Move> movement) {
         } else if (firstMove && new_posn == org_posn + 20) {
             if (captured != ' ' && captured != '-') {return false;}
         } else {return false;}
-    } else {
-        return false;
-    }
+    } 
+    return false;
 }
 
 bool Chess::validMove(std::shared_ptr<Move> movement, bool whiteTurn, char promote) {
@@ -351,7 +349,8 @@ std::string Chess::checkmateTest(bool whiteTurn) {
         return "Checkmate! Black wins!";
     } else if (stalemate != "") {
         return "Checkmate! White wins!";
-    } else {return "";}
+    }
+    return "";
 }
 
 std::string Chess::blackInCheck() {
@@ -377,7 +376,7 @@ std::string Chess::blackInCheck() {
         board->setIsChecked(blackKing, true);
         return "Black is in check.";
     }
-    else {return "";}
+    return "";
 }
 
 std::string Chess::whiteInCheck() {
@@ -402,9 +401,8 @@ std::string Chess::whiteInCheck() {
     if (inCheck) {
         board->setIsChecked(whiteKing, true);
         return "White is in check.";
-    } else {
-        return "";
     }
+    return "";
 }
 
 //Controller calls movePiece function with the movement of next turn.  
@@ -455,10 +453,9 @@ bool Chess::movePiece(std::shared_ptr<Move> movement, bool whiteTurn, char promo
         score->addToBlack(0.5);
         drawBoard(status, org_changed_posn, new_changed_posn, movement->getCell1(), movement->getCell2());
         return false;
-    } else {
-        drawBoard(status, org_changed_posn, new_changed_posn, movement->getCell1(), movement->getCell2());
-        return true;
     }
+    drawBoard(status, org_changed_posn, new_changed_posn, movement->getCell1(), movement->getCell2());
+    return true;
 }
 
 // Observers call getPiece function to get the piece which is on the Position
@@ -466,17 +463,18 @@ char Chess::getPiece(Position posn) const {
     return board->charAt(posn);
 }
 
-Chess::~Chess() {
-    int length = moves.size();
-    for(int i = 0; i < length; ++i) {
-        moves.erase(moves.begin());
-    }
-}
 
 std::string Chess::checkTest() {
     std::string white = whiteInCheck();
     std::string black = blackInCheck();
     if (white == "") {return black;}
     else if (black == "") {return white;}
-    else {return "";}
+    return "";
+}
+
+Chess::~Chess() {
+    int length = moves.size();
+    for(int i = 0; i < length; ++i) {
+        moves.erase(moves.begin());
+    }
 }
