@@ -3,7 +3,7 @@
 
 void Cli::drawBoard(int posn1 = -1, int posn2 = -1, int posn3 = -1, int posn4 = -1) {
     char piece;
-     for (int i = 0; i < 8; ++i) {
+    for (int i = 0; i < 8; ++i) {
         std::cout << 8 - i << " ";
         for (int j = 0; j <8;  ++j) {
             int posn = i*10 + j;
