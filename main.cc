@@ -136,6 +136,13 @@ int main() {
                             std::cerr << "Please provide a valid piece." << std::endl;
                             continue;
                         }
+                        if (piece == 'p' && 'A' <= promoted && promoted <= 'Z') {
+                            std::cerr << "You cannont promote to opponent's piece." << std::endl;
+                            continue;
+                        } else if (piece == 'P' && 'a' <= promoted && promoted <= 'z') {
+                            std::cerr << "You cannont promote to opponent's piece." << std::endl;
+                            continue;
+                        }
                         try {gameEnd = control->pawnPromote(firstPosn, secondPosn, piece);}
                         catch (std::out_of_range &e) {
                             std::cerr << e.what() << std::endl;

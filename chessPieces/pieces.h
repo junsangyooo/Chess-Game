@@ -14,7 +14,7 @@ enum Position;
 
 class Piece {
 public:
-    virtual ~Piece() {}
+    virtual ~Piece();
 public:
     virtual char getPiece() const = 0;
     virtual bool getFirstMove() const {}
