@@ -497,3 +497,12 @@ Chess::~Chess() {
         moves.erase(moves.begin());
     }
 }
+
+
+std::string Chess::checkTest() {
+    std::string white = whiteInCheck();
+    std::string black = blackInCheck();
+    if (white == "") {return black;}
+    else if (black == "") {return white;}
+    else {return "";}
+}
