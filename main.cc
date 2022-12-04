@@ -95,10 +95,6 @@ bool newGame() {
     std::cin >> response;
     if (response == "yes") {return true;}
     else if (response == "no") { return false;}
-    else {
-        std::cout << "Please provide valid response." << std::endl;
-        return newGame();
-    }
 }
 
 

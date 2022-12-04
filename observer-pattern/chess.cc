@@ -300,33 +300,34 @@ bool Chess::validMove(std::shared_ptr<Move> movement, bool whiteTurn, char promo
     }
 
     if (piece == 'k' || piece == 'K') {    //Check King move
-        std::cout << 1 << std::endl;
         if (!validKing(movement, whiteTurn)) {return false;}
     } else if (piece == 'q' || piece == 'Q') {    //Check Queen move
-        std::cout << 2 << std::endl;
         if (!validQueen(movement)) {return false;}
     }
     else if (piece == 'b' || piece == 'B') {    //Check Bishop move
-        std::cout << 3 << std::endl;
         if (!validBishop(movement)) {return false;}
     }
     else if (piece == 'n' || piece == 'N') {    //Check Knight move
-        std::cout << 4 << std::endl;
         if (!validKnight(movement)) {return false;}
     }
     else if (piece == 'r' || piece == 'R') {    //Check Rook move
-        std::cout << 5 << std::endl;
         if (!validRook(movement)) {return false;}
     }
     else if (piece == 'p' || piece == 'P') { //Check Pawn move
+    std::cout << 6 << std::endl;
         if (!validPawn(movement, whiteTurn, promote)) {return false;}
     } else {
         return false;
     }
+    std::cout << 1 << std::endl;
     bool valid = true;
+    std::cout << 2 << std::endl;
     board->move(movement);
+    std::cout << 3 << std::endl;
     auto tmp_move = std::make_shared<Move>(new_posn, org_posn);
+    std::cout << 4 << std::endl;
     if ((whiteTurn && whiteInCheck() != "") || (!whiteTurn && blackInCheck() != "")) {
+        std::cout << 5 << std::endl;
         board->move(tmp_move);
         valid = false;
     } else {
@@ -366,7 +367,7 @@ std::string Chess::stalemateTest(bool whiteTurn) {
                     auto move = std::make_shared<Move>(org_posn, new_posn);
                     if (validMove(move, whiteTurn)) {
                         return "";
-                    }
+                    } else {continue;}
                 }
             }
         }
@@ -540,15 +541,11 @@ bool Chess::movePiece(std::shared_ptr<Move> movement, bool whiteTurn, char promo
             status = checkmate;
         }
     } else {
-        std::cout << "1" << std::endl;
         status = stalemateTest(!whiteTurn);
-        std::cout << "2" << std::endl;
     }
 
     movement->setChecked(status);
-    std::cout << "4" << std::endl;
     moves.emplace_back(movement);
-    std::cout << "5" << std::endl;
 
     int org_changed_posn = (org_posn / 10) * 10 + (org_posn % 10);
     int new_changed_posn = (new_posn / 10) * 10 + (new_posn % 10);
