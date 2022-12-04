@@ -35,7 +35,7 @@ class Chess : public Subject{
     std::string whiteInCheck();
     std::string blackInCheck();
 public:
-    bool validMove(std::shared_ptr<Move> movement, bool whiteTurn);
+    bool validMove(std::shared_ptr<Move> movement, bool whiteTurn, char promote = '.');
     bool movePiece(std::shared_ptr<Move> movement, bool whiteTurn, char promote = '.');
     bool pawnPromote(std::shared_ptr<Move> movement, char piece);
     char getPiece(Position posn) const override;

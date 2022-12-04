@@ -36,7 +36,7 @@ public:
     void setCastling(Position posn, bool value);
     void replace(char c, Position posn);
     void remove(Position posn);
-    void move(std::shared_ptr<Move> movement, int when);
+    void move(std::shared_ptr<Move> movement, int when, char piece = '.');
     bool getPromoted(Position posn);
     void setPromoted(Position posn, bool value);
     void setWhenPromoted(Position posn, int value);

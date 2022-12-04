@@ -23,12 +23,8 @@ bool Controller::check() {
     }
 }
 
-void Controller::display() {
-
-}
-
-void Controller::resign() {
-    
+void Controller::display(int posn = -1) {
+    chess->drawBoard(posn);
 }
 
 void Controller::undo() {
@@ -38,10 +34,10 @@ void Controller::undo() {
     }
 }
 
-bool Controller::pawnPromote(Position org_posn, Position new_posn, char piece) {
+bool Controller::pawnPromote(Position org_posn, Position new_posn, bool whiteTurn, char piece) {
     auto movement = std::make_shared<Move>(org_posn, new_posn);
-    try{chess->pawnPromote(movement, piece);}
-    catch (std::out_of_range &e) {
-        throw e;
-    }
+    bool gameEnd;
+    try {gameEnd = chess->movePiece(movement, whiteTurn, piece);}
+    catch (std::out_of_range &e) {throw e;}
+    return gameEnd;
 }

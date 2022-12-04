@@ -22,8 +22,7 @@ public:
     void setComputerWhite(std::shared_ptr<Computer> comp) {computerWhite = comp;}
     void setComputerBlack(std::shared_ptr<Computer> comp) {computerBlack = comp;}
     bool check();
-    void display();
-    void resign();
+    void display(int posn = -1);
     void undo();
     bool move(Position org_posn, Position new_posn, bool whiteTurn);
     bool pawnPromote(Position org_posn, Position new_posn, bool whiteTurn, char piece);

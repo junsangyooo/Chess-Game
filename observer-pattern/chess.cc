@@ -2,9 +2,6 @@
 
 Chess::Chess(std::shared_ptr<Board> bd, std::shared_ptr<ScoreBoard> sb): board{bd}, score{sb} {}
 
-void exception() {
-    throw std::out_of_range {"Invalid Move!"};
-}
 
 void Chess::undo() {
     if (moves.size() == 0) {
@@ -251,7 +248,7 @@ bool Chess::validPawn(std::shared_ptr<Move> movement) {
 }
 
 
-bool Chess::validMove(std::shared_ptr<Move> movement, bool whiteTurn) {
+bool Chess::validMove(std::shared_ptr<Move> movement, bool whiteTurn, char promote = '.') {
     Position org_posn = movement->getOrg();
     Position new_posn = movement->getNew();
 
@@ -278,21 +275,6 @@ bool Chess::validMove(std::shared_ptr<Move> movement, bool whiteTurn) {
 
     if (piece == 'k' || piece == 'K') {    //Check King move
         if (!validKing(movement)) {return false;}
-        /*if (!validKing(movement) && new_posn + 2 == org_posn || new_posn - 2 == org_posn) {
-            if(!castling(movement, whiteTurn)) {return false;}
-                board->setCastling(org_posn, true);
-                if (new_posn > org_posn) {
-                    board->setCastling(Position(new_posn + 1), true);
-                    //movement->setCaptured(board->getPiece(Position(new_posn + 1)));
-                }
-                else {
-                    board->setCastling(Position(new_posn - 2), true);
-                    //movement->setCaptured(board->getPiece(Position(new_posn - 2)));
-                }
-                return true;
-            } else {
-                return false;
-        }*/
     } else if (piece == 'q' || piece == 'Q') {    //Check Queen move
         if (!validQueen(movement)) {return false;}
     }
@@ -307,16 +289,21 @@ bool Chess::validMove(std::shared_ptr<Move> movement, bool whiteTurn) {
     }
     else if (piece == 'p' || piece == 'P') { //Check Pawn move
         if (!validPawn(movement)) {return false;}
-        /*if (org_posn > new_posn) {
-            board->setEnPassant(Position(new_posn + 10), true);
-            movement->setCaptured(board->getPiece(Position(new_posn + 10)));
-        }
-        else {
-            board->setEnPassant(Position(new_posn -10), true);
-            movement->setCaptured(board->getPiece(Position(new_posn - 10)));
-        }*/
     } else {
         return false;
+    }
+
+    board->move(movement, moves.size(), promote);
+    moves.emplace_back(movement);
+    if (whiteTurn && whiteInCheck() != "") {
+        undo();
+        throw std::out_of_range {"King is under check."};
+    } else if (!whiteTurn && blackInCheck() != "") {
+        undo();
+        throw std::out_of_range {"King is under check."};
+    } else {
+        undo();
+        return true;
     }
 }
 
@@ -450,15 +437,12 @@ bool Chess::movePiece(std::shared_ptr<Move> movement, bool whiteTurn, char promo
     Position new_posn = movement->getNew();
     char piece = board->charAt(org_posn);
     int when = moves.size();
+    bool valid;
+    try {valid = validMove(movement, whiteTurn);}
+    catch (std::out_of_range &e) {throw e;}
 
     if (!validMove(movement, whiteTurn)) {
         throw std::out_of_range {"Invalid move!"};
-    } else if (promote != '.') {
-        board->move(movement, when);
-        board->setWhenPromoted(new_posn, when);
-        board->replace(promote, new_posn);
-        board->setWhenPromoted(new_posn, when);
-        board->setPromoted(new_posn, true);
     } else {
         board->move(movement, when);
     }
@@ -466,19 +450,9 @@ bool Chess::movePiece(std::shared_ptr<Move> movement, bool whiteTurn, char promo
     //Now, we check whether the movement put the king under check
     std::string status;
     if (whiteTurn){
-        status = whiteInCheck();
-        if (status != "") {  //If thie move makes their king under check, undo
-            undo();
-            throw std::out_of_range {"King is under check."};
-        }
-        else {status = blackInCheck();}
-    } else {
         status = blackInCheck();
-        if (status != "") {  //If thie move makes their king under check, undo
-            undo();
-            throw std::out_of_range {"King is under check."};
-        }
-        else {status = whiteInCheck();}
+    } else {
+        status = whiteInCheck();
     }
 
     //If it is not check, check stalemate

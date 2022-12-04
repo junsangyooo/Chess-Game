@@ -46,9 +46,10 @@ int main() {
             textBoard = std::make_shared<Cli>(chess);
             graphicBoard = std::make_shared<Gui>(chess);
             chess->attach(textBoard);
-            chess.attach(graphicBoard);
+            chess->attach(graphicBoard);
             whiteTurn = true;
             boardExist = true;
+            control->display();
         }
         if (command == "exit") {
             std::cout << sb;
@@ -100,7 +101,6 @@ int main() {
             while(std::cin >> cmd) {
                 if (gameEnd) {break;}
                 if (cmd == "resign") {
-                    control->resign();
                     if (whiteTurn) {sb->addToBlack(1);}
                     else {sb->addToWhite(1);}
                     boardExist = false;
@@ -137,13 +137,13 @@ int main() {
                             continue;
                         }
                         if (piece == 'p' && 'A' <= promoted && promoted <= 'Z') {
-                            std::cerr << "You cannont promote to opponent's piece." << std::endl;
+                            std::cerr << "You cannont promote to the opponent's piece." << std::endl;
                             continue;
                         } else if (piece == 'P' && 'a' <= promoted && promoted <= 'z') {
-                            std::cerr << "You cannont promote to opponent's piece." << std::endl;
+                            std::cerr << "You cannont promote to the opponent's piece." << std::endl;
                             continue;
                         }
-                        try {gameEnd = control->pawnPromote(firstPosn, secondPosn, piece);}
+                        try {gameEnd = control->pawnPromote(firstPosn, secondPosn, whiteTurn, piece);}
                         catch (std::out_of_range &e) {
                             std::cerr << e.what() << std::endl;
                             continue;
@@ -170,6 +170,7 @@ int main() {
             boardExist = false;
         } else if (command == "setup") {
             std::string cmd;
+            int changedPosn;
             while (std::cin >> cmd) {
                 if (cmd == "done") {
                     int whiteKing = 0;
@@ -212,6 +213,7 @@ int main() {
                         std::cerr << e.what() << std::endl;
                         continue;
                     }
+                    changedPosn = ((posn / 10) * 10) + (posn % 10);
                 } else if (cmd == "-") {
                     std::string position;
                     std::cin >> position;
@@ -221,11 +223,12 @@ int main() {
                         std::cerr << e.what() << std::endl;
                         continue;
                     }
-                    std::string colour = board->colourAt(posn);
-                    if (colour == "") {
+                    char c = board->charAt(posn);
+                    if (c == ' ' || c == '-') {
                         continue;
                     }
                     board->remove(posn);
+                    changedPosn = ((posn / 10) * 10) + (posn % 10);
                 } else if (cmd == "=") {
                     std::string colour;
                     std::cin >> colour;
@@ -235,11 +238,12 @@ int main() {
                         std::cerr << "Invalid colour!" << std::endl;
                         continue;
                     }
+                    continue;
                 } else {
                     std::cerr << "Please provide a valid command." << std::endl;
                     continue;
                 }
-                control->display();
+                control->display(changedPosn);
             }
         } else {
             std::cerr << "Please provide a valid command." << std::endl;

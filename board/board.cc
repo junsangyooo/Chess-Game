@@ -217,7 +217,7 @@ bool Board::getCastling(Position posn) {
     return bd[row][col]->getCastling();
 }
 
-void Board::move(std::shared_ptr<Move> movement, int when) {
+void Board::move(std::shared_ptr<Move> movement, int when, char piece = '.') {
     Position org_posn = movement->getOrg();
     Position new_posn = movement->getNew();
     char movingPiece = charAt(org_posn);
@@ -258,6 +258,12 @@ void Board::move(std::shared_ptr<Move> movement, int when) {
     int new_row = new_posn / 10;
     bd[new_row][new_col] = bd[org_row][org_col];
     remove(org_posn);
+    if ((movingPiece == 'p' || movingPiece == 'P') && piece != '.') {
+        setWhenPromoted(new_posn, when);
+        replace(piece, new_posn);
+        setWhenPromoted(new_posn, when);
+        setPromoted(new_posn, true);
+    }
 }
 
 bool Board::getPromoted(Position posn) {
