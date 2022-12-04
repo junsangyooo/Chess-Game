@@ -6,7 +6,6 @@
 #include <stdexcept>
 #include <vector>
 #include <memory>
-//#include "pieces.h"
 #include "bishop.h"
 #include "king.h"
 #include "knight.h"

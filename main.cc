@@ -130,7 +130,6 @@ int main() {
             chess->attach(graphicBoard);
             whiteTurn = true;
             boardExist = true;
-            control->display();
         }
         if (command == "exit") {
             break;

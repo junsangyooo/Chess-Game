@@ -46,7 +46,7 @@ Board::Board() {
     bd[7][4] = king_w;
     whiteKing = Position(74);
 
-    for (int i = 2; i < 5; i++) {
+    for (int i = 2; i <= 5; i++) {
         for (int j = 0; j < 8; j++) {
             if ((i + j) % 2 == 0) {
                 auto white = std::make_shared<Empty>(' ');

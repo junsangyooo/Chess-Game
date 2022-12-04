@@ -215,40 +215,43 @@ void Gui::drawBoard(std::string value, int posn1, int posn2, int posn3, int posn
             drawPawn(col, row, piece);
         }
     }
-    if (posn1 == -1 && posn2 == -1 && posn3 == -1 && posn4 == -1) {
-        for (int i = 0; i < 8; ++i) {
-            for (int j = 0; j <8;  ++j) {
-                int posn = i*10 + j;
-                piece = chess->getPiece(Position(posn));
-                if (piece != '-') {
-                    xw.fillRectangle(j*30, i*30, 30, 30, xw.Yellow);
-                } else {
-                    xw.fillRectangle(j*30, i*30, 30, 30, xw.Orange);
-                }
-                if (piece == 'k' || piece =='K'){
-                    drawKing(j, i, piece);
-                } else if (piece == 'q' || piece == 'Q') {
-                    drawQueen(j, i, piece);
-                } else if (piece == 'r' || piece == 'R'){
-                    drawRook(j, i, piece);
-                } else if (piece == 'b' || piece == 'B') {
-                    drawBishop(j ,i, piece);
-                } else if (piece == 'n' || piece == 'N') {
-                    drawKnight(j ,i, piece);
-                } else {
-                    drawPawn(j, i, piece);
-                }
+    if (value != "") {
+        xw.drawString(30, 270, value);
+    }
+}
+
+void Gui::notify() {
+    for (int i = 0; i < 8; ++i) {
+        for (int j = 0; j <8;  ++j) {
+            int posn = i*10 + j;
+            char piece = chess->getPiece(Position(posn));
+            if (piece != '-') {
+                xw.fillRectangle(j*30, i*30, 30, 30, xw.Yellow);
+            } else {
+                xw.fillRectangle(j*30, i*30, 30, 30, xw.Orange);
+            }
+            if (piece == 'k' || piece =='K'){
+                drawKing(j, i, piece);
+            } else if (piece == 'q' || piece == 'Q') {
+                drawQueen(j, i, piece);
+            } else if (piece == 'r' || piece == 'R'){
+                drawRook(j, i, piece);
+            } else if (piece == 'b' || piece == 'B') {
+                drawBishop(j ,i, piece);
+            } else if (piece == 'n' || piece == 'N') {
+                drawKnight(j ,i, piece);
+            } else {
+                 drawPawn(j, i, piece);
             }
         }
-    }
-    if (value != "") {
-        xw.drawString(270, 270, value);
     }
 }
 
 Gui::Gui(std::shared_ptr<Chess> chess): chess{chess}, xw{280, 280} {
-    drawBoard();
+    notify();
 }
+
+
 
 Gui::~Gui() {
     chess = nullptr;

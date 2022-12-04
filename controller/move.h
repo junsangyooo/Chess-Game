@@ -11,8 +11,6 @@
 #include <memory>
 #include "pieces.h"
 
-enum Position;
-
 class Move {
     Position org_posn, new_posn;
     std::shared_ptr<Piece> captured;
