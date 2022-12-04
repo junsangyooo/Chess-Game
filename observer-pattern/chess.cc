@@ -26,32 +26,31 @@ void Chess::undo() {
             else {
                 board->undo(move, when);
             }
-            drawBoard(org_changed_posn, new_changed_posn);
+            drawBoard(move->getChecked(), org_changed_posn, new_changed_posn);
         }
     } else if (piece == 'k' || piece == 'K') {
         int diff = abs(pre_new_posn - pre_org_posn);
         if (diff == 2) {
             board->undoCastling(move, when);
-            drawBoard(org_changed_posn, new_changed_posn, move->getCell1(), move->getCell2());
+            drawBoard(move->getChecked(), org_changed_posn, new_changed_posn, move->getCell1(), move->getCell2());
         } else {
             board->undo(move, when);
-            drawBoard(org_changed_posn, new_changed_posn);
+            drawBoard(move->getChecked(), org_changed_posn, new_changed_posn);
         }
     } else if (piece == 'p' || piece == 'P') {
         if (captured->getPiece() == 'p' || captured->getPiece() == 'P') {
             if (captured->getEnPassant()) {
                 board->undoEnPassant(move, when);
-                drawBoard(org_changed_posn, new_changed_posn, move->getCell1(), move->getCell2());
+                drawBoard(move->getChecked(), org_changed_posn, new_changed_posn, move->getCell1(), move->getCell2());
             } else {
                 board->undo(move, when);
-                drawBoard(org_changed_posn, new_changed_posn);
+                drawBoard(move->getChecked(), org_changed_posn, new_changed_posn);
             }
         } else {
             board->undo(move, when);
-            drawBoard(org_changed_posn, new_changed_posn);
+            drawBoard(move->getChecked(), org_changed_posn, new_changed_posn);
         }
     }
-    notify(move->getChecked());
 }
 
 bool Chess::enPassant(std::shared_ptr<Move> movement) {
@@ -445,29 +444,24 @@ bool Chess::movePiece(std::shared_ptr<Move> movement, bool whiteTurn, char promo
     movement->setChecked(status);
     moves.emplace_back(movement);
 
-
+    int org_changed_posn = (org_posn / 10) * 10 + org_posn % 10;
+    int new_changed_posn = (org_posn / 10) * 10 + org_posn % 10;
     //Notify to the observers to display the board.
     if (status == "Checkmate! White wins!"){
         score->addToWhite(1);
-        drawBoard();
-        notify(status);
+        drawBoard(status, org_changed_posn, new_changed_posn, movement->getCell1(), movement->getCell2());
         return false;
     } else if (status == "Checkmate! Black wins!") {
         score->addToBlack(1);
-        drawBoard();
-        notify(status);
+        drawBoard(status, org_changed_posn, new_changed_posn, movement->getCell1(), movement->getCell2());
         return false;
     } else if (status == "Stalemate!") {
         score->addToWhite(0.5);
         score->addToBlack(0.5);
-        drawBoard();
-        notify(status);
+        drawBoard(status, org_changed_posn, new_changed_posn, movement->getCell1(), movement->getCell2());
         return false;
     } else {
-        int org_changed_posn = (org_posn / 10) * 10 + org_posn % 10;
-        int new_changed_posn = (org_posn / 10) * 10 + org_posn % 10;
-        drawBoard(org_changed_posn, new_changed_posn, movement->getCell1(), movement->getCell2());
-        notify(status);
+        drawBoard(status, org_changed_posn, new_changed_posn, movement->getCell1(), movement->getCell2());
         return true;
     }
 }

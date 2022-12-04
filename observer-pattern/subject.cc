@@ -12,14 +12,8 @@ void Subject::detach(std::string type) {
     }
 }
 
-void Subject::drawBoard(int posn1 = -1, int posn2 = -1, int posn3 = -1, int posn4 = -1) {
+void Subject::drawBoard(std::string value = "", int posn1 = -1, int posn2 = -1, int posn3 = -1, int posn4 = -1) {
     for (auto ob: observers) {
-        ob->drawBoard(posn1, posn2, posn3, posn4);
-    }
-}
-
-void Subject::notify(std::string value) {
-    for(auto ob: observers) {
-        ob->notify(value);
+        ob->drawBoard(value, posn1, posn2, posn3, posn4);
     }
 }

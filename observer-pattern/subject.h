@@ -20,8 +20,7 @@ class Subject {
 public:
     void attach(std::shared_ptr<Observer> ob);
     void detach(std::string type);
-    void drawBoard(int posn1 = -1, int posn2 = -1, int posn3 = -1, int posn4 = -1);
-    void notify(std::string value);
+    void drawBoard(std::string value = "", int posn1 = -1, int posn2 = -1, int posn3 = -1, int posn4 = -1);
     virtual char getPiece(Position posn) const = 0;
     virtual ~Subject() = default;
 };

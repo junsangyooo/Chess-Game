@@ -21,6 +21,18 @@
 
 enum Position;
 
+bool newGame() {
+    std::string response;
+    std::cin >> response;
+    if (response == "yes") {return true;}
+    else if (response == "no") { return false;}
+    else {
+        std::cout << "Please provide valid response." << std::endl;
+        return newGame();
+    }
+}
+
+
 bool validPiece(char piece) {
     if (piece == 'p' || piece == 'P' || piece == 'k' || piece == 'K' || piece == 'q' || piece == 'Q' || piece == 'r' || piece == 'R' ||piece == 'b' || piece == 'B' || piece == 'n' || piece == 'N') {
         return true;
@@ -52,7 +64,6 @@ int main() {
             control->display();
         }
         if (command == "exit") {
-            std::cout << sb;
             break;
         } else if (command == "game"){
             std::string player1;
@@ -101,16 +112,18 @@ int main() {
             while(std::cin >> cmd) {
                 if (gameEnd) {break;}
                 if (cmd == "resign") {
+                    control->resign(whiteTurn);
                     if (whiteTurn) {sb->addToBlack(1);}
                     else {sb->addToWhite(1);}
-                    boardExist = false;
                     break;
                 } else if (cmd == "move") {
                     if (whiteTurn && player1IsComputer) {
                         gameEnd = control->computerMove(whiteTurn);
+                        whiteTurn = !whiteTurn;
                         continue;
                     } else if (!whiteTurn && player2IsComputer) {
                         gameEnd = control->computerMove(whiteTurn);
+                        whiteTurn = !whiteTurn;
                         continue;
                     }
                     std::string posn1;
@@ -150,7 +163,11 @@ int main() {
                         }
                         continue;
                     }
-                    gameEnd = control->move(firstPosn, secondPosn, whiteTurn);
+                    try {gameEnd = control->move(firstPosn, secondPosn, whiteTurn);}
+                    catch (std::out_of_range &e) {
+                        std::cerr << e.what() << std::endl;
+                        continue;
+                    }
                     whiteTurn = !whiteTurn;
                     continue;
                 } else if (cmd == "undo") {
@@ -162,12 +179,19 @@ int main() {
                     whiteTurn = !whiteTurn;
                 }
             }
-            board = nullptr;
-            chess = nullptr;
-            control = nullptr;
-            textBoard = nullptr;
-            graphicBoard = nullptr;
-            boardExist = false;
+            std::cout << "Game ended. Do you want to play again? (yes/no)" << std::endl;
+            bool restart = newGame();
+            if (!restart) {
+                /*board = nullptr;
+                chess = nullptr;
+                control = nullptr;
+                textBoard = nullptr;
+                graphicBoard = nullptr;*/
+                break;
+            } else {
+                boardExist = false;
+                continue;
+            }
         } else if (command == "setup") {
             std::string cmd;
             int changedPosn;

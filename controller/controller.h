@@ -33,6 +33,7 @@ public:
     bool move(Position org_posn, Position new_posn, bool whiteTurn);
     bool pawnPromote(Position org_posn, Position new_posn, bool whiteTurn, char piece);
     bool computerMove(bool whiteTurn);
+    void resign(bool whiteTurn);
 };
 
 #endif
