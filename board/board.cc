@@ -177,7 +177,6 @@ bool Board::getEnPassant(Position posn) {
 void Board::move(std::shared_ptr<Move> movement, char piece) {
     Position org_posn = movement->getOrg();
     Position new_posn = movement->getNew();
-    movement->setCaptured(getPiece(new_posn));
     int org_col = org_posn % 10;
     int org_row = org_posn / 10;
     int new_col = new_posn % 10;
