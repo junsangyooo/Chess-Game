@@ -1,9 +1,14 @@
 #ifndef _SCOREBOARD_H_
 #define _SCOREBOARD_H_
 #include <iostream>
-#include <iomanip>
-#include <string>
+#include <fstream>
 #include <sstream>
+#include <string>
+#include <iomanip>
+#include <utility>
+#include <stdexcept>
+#include <vector>
+#include <memory>
 
 class ScoreBoard {
     float white;

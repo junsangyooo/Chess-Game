@@ -3,6 +3,13 @@
 #include <X11/Xlib.h>
 #include <iostream>
 #include <string>
+#include <fstream>
+#include <sstream>
+#include <iomanip>
+#include <utility>
+#include <stdexcept>
+#include <vector>
+#include <memory>
 
 class Xwindow {
   Display *d;

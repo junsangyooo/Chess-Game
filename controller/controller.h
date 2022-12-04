@@ -1,7 +1,13 @@
 #ifndef _CONTROLLER_H_
 #define _CONTROLLER_H_
+#include <iostream>
+#include <fstream>
+#include <sstream>
 #include <string>
+#include <iomanip>
 #include <utility>
+#include <stdexcept>
+#include <vector>
 #include <memory>
 #include "chess.h"
 #include "move.h"

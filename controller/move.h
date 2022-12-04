@@ -1,5 +1,14 @@
 #ifndef _MOVE_H_
 #define _MOVE_H_
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <string>
+#include <iomanip>
+#include <utility>
+#include <stdexcept>
+#include <vector>
+#include <memory>
 #include "position.h"
 #include "pieces.h"
 

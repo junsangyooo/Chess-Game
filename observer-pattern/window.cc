@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include <string>
 #include <unistd.h>
+
 #include "window.h"
 
 using namespace std;
