@@ -2,7 +2,6 @@
 
 Chess::Chess(std::shared_ptr<Board> bd, std::shared_ptr<ScoreBoard> sb): board{bd}, score{sb} {}
 
-
 void Chess::undo() {
     if (moves.size() == 0) {
         throw std::out_of_range {"Cannot undo when the game starts"};
@@ -254,7 +253,6 @@ bool Chess::validPawn(std::shared_ptr<Move> movement) {
     }
 }
 
-
 bool Chess::validMove(std::shared_ptr<Move> movement, bool whiteTurn, char promote = '.') {
     Position org_posn = movement->getOrg();
     Position new_posn = movement->getNew();
@@ -314,129 +312,102 @@ bool Chess::validMove(std::shared_ptr<Move> movement, bool whiteTurn, char promo
     }
 }
 
-std::string Chess::stalemateTest() {
+std::string Chess::stalemateTest(bool whiteTurn) {
+    bool isThereValidMove = false;
+    std::vector<Position> pieces;
+    for (int i = 0; i < 8; ++i) {
+        for (int j = 0; j < 8; ++j) {
+            Position posn = Position(i*10 + j);
+            char piece = board->charAt(posn);
+            if (whiteTurn && 'A' <= piece && piece <= 'Z') {
+                pieces.emplace_back(posn);
+            } else if (!whiteTurn && 'a' <= piece && piece <= 'z') {
+                pieces.emplace_back(posn);
+            }
+        }
+    }
+    int length = pieces.size();
+    for (int index = 0; index < length; ++index) {
+        Position org_posn = pieces.at(index);
+        for(int i = 0; i < 8; ++i) {
+            for (int j = 0; j < 8; ++j) {
+                int posn_index = i*10- + j;
+                Position new_posn = Position(posn_index);
+                char c  = board->charAt(new_posn);
+                if (whiteTurn && 'A' <= c && c <= 'Z') {
+                    continue;
+                } else if (!whiteTurn && 'a' <= c && c <= 'z') {
+                    continue;
+                } else {
+                    auto move = std::make_shared<Move>(org_posn, new_posn);
+                    if (validMove(move, whiteTurn)) {
+                        return "";
+                    }
+                }
+            }
+        }
+    }
+    return "Stalemate!";
+}
+
+std::string Chess::checkmateTeset() {
 
 }
 
 std::string Chess::blackInCheck() {
     Position blackKing = board->getBlackKing();
     bool inCheck = false;
-    int whites = 0;
-    int blacks = 0;
     int kingIndex = 0;
-    std::vector<std::shared_ptr<Position>> blackPieces;
     std::vector<std::shared_ptr<Position>> whitePieces;
-    std::vector<std::shared_ptr<Position>> checkingPiece;
     for (int i = 0; i < 8; ++i) {
         for (int j = 0; j < 8; ++j) {
             Position posn = Position(i*10 + j);
             char piece = board->charAt(posn);
-            auto tmp_move_black = std::make_shared<Move>(posn, blackKing);
             if (piece == ' ' || piece == '-') {continue;}
-            else if (piece == 'K') {
-                whitePieces.emplace_back(posn);
-                whites++;
-                if (validKing(tmp_move_black)) {
+            else if ('A' <= piece && piece <= 'Z') {
+                auto tmp_move = std::make_shared<Move>(posn, blackKing);
+                if (validMove(tmp_move, true)) {
                     inCheck = true;
-                    checkingPiece.emplace_back(posn);
+                    break;
                 }
-            } else if (piece == 'B') {
-                whitePieces.emplace_back(posn);
-                whites++;
-                if (validBishop(tmp_move_black)) {
-                    inCheck = true;
-                    checkingPiece.emplace_back(posn);
-                }
-            } else if (piece == 'Q') {
-                whitePieces.emplace_back(posn);
-                whites++;
-                if (validQueen(tmp_move_black)) {
-                    inCheck = true;
-                    checkingPiece.emplace_back(posn);
-                }
-            } else if (piece == 'R') {
-                whitePieces.emplace_back(posn);
-                whites++;
-                if (validRook(tmp_move_black)) {
-                    inCheck = true;
-                    checkingPiece.emplace_back(posn);
-                }
-            } else if (piece == 'N') {
-                whitePieces.emplace_back(posn);
-                whites++;
-                if (validKnight(tmp_move_black)) {
-                    inCheck = true;
-                    checkingPiece.emplace_back(posn);
-                }
-            } else if (piece == 'P') {
-                whitePieces.emplace_back(posn);
-                whites++;
-                if (validPawn(tmp_move_black)) {
-                    inCheck = true;
-                    checkingPiece.emplace_back(posn);
-                }
-            } else if (piece == 'k'){
-                kingIndex = blackPieces.size();
-                blackPieces.emplace_back(posn);
-                blacks++;
-            } else {
-                blackPieces.emplace_back(posn);
-                blacks++;
-            }
+            } else { continue;}
         }
+        if (inCheck) {break;}
     }
-    if (inCheck) {board->setIsChecked(blackKing, true);}
-    int check = checkingPiece.size();
-    
+    if (inCheck) {
+        board->setIsChecked(blackKing, true);
+        return "Black is in check.";
+    }
+    else {return "";}
 }
 
 std::string Chess::whiteInCheck() {
     Position whiteKing = board->getWhiteKing();
     bool inCheck = false;
     std::vector<std::shared_ptr<Position>> blackPieces;
-    std::vector<std::shared_ptr<Position>> whitePieces;
-    int blacks = 0;
-    int whites = 0;
     //Now check whether the King is under check
     for (int i = 0; i < 8; ++i) {
         for (int j = 0; j < 8; ++j) {
             Position posn = Position(i*10 + j);
             char piece = board->charAt(posn);
-            auto tmp_move_white = std::make_shared<Move>(posn, whiteKing);
-            if (piece ==' ' || piece == '-'){continue;}
-            else if (piece == 'k') {
-                blackPieces.emplace_back(posn);
-                blacks++;
-                if (validKing(tmp_move_white)) {inCheck = true;}
-            } else if (piece == 'b') {
-                blackPieces.emplace_back(posn);
-                blacks++;
-                if (validBishop(tmp_move_white)) {inCheck = true;}
-            } else if (piece == 'q') {
-                blackPieces.emplace_back(posn);
-                blacks++;
-                if (validQueen(tmp_move_white)) {inCheck = true;}
-            } else if (piece == 'r') {
-                blackPieces.emplace_back(posn);
-                blacks++;
-                if (validRook(tmp_move_white)) {inCheck = true;}
-            } else if (piece == 'n') {
-                blackPieces.emplace_back(posn);
-                blacks++;
-                if (validKnight(tmp_move_white)) {inCheck = true;}
-            } else if (piece == 'p') {
-                blackPieces.emplace_back(posn);
-                blacks++;
-                if (validPawn(tmp_move_white)) {inCheck = true;}
-            } else {
-                whites++;
-                whitePieces.emplace_back(posn);
-            }
+            if (piece == ' ' || piece == '-') {continue;}
+            else if ('a' <= piece && piece <= 'z') {
+                auto tmp_move = std::make_shared<Move>(posn, whiteKing);
+                if (validMove(tmp_move, false)) {
+                    inCheck = true;
+                    break;
+                }
+            } else { continue;}
         }
+        if (inCheck) {break;}
     }
-    if (inCheck) {board->setIsChecked(whiteKing, true);}
+    if (inCheck) {
+        board->setIsChecked(whiteKing, true);
+        return "White is in check.";
+    } else {
+        return "";
+    }
 }
-
 
 //Controller calls movePiece function with the movement of next turn.  
 bool Chess::movePiece(std::shared_ptr<Move> movement, bool whiteTurn, char promote = '.') {
@@ -464,7 +435,7 @@ bool Chess::movePiece(std::shared_ptr<Move> movement, bool whiteTurn, char promo
 
     //If it is not check, check stalemate
     if (status == "") {
-        status = stalemateTest();
+        status = stalemateTest(!whiteTurn);
     }
     movement->setChecked(status);
     moves.emplace_back(movement);

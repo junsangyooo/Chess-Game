@@ -41,7 +41,8 @@ public:
     char getPiece(Position posn) const override;
     void undo();
     std::string checkTest();
-    std::string stalemateTest();
+    std::string checkmateTeset();
+    std::string stalemateTest(bool whiteTurn);
 public:
     Chess(std::shared_ptr<Board> bd, std::shared_ptr<ScoreBoard> scoreboard);
     ~Chess();
