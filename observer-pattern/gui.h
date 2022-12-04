@@ -18,7 +18,7 @@ class Gui: public Observer {
     void drawPawn(int col, int row, char piece);
 public:
     Gui(std::shared_ptr<Chess> chess);
-    void drawBoard(Position posn1 = Position(-1), char c1 = NULL, Position posn2 = Position(-1), char c2 = NULL, Position posn3 = Position(-1), char c3 = NULL, Position posn4 = Position(-1), char c4 = NULL) override;
+    void drawBoard(int posn1 = -1, int posn2 = -1, int posn3 = -1, int posn4 = -1) override;
     void notify(std::string value) override;
     ~Gui();
 };

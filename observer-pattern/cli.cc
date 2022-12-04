@@ -1,7 +1,7 @@
 #include "cli.h"
 #include <iostream>
 
-void Cli::drawBoard(Position posn1 = Position(-1), char c1 = NULL, Position posn2 = Position(-1), char c2 = NULL, Position posn3 = Position(-1), char c3 = NULL, Position posn4 = Position(-1), char c4 = NULL) {
+void Cli::drawBoard(int posn1 = -1, int posn2 = -1, int posn3 = -1, int posn4 = -1) {
     char piece;
      for (int i = 0; i < 8; ++i) {
         std::cout << 8 - i << " ";

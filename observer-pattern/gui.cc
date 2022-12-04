@@ -141,30 +141,103 @@ void Gui::drawPawn(int col, int row, char piece) {
     xw.fillRectangle(col*30+7, row*30+23, 18, 2, colour);
 }
 
-void Gui::drawBoard(Position posn1 = Position(-1), char c1 = NULL, Position posn2 = Position(-1), char c2 = NULL, Position posn3 = Position(-1), char c3 = NULL, Position posn4 = Position(-1), char c4 = NULL) {
+void Gui::drawBoard(int posn1 = -1, int posn2 = -1, int posn3 = -1, int posn4 = -1) {
     char piece;
-    
-    for (int i = 0; i < 8; ++i) {
-        for (int j = 0; j <8;  ++j) {
-            int posn = i*10 + j;
-            piece = chess->getPiece(Position(posn));
-            if (piece != '-') {
-                xw.fillRectangle(j*30, i*30, 30, 30, xw.Yellow);
-            } else {
-                xw.fillRectangle(j*30, i*30, 30, 30, xw.Orange);
-            }
-            if (piece == 'k' || piece =='K'){
-                drawKing(j, i, piece);
-            } else if (piece == 'q' || piece == 'Q') {
-                drawQueen(j, i, piece);
-            } else if (piece == 'r' || piece == 'R'){
-                drawRook(j, i, piece);
-            } else if (piece == 'b' || piece == 'B') {
-                drawBishop(j ,i, piece);
-            } else if (piece == 'n' || piece == 'N') {
-                drawKnight(j ,i, piece);
-            } else {
-                drawPawn(j, i, piece);
+    if (posn1 != -1) {
+        int row = posn1 / 10;
+        int col = posn1 % 10;
+        piece = chess->getPiece(Position(posn1));
+        if (piece == 'k' || piece =='K'){
+            drawKing(col, row, piece);
+        } else if (piece == 'q' || piece == 'Q') {
+            drawQueen(col, row, piece);
+        } else if (piece == 'r' || piece == 'R'){
+            drawRook(col, row, piece);
+        } else if (piece == 'b' || piece == 'B') {
+            drawBishop(col, row, piece);
+        } else if (piece == 'n' || piece == 'N') {
+            drawKnight(col, row, piece);
+        } else {
+            drawPawn(col, row, piece);
+        }
+    }
+    if (posn2 != -1) {
+        int row = posn2 / 10;
+        int col = posn2 % 10;
+        piece = chess->getPiece(Position(posn2));
+        if (piece == 'k' || piece =='K'){
+            drawKing(col, row, piece);
+        } else if (piece == 'q' || piece == 'Q') {
+            drawQueen(col, row, piece);
+        } else if (piece == 'r' || piece == 'R'){
+            drawRook(col, row, piece);
+        } else if (piece == 'b' || piece == 'B') {
+            drawBishop(col, row, piece);
+        } else if (piece == 'n' || piece == 'N') {
+            drawKnight(col, row, piece);
+        } else {
+            drawPawn(col, row, piece);
+        }
+    }
+    if (posn3 != -1) {
+        int row = posn3 / 10;
+        int col = posn3 % 10;
+        piece = chess->getPiece(Position(posn3));
+        if (piece == 'k' || piece =='K'){
+            drawKing(col, row, piece);
+        } else if (piece == 'q' || piece == 'Q') {
+            drawQueen(col, row, piece);
+        } else if (piece == 'r' || piece == 'R'){
+            drawRook(col, row, piece);
+        } else if (piece == 'b' || piece == 'B') {
+            drawBishop(col, row, piece);
+        } else if (piece == 'n' || piece == 'N') {
+            drawKnight(col, row, piece);
+        } else {
+            drawPawn(col, row, piece);
+        }
+    }
+    if (posn4 != -1) {
+        int row = posn4 / 10;
+        int col = posn4 % 10;
+        piece = chess->getPiece(Position(posn4));
+        if (piece == 'k' || piece =='K'){
+            drawKing(col, row, piece);
+        } else if (piece == 'q' || piece == 'Q') {
+            drawQueen(col, row, piece);
+        } else if (piece == 'r' || piece == 'R'){
+            drawRook(col, row, piece);
+        } else if (piece == 'b' || piece == 'B') {
+            drawBishop(col, row, piece);
+        } else if (piece == 'n' || piece == 'N') {
+            drawKnight(col, row, piece);
+        } else {
+            drawPawn(col, row, piece);
+        }
+    }
+    if (posn1 == -1 && posn2 == -1 && posn3 == -1 && posn4 == -1) {
+        for (int i = 0; i < 8; ++i) {
+            for (int j = 0; j <8;  ++j) {
+                int posn = i*10 + j;
+                piece = chess->getPiece(Position(posn));
+                if (piece != '-') {
+                    xw.fillRectangle(j*30, i*30, 30, 30, xw.Yellow);
+                } else {
+                    xw.fillRectangle(j*30, i*30, 30, 30, xw.Orange);
+                }
+                if (piece == 'k' || piece =='K'){
+                    drawKing(j, i, piece);
+                } else if (piece == 'q' || piece == 'Q') {
+                    drawQueen(j, i, piece);
+                } else if (piece == 'r' || piece == 'R'){
+                    drawRook(j, i, piece);
+                } else if (piece == 'b' || piece == 'B') {
+                    drawBishop(j ,i, piece);
+                } else if (piece == 'n' || piece == 'N') {
+                    drawKnight(j ,i, piece);
+                } else {
+                    drawPawn(j, i, piece);
+                }
             }
         }
     }
@@ -183,3 +256,14 @@ Gui::~Gui() {
     chess = nullptr;
     chess->detach("Gui");
 }
+
+╔════════╗
+║♜♞♝♛♚♝♞♜║
+║♟♟♟♟♟♟♟♟║
+║▒█▒█▒█▒█║
+║█▒█▒█▒█▒║
+║▒█▒█▒█▒█║
+║█▒█▒█▒█▒║
+║♙♙♙♙♙♙♙♙║
+║♖♘♗♕♔♗♘♖║
+╚════════╝
