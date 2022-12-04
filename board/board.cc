@@ -272,7 +272,6 @@ void Board::undoCastling(std::shared_ptr<Move> movement) {
     int org_row = org_posn / 10;
     int new_col = new_posn % 10;
     int new_row = new_posn / 10;
-    char piece = charAt(new_posn);
     bd[org_row][org_col] = bd[new_row][new_col];
     if (new_posn  + 2 == org_posn) {
         bd[org_row][new_col - 1]= bd[org_row][new_col + 1];

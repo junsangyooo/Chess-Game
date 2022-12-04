@@ -73,7 +73,6 @@ bool Chess::enPassant(std::shared_ptr<Move> movement, bool whiteTurn) {
 bool Chess::castling(std::shared_ptr<Move> movement, bool whiteTurn) {
     Position org_posn = movement->getOrg();
     Position new_posn = movement->getNew();
-    char piece = board->charAt(org_posn);
     if (!board->getFirstMove(org_posn)) {return false;}
     if (whiteTurn && whiteInCheck() != "") {return false;}
     if (!whiteTurn && blackInCheck() != "") {return false;}
@@ -200,7 +199,6 @@ bool Chess::validKnight(std::shared_ptr<Move> movement) {
 bool Chess::validPawn(std::shared_ptr<Move> movement, bool whiteTurn, char promote) {
     Position org_posn = movement->getOrg();
     Position new_posn = movement->getNew();
-    char piece = board->charAt(org_posn);
     char captured = board->charAt(new_posn);
     bool firstMove = board->getFirstMove(org_posn);
     if (Position(org_posn  - (whiteTurn * 11) + (!whiteTurn * 11)) == new_posn || Position(org_posn  - (whiteTurn * 9) + (!whiteTurn * 9)) == new_posn) {
@@ -238,7 +236,6 @@ bool Chess::validMove(std::shared_ptr<Move> movement, bool whiteTurn, char promo
 
     // Check whether the piece would be captured has the same side piece.
     char piece = board->charAt(org_posn);
-    std::cout << piece << std::endl;
     char new_piece = board->charAt(new_posn);
     if (piece == ' ' || piece == '-') {return false;}   //Check Empty piece
     if (whiteTurn) {
@@ -284,7 +281,7 @@ bool Chess::validMove(std::shared_ptr<Move> movement, bool whiteTurn, char promo
         valid = false;
     }
     board->move(tmp_move);
-    return true;
+    return valid;
 }
 
 std::string Chess::stalemateTest(bool whiteTurn) {
