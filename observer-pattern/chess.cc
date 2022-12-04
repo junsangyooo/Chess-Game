@@ -363,6 +363,7 @@ std::string Chess::stalemateTest(bool whiteTurn) {
                 } else if (!whiteTurn && 'a' <= c && c <= 'z') {
                     continue;
                 } else {
+                    std::cout << int(org_posn) << " -> " << posn_index << std::endl;
                     auto move = std::make_shared<Move>(org_posn, new_posn);
                     if (validMove(move, whiteTurn)) {
                         return "";
