@@ -147,6 +147,11 @@ void Gui::drawBoard(std::string value, int posn1, int posn2, int posn3, int posn
         int row = posn1 / 10;
         int col = posn1 % 10;
         piece = chess->charAt(Position(posn1));
+        if ((row + col) % 2 == 0) {
+            xw.fillRectangle(col*30, row*30, 30, 30, xw.Orange);
+        } else {
+            xw.fillRectangle(col*30, row*30, 30, 30, xw.Brown);
+        }
         if (piece == 'k' || piece =='K'){
             drawKing(col, row, piece);
         } else if (piece == 'q' || piece == 'Q') {
@@ -159,16 +164,17 @@ void Gui::drawBoard(std::string value, int posn1, int posn2, int posn3, int posn
             drawKnight(col, row, piece);
         } else if (piece == 'p' || piece == 'P') {
             drawPawn(col, row, piece);
-        } else if ((row + col) % 2 == 0) {
-            xw.fillRectangle(col*30, row*30, 30, 30, xw.Yellow);
-        } else {
-            xw.fillRectangle(col*30, row*30, 30, 30, xw.Red);
         }
     }
     if (posn2 != -1) {
         int row = posn2 / 10;
         int col = posn2 % 10;
         piece = chess->charAt(Position(posn2));
+        if ((row + col) % 2 == 0) {
+            xw.fillRectangle(col*30, row*30, 30, 30, xw.Orange);
+        } else {
+            xw.fillRectangle(col*30, row*30, 30, 30, xw.Brown);
+        }
         if (piece == 'k' || piece =='K'){
             drawKing(col, row, piece);
         } else if (piece == 'q' || piece == 'Q') {
@@ -181,16 +187,17 @@ void Gui::drawBoard(std::string value, int posn1, int posn2, int posn3, int posn
             drawKnight(col, row, piece);
         } else if (piece == 'p' || piece == 'P') {
             drawPawn(col, row, piece);
-        } else if ((row + col) % 2 == 0) {
-            xw.fillRectangle(col*30, row*30, 30, 30, xw.Yellow);
-        } else {
-            xw.fillRectangle(col*30, row*30, 30, 30, xw.Red);
         }
     }
     if (posn3 != -1) {
         int row = posn3 / 10;
         int col = posn3 % 10;
         piece = chess->charAt(Position(posn3));
+        if ((row + col) % 2 == 0) {
+            xw.fillRectangle(col*30, row*30, 30, 30, xw.Orange);
+        } else {
+            xw.fillRectangle(col*30, row*30, 30, 30, xw.Brown);
+        }
         if (piece == 'k' || piece =='K'){
             drawKing(col, row, piece);
         } else if (piece == 'q' || piece == 'Q') {
@@ -203,16 +210,17 @@ void Gui::drawBoard(std::string value, int posn1, int posn2, int posn3, int posn
             drawKnight(col, row, piece);
         } else if (piece == 'p' || piece == 'P') {
             drawPawn(col, row, piece);
-        } else if ((row + col) % 2 == 0) {
-            xw.fillRectangle(col*30, row*30, 30, 30, xw.Yellow);
-        } else {
-            xw.fillRectangle(col*30, row*30, 30, 30, xw.Red);
         }
     }
     if (posn4 != -1) {
         int row = posn4 / 10;
         int col = posn4 % 10;
         piece = chess->charAt(Position(posn4));
+        if ((row + col) % 2 == 0) {
+            xw.fillRectangle(col*30, row*30, 30, 30, xw.Orange);
+        } else {
+            xw.fillRectangle(col*30, row*30, 30, 30, xw.Brown);
+        }
         if (piece == 'k' || piece =='K'){
             drawKing(col, row, piece);
         } else if (piece == 'q' || piece == 'Q') {
@@ -225,10 +233,6 @@ void Gui::drawBoard(std::string value, int posn1, int posn2, int posn3, int posn
             drawKnight(col, row, piece);
         } else if (piece == 'p' || piece == 'P') {
             drawPawn(col, row, piece);
-        } else if ((row + col) % 2 == 0) {
-            xw.fillRectangle(col*30, row*30, 30, 30, xw.Yellow);
-        } else {
-            xw.fillRectangle(col*30, row*30, 30, 30, xw.Red);
         }
     }
     if (value != "") {
