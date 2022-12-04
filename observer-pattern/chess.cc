@@ -302,10 +302,10 @@ bool Chess::validMove(std::shared_ptr<Move> movement, bool whiteTurn, char promo
     moves.emplace_back(movement);
     if (whiteTurn && whiteInCheck() != "") {
         undo();
-        throw std::out_of_range {"King is under check."};
+        return false;
     } else if (!whiteTurn && blackInCheck() != "") {
         undo();
-        throw std::out_of_range {"King is under check."};
+        return false;
     } else {
         undo();
         return true;
@@ -418,11 +418,8 @@ bool Chess::movePiece(std::shared_ptr<Move> movement, bool whiteTurn, char promo
     Position new_posn = movement->getNew();
     char piece = board->charAt(org_posn);
     int when = moves.size();
-    bool valid;
-    try {valid = validMove(movement, whiteTurn);}
-    catch (std::out_of_range &e) {throw e;}
-
-    if (!validMove(movement, whiteTurn)) {
+    bool valid = validMove(movement, whiteTurn);
+    if (!valid) {
         throw std::out_of_range {"Invalid move!"};
     } else {
         board->move(movement, when);
