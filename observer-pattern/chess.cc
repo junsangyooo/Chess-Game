@@ -442,8 +442,8 @@ std::string Chess::whiteInCheck() {
     int length = blackPieces.size();
     for (int i = 0; i < length; ++i) {
         auto tmp_move = std::make_shared<Move>(blackPieces[i], whiteKing);
-        inCheck = validMove(tmp_move, false);
-        if (!inCheck) {break;}
+        inCheck = !validMove(tmp_move, false);
+        if (inCheck) {break;}
         else {continue;}
     }
     if (inCheck) {
