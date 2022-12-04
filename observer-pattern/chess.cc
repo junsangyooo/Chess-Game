@@ -16,6 +16,8 @@ void Chess::undo() {
     int when = moves.size();
     board->undo(move, when);
     char piece = board->charAt(pre_new_posn);
+    int org_changed_posn = (pre_org_posn / 10) * 10 + pre_org_posn % 10;
+    int new_changed_posn = (pre_new_posn / 10) * 10 + pre_new_posn % 10;
     if (piece== 'q' || piece == 'Q' || piece == 'n' || piece == 'N' || piece == 'r' || piece == 'R' || piece == 'b' || piece == 'B') {
         if (board->getPromoted(pre_new_posn)) {
             int whenPromoted = board->getWhenPromoted(pre_new_posn);
@@ -25,26 +27,31 @@ void Chess::undo() {
             else {
                 board->undo(move, when);
             }
+            drawBoard(org_changed_posn, new_changed_posn);
         }
     } else if (piece == 'k' || piece == 'K') {
         int diff = abs(pre_new_posn - pre_org_posn);
         if (diff == 2) {
             board->undoCastling(move, when);
+            drawBoard(org_changed_posn, new_changed_posn, move->getCell1(), move->getCell2());
         } else {
             board->undo(move, when);
+            drawBoard(org_changed_posn, new_changed_posn);
         }
     } else if (piece == 'p' || piece == 'P') {
         if (captured->getPiece() == 'p' || captured->getPiece() == 'P') {
             if (captured->getEnPassant()) {
                 board->undoEnPassant(move, when);
+                drawBoard(org_changed_posn, new_changed_posn, move->getCell1(), move->getCell2());
             } else {
                 board->undo(move, when);
+                drawBoard(org_changed_posn, new_changed_posn);
             }
         } else {
             board->undo(move, when);
+            drawBoard(org_changed_posn, new_changed_posn);
         }
     }
-    drawBoard();
     notify(move->getChecked());
 }
 
@@ -481,7 +488,9 @@ bool Chess::movePiece(std::shared_ptr<Move> movement, bool whiteTurn, char promo
         notify(status);
         return false;
     } else {
-        drawBoard();
+        int org_changed_posn = (org_posn / 10) * 10 + org_posn % 10;
+        int new_changed_posn = (org_posn / 10) * 10 + org_posn % 10;
+        drawBoard(org_changed_posn, new_changed_posn, movement->getCell1(), movement->getCell2());
         notify(status);
         return true;
     }
@@ -497,7 +506,6 @@ Chess::~Chess() {
         moves.erase(moves.begin());
     }
 }
-
 
 std::string Chess::checkTest() {
     std::string white = whiteInCheck();

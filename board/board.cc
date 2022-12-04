@@ -166,6 +166,7 @@ void Board::enPassant(std::shared_ptr<Move> movement) {
     setEnPassant(Position(org_row*10 + new_col), true);
     movement->setCaptured(getPiece(Position(org_row*10 + new_col)));
     bd[new_row][new_col] = bd[org_row][org_col];
+    movement->setCell1(org_row*10 + new_col);
     remove(org_posn);
     remove(Position(10*org_row + new_col));
 }
@@ -187,12 +188,16 @@ void Board::castling(std::shared_ptr<Move> movement, int when) {
         setCastling(Position(new_posn + 1), true);
         bd[org_row][new_col - 1] = bd[org_row][new_col + 1];
         remove(Position(new_posn + 1));
+        movement->setCell1(org_row*10 + new_col - 1);
+        movement->setCell2(org_row*10 + new_col + 1);
     } else {
         setWhenFirstMove(Position(new_posn - 2), when);
         setFirstMove(Position(new_posn - 2), false);
         setCastling(Position(new_posn - 2), true);
         bd[org_row][new_col + 1] = bd[org_row][new_col - 2];
         remove(Position(new_posn - 2));
+        movement->setCell1(org_row*10 + new_col + 1);
+        movement->setCell2(org_row*10 + new_col - 2);
     }
 }
 
