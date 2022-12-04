@@ -12,7 +12,7 @@ void Subject::detach(std::string type) {
     }
 }
 
-void Subject::drawBoard(std::string value = "", int posn1 = -1, int posn2 = -1, int posn3 = -1, int posn4 = -1) {
+void Subject::drawBoard(std::string value, int posn1, int posn2, int posn3, int posn4) {
     for (auto ob: observers) {
         ob->drawBoard(value, posn1, posn2, posn3, posn4);
     }

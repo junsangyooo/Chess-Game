@@ -21,9 +21,9 @@
 #include "scoreboard.h"
 
 class Chess : public Subject{
+    std::shared_ptr<Board> board;
     std::shared_ptr<ScoreBoard> score;
     std::vector<std::shared_ptr<Move>> moves;
-    std::shared_ptr<Board> board;
     bool enPassant(std::shared_ptr<Move> movement);
     bool castling(std::shared_ptr<Move> movement);
     bool validKing(std::shared_ptr<Move> movement);
