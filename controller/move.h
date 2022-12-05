@@ -15,7 +15,7 @@ class Move {
     Position org_posn, new_posn;
     std::shared_ptr<Piece> captured = nullptr;
     std::shared_ptr<Piece> promoted;
-    std::string checked;
+    std::string status;
     int changed_cell1 = -1;
     int changed_cell2 = -1;
 public:
@@ -28,8 +28,8 @@ public:
     std::shared_ptr<Piece> getCaptured() {return captured;}
     void setPromoted(std::shared_ptr<Piece> piece);
     std::shared_ptr<Piece> getPromoted() {return promoted;}
-    void setChecked(std::string comment) {checked = comment;}
-    std::string getChecked() {return checked;}
+    void setStatus(std::string comment) {status = comment;}
+    std::string getStatus() {return status;}
     void setCell1(int value) {changed_cell1 = value;}
     void setCell2(int value) {changed_cell2 = value;}
     int getCell1() {return changed_cell1;}
