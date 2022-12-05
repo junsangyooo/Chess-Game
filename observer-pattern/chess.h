@@ -27,10 +27,10 @@ class Chess : public Subject{
     bool enPassant(std::shared_ptr<Move> movement, bool whiteTurn);
     bool castling(std::shared_ptr<Move> movement, bool whiteTurn);
     bool validKing(std::shared_ptr<Move> movement, bool whiteTurn);
-    bool validQueen(std::shared_ptr<Move> movement);
-    bool validRook(std::shared_ptr<Move> movement);
-    bool validKnight(std::shared_ptr<Move> movement);
-    bool validBishop(std::shared_ptr<Move> movement);
+    bool validQueen(std::shared_ptr<Move> movement, bool whiteTurn);
+    bool validRook(std::shared_ptr<Move> movement, bool whiteTurn);
+    bool validKnight(std::shared_ptr<Move> movement, bool whiteTurn);
+    bool validBishop(std::shared_ptr<Move> movement, bool whiteTurn);
     bool validPawn(std::shared_ptr<Move> movement, bool whiteTurn, char promote = '.');
     std::string whiteInCheck();
     std::string blackInCheck();

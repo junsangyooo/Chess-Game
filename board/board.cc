@@ -86,12 +86,24 @@ void Board::replace(char c, Position posn) {
     std::shared_ptr<Piece> newPiece;
     if (c == 'p') {
         newPiece = std::make_shared<Pawn>(c);
+        if (posn  < 10 || posn > 17) {
+            newPiece->setFirstMove(false);
+        }
     } else if (c == 'P') {
         newPiece = std::make_shared<Pawn>(c);
+        if (posn  < 60 || posn > 67) {
+            newPiece->setFirstMove(false);
+        }
     } else if (c == 'r') {
         newPiece = std::make_shared<Rook>(c);
+        if (posn != 0 && posn != 7) {
+            newPiece->setFirstMove(false);
+        }
     } else if (c == 'R') {
         newPiece = std::make_shared<Rook>(c);
+        if (posn != 70 && posn != 77) {
+            newPiece->setFirstMove(false);
+        }
     } else if (c == 'b') {
         newPiece = std::make_shared<Bishop>(c);
     } else if (c == 'B') {
@@ -102,8 +114,14 @@ void Board::replace(char c, Position posn) {
         newPiece = std::make_shared<Knight>(c);
     } else if (c == 'k') {
         newPiece = std::make_shared<King>(c);
+        if (posn != 4) {
+            newPiece->setFirstMove(false);
+        }
     } else if (c == 'K') {
         newPiece = std::make_shared<King>(c);
+        if (posn != 74) {
+            newPiece->setFirstMove(false);
+        }
     } else if (c == 'q') {
         newPiece = std::make_shared<Queen>(c);
     } else if (c == 'Q') {
@@ -226,12 +244,15 @@ int Board::getWhenFirstMove(Position posn) {
 void Board::undo(std::shared_ptr<Move> movement) {
     Position org_posn = movement->getOrg();
     Position new_posn = movement->getNew();
+    int org_col = org_posn % 10;
+    int org_row = org_posn / 10;
     int new_col = new_posn % 10;
     int new_row = new_posn / 10;
-    auto newMove = std::make_shared<Move>(new_posn, org_posn);
-    move(newMove);
+    bd[org_row][org_col] = bd[new_row][new_col];
     auto captured = movement->getCaptured();
-    if (captured != nullptr) {
+    if (captured == nullptr) {
+        remove(new_posn);
+    } else {
         bd[new_row][new_col] = captured;
     }
 }
@@ -272,8 +293,9 @@ void Board::undoCastling(std::shared_ptr<Move> movement) {
     int new_col = new_posn % 10;
     int new_row = new_posn / 10;
     bd[org_row][org_col] = bd[new_row][new_col];
+    remove(new_posn);
     if (new_posn  + 2 == org_posn) {
-        bd[org_row][new_col - 1]= bd[org_row][new_col + 1];
+        bd[org_row][new_col - 2]= bd[org_row][new_col + 1];
         remove(Position(new_posn + 1));
     } else {
         bd[org_row][new_col + 1]= bd[org_row][new_col - 1];
