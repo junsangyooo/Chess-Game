@@ -248,7 +248,7 @@ int main() {
                         char piece = board->charAt(firstPosn);
                         //Check Pawn Promotion
                         char promoted;
-                        if ((piece == 'p' && 60 <= secondPosn && secondPosn <= 67) || (piece == 'P' && 10 <= secondPosn && secondPosn <= 17)) {
+                        if ((piece == 'p' && 60 <= firstPosn && firstPosn <= 67) || (piece == 'P' && 10 <= firstPosn && firstPosn <= 17)) {
                             std::cin >> promoted;
                             if (promoted != 'r' && promoted != 'R' && promoted != 'n' && promoted != 'N' && promoted != 'b' && promoted != 'B' && promoted != 'q' && promoted != 'Q') {
                                 std::cerr << "Please provide a valid piece." << std::endl;
@@ -286,6 +286,10 @@ int main() {
                         continue;
                     }
                     whiteTurn = !whiteTurn;
+                } else {
+                    std::cerr << "Please provide a valid command." << std::endl;
+                    error = true;
+                    continue;
                 }
                 bool response = false;
                 if (gameEnd) {

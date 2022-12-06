@@ -235,6 +235,7 @@ void Gui::drawBoard(std::string value, int posn1, int posn2, int posn3, int posn
             drawPawn(col, row, piece);
         }
     }
+    xw.fillRectangle(0, 240, 240, 40, xw.White);
     if (value != "") {
         xw.drawString(30, 270, value);
     }

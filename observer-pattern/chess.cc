@@ -27,7 +27,6 @@ void Chess::undo(bool display) {
             board->undo(move);
         }
     } else if (piece == 'p' || piece == 'P') {
-        std::cout << 11 << std::endl;
         if (captured != nullptr) {
             char tmp = captured->getPiece();
             if ((tmp == 'p' || tmp == 'P') && captured->getEnPassant()) {
@@ -36,7 +35,6 @@ void Chess::undo(bool display) {
                 changedOne = (pre_org_posn * 10) / 10 + (pre_new_posn % 10);
             } else {board->undo(move);}
         } else {board->undo(move);}
-        std::cout << 33 << std::endl;
     } else if (piece == 'k' || piece == 'K') {
         if (pre_new_posn + 2 == pre_org_posn) {
             board->undoCastling(move);
@@ -468,7 +466,6 @@ std::string Chess::blackInCheck() {
         }
         if (found) {break;}
     }
-    std::cout << found << std::endl;
 
     for (int i = 0; i < 8; ++i) {
         for (int j = 0; j < 8; ++j) {
@@ -500,9 +497,9 @@ std::string Chess::whiteInCheck() {
     
     for(int i = 0; i < 8; ++i) {
         for (int j = 0; j < 8; ++j) {
-            char piece = board->charAt(Position(i*10 + j));
+            Position tmp = Position(i*10 + j);
+            char piece = board->charAt(tmp);
             if ('a' <= piece && piece <= 'z') {
-                Position tmp = Position(i*10 + j);
                 auto move = std::make_shared<Move>(tmp, whiteKing);
                 if (validMove(move, false)) {return "White is in check.";}
             }
