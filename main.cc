@@ -178,8 +178,6 @@ int main() {
                     chess->attach(graphicBoard);
                     control->setPlayer1(player1);
                     control->setPlayer2(player2);
-                    control->setPlayer1(player1);
-                    control->setPlayer2(player2);
                     if (player1IsComputer) {
                         control->setComputerWhite(computerOne);
                     }
