@@ -166,13 +166,13 @@ int main() {
                 computerTwo = std::make_shared<LevelOne>(chess, false, board);
             } else if (player2 == "computer2") {
                 player2IsComputer = true;
-                computerTwo = std::make_shared<LevelTwo>(chess, true, board);
+                computerTwo = std::make_shared<LevelTwo>(chess, false, board);
             }/* else if (player2 == "computer3") {
                 player2IsComputer = true;
-                computerTwo = std::make_shared<LevelThree>(chess, true, board);
+                computerTwo = std::make_shared<LevelThree>(chess, false, board);
             } else if (player2 == "computer4") {
                 player2IsComputer = true;
-                computerTwo = std::make_shared<LevelFour>(chess, true, board);
+                computerTwo = std::make_shared<LevelFour>(chess, false, board);
             }*/
             if (player2IsComputer) {
                 control->setComputerBlack(computerTwo);

@@ -2,20 +2,15 @@ game human human
 move b2 b4
 move g8 h6
 move b4 b5
-move b7 b5
-move a5 b6
-move c7 b6
-move g1 h3
-move b6 b5
-move h3 g1
-move b5 b4
-move c2 c4
-move b4 c3
-move b2 b4
-move h6 g8
-move b4 b5
 move a7 a5
 move b5 a6
+move c7 c6
+move g1 h3
+move c6 c5
+move h3 g1
+move c5 c4
+move d2 d4
+move c4 d3
 resign
 no
 exit

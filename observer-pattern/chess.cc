@@ -333,6 +333,8 @@ bool Chess::validPawn(std::shared_ptr<Move> movement, bool whiteTurn, char promo
         char between = board->charAt(Position(org_posn - (whiteTurn*10) + (!whiteTurn*10)));
         if (between != ' ' && between != '-') {
             return false;
+        } else if (captured != ' ' && captured != '-') {
+            return false;
         }
     } else {return false;}
 

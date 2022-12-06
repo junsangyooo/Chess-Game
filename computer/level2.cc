@@ -10,7 +10,6 @@ LevelTwo::~LevelTwo() {
 
 bool LevelTwo::makeMove() {
     std::vector<Position> positions;
-    Position oppoKing;
     for (int i = 0; i < 8; i++) {
         for (int j = 0; j < 8; ++j) {
             char piece  = board->charAt(Position(10*i + j));
@@ -18,10 +17,6 @@ bool LevelTwo::makeMove() {
                 positions.emplace_back(Position(10*i + j));
             } else if (!whiteSide && 'a' <= piece && piece <= 'z') {
                 positions.emplace_back(Position(10*i + j));
-            } else if (whiteSide && piece == 'k') {
-                oppoKing = Position(10*i + j);
-            } else if (!whiteSide && piece == 'K') {
-                oppoKing = Position(10*i + j);
             }
         }
     }
@@ -31,6 +26,7 @@ bool LevelTwo::makeMove() {
     char promoteTo;
     bool promoted = false;
     
+    // Find to way to check first
     while(!found) {
         std::random_device rd; // obtain a random number from hardware
         std::mt19937 gen(rd()); // seed the generator
@@ -39,7 +35,6 @@ bool LevelTwo::makeMove() {
 
         Position org_posn = positions.at(random - 1);
         char piece = board->charAt(org_posn);
-        // Find to way to check first
         if ((piece == 'p' && 60 <= org_posn && org_posn <= 67) && (piece == 'P' && 10 <= org_posn && org_posn <= 17)) {
             std::vector<char> promote;
             int index = 0;
@@ -122,8 +117,22 @@ bool LevelTwo::makeMove() {
             }
             if (found) {break;}
         }
+    }
+    if (found && promoted) {
+        return chess->movePiece(move, whiteSide, promoteTo);
+    } else if (found) {
+        return chess->movePiece(move, whiteSide);
+    }
 
-        //Noe we find capturing move
+    //Noe we find capturing move
+    while(!found) {
+        std::random_device rd; // obtain a random number from hardware
+        std::mt19937 gen(rd()); // seed the generator
+        std::uniform_int_distribution<> distr(1, length); // define the range
+        int random = distr(gen);
+
+        Position org_posn = positions.at(random - 1);
+        char piece = board->charAt(org_posn);
         if ((piece == 'p' && 60 <= org_posn && org_posn <= 67) && (piece == 'P' && 10 <= org_posn && org_posn <= 17)) {
             std::vector<char> promote;
             int index = 0;
@@ -181,8 +190,22 @@ bool LevelTwo::makeMove() {
             }
             if (found) {break;}
         }
+    }
+    if (found && promoted) {
+        return chess->movePiece(move, whiteSide, promoteTo);
+    } else if (found) {
+        return chess->movePiece(move, whiteSide);
+    }
+    
+    //Just choose a random move
+    while(!found) {
+        std::random_device rd; // obtain a random number from hardware
+        std::mt19937 gen(rd()); // seed the generator
+        std::uniform_int_distribution<> distr(1, length); // define the range
+        int random = distr(gen);
 
-        //Just choose a random move
+        Position org_posn = positions.at(random - 1);
+        char piece = board->charAt(org_posn);
         for (int i = 0; i < 8; ++i) {
             for (int j = 0; j < 8; ++j) {
                 Position new_posn = Position(i*10 + j);

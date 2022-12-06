@@ -56,4 +56,4 @@ undo
 move b2 b1 n
 resign
 no
-quit
+exit
