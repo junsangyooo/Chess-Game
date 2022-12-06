@@ -554,10 +554,10 @@ bool Chess::movePiece(std::shared_ptr<Move> movement, bool whiteTurn, char promo
                 movement->setCell1(((org_posn / 10)*10) + (new_posn % 10));
                 board->enPassant(movement);
             } else {
-                board->move(movement);
+                board->move(movement, promote);
             }
         } else {
-            board->move(movement);
+            board->move(movement, promote);
         }
     } else {
         board->move(movement);
