@@ -104,13 +104,9 @@ void Board::replace(char c, Position posn) {
         if (posn != 70 && posn != 77) {
             newPiece->setFirstMove(false);
         }
-    } else if (c == 'b') {
+    } else if (c == 'b' || c == 'B') {
         newPiece = std::make_shared<Bishop>(c);
-    } else if (c == 'B') {
-        newPiece = std::make_shared<Bishop>(c);
-    } else if (c == 'n') {
-        newPiece = std::make_shared<Knight>(c);
-    } else if (c == 'N') {
+    } else if (c == 'n' || c == 'N') {
         newPiece = std::make_shared<Knight>(c);
     } else if (c == 'k') {
         newPiece = std::make_shared<King>(c);
@@ -122,9 +118,7 @@ void Board::replace(char c, Position posn) {
         if (posn != 74) {
             newPiece->setFirstMove(false);
         }
-    } else if (c == 'q') {
-        newPiece = std::make_shared<Queen>(c);
-    } else if (c == 'Q') {
+    } else if (c == 'q' || c == 'Q') {
         newPiece = std::make_shared<Queen>(c);
     } else {throw std::out_of_range {"Invalid Piece!"};}
     remove(posn);
