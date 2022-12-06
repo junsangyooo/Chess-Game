@@ -12,7 +12,7 @@ void Chess::undo() {
     int when = moves.size();
     Position pre_org_posn = move->getOrg();
     Position pre_new_posn = move->getNew();
-    auto captured = move->getCaptured();
+    std::shared_ptr<Piece> captured = move->getCaptured();
     char piece = board->charAt(pre_new_posn);
     if (piece== 'q' || piece == 'Q' || piece == 'n' || piece == 'N' || piece == 'r' || piece == 'R' || piece == 'b' || piece == 'B') {
         if (board->getPromoted(pre_new_posn) && board->getWhenPromoted(pre_new_posn) == when) {
@@ -25,11 +25,14 @@ void Chess::undo() {
             board->undo(move);
         }
     } else if (piece == 'p' || piece == 'P') {
+        std::cout << 11 << std::endl;
         char tmp = captured->getPiece();
+        std::cout << 22 << std::endl;
         if ((tmp == 'p' || tmp == 'P') && captured->getEnPassant()) {
             board->undoEnPassant(move);
             board->setEnPassant(Position((pre_org_posn * 10) / 10 + (pre_new_posn % 10)), false);
         } else {board->undo(move);}
+        std::cout << 33 << std::endl;
     } else if (piece == 'k' || piece == 'K') {
         if (pre_new_posn + 2 == pre_org_posn) {
             board->undoCastling(move);
@@ -323,13 +326,20 @@ bool Chess::validPawn(std::shared_ptr<Move> movement, bool whiteTurn, char promo
         }
     } else {return false;}
 
+    std::cout << "one" << std::endl;
     moves.emplace_back(movement);
+    std::cout << "two" << std::endl;
     board->move(movement);
+    std::cout << "three" << std::endl;
     if ((whiteTurn && whiteInCheck() != "") || (!whiteTurn && blackInCheck() != "")) {
+        std::cout << "four" << std::endl;
         undo();
+        std::cout << "five" << std::endl;
         return false;
     }
+    std::cout << "four" << std::endl;
     undo();
+    std::cout << "five" << std::endl;
     return true;
 }
 
@@ -533,7 +543,9 @@ bool Chess::movePiece(std::shared_ptr<Move> movement, bool whiteTurn, char promo
     char captured = board->charAt(new_posn);
     
     // Check valid move and move
+    std::cout << 1 << std::endl;
     bool valid = validMove(movement, whiteTurn, promote);
+    std::cout << 2 << std::endl;
     if (!valid) {
         throw std::out_of_range {"Invalid move!"};
     } else if ((piece == 'k' || piece == 'K') && (new_posn + 2 == org_posn || new_posn - 2 == org_posn)) {
@@ -577,6 +589,7 @@ bool Chess::movePiece(std::shared_ptr<Move> movement, bool whiteTurn, char promo
     } else {
         board->move(movement);
     }
+    std::cout << 3 << std::endl;
 
     //Now, we check it's check, checkmate or stalemate
     bool gameEnd = false;;

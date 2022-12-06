@@ -277,7 +277,7 @@ void Gui::notify() {
             if (piece == ' ' || piece == '-') {continue;}
             else {
                 std::string tmp(1, piece);
-                xw.drawString(j*30 + 10, i*30 + 10, tmp);
+                xw.drawString(j*30 + 10, i*30 + 15, tmp);
             }
         }
     }

@@ -240,7 +240,6 @@ int Board::getWhenFirstMove(Position posn) {
     return bd[row][col]->getWhenFirstMove();
 }
 
-
 void Board::undo(std::shared_ptr<Move> movement) {
     Position org_posn = movement->getOrg();
     Position new_posn = movement->getNew();

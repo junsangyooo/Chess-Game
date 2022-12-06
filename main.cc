@@ -106,7 +106,7 @@ bool validPiece(char piece) {
 }
 
 int main() {
-    std::shared_ptr<ScoreBoard> sb = std::make_shared<ScoreBoard>(0, 0);
+    std::shared_ptr<ScoreBoard> sb = std::make_shared<ScoreBoard>(0.0, 0.0);
     std::string command;
     bool boardExist = false;
     bool whiteTurn = true;
