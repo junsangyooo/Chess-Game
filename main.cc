@@ -13,9 +13,9 @@
 #include "gui.h"
 #include "cli.h"
 #include "controller.h"
-/*#include "computer.h"
+#include "computer.h"
 #include "level1.h"
-#include "level2.h"
+/*#include "level2.h"
 #include "level3.h"
 #include "level4.h"*/
 
@@ -140,7 +140,7 @@ int main() {
             bool player2IsComputer = false;
             std::shared_ptr<Computer> computerOne;
             std::shared_ptr<Computer> computerTwo;
-            /*if (player1 == "computer1") {
+            if (player1 == "computer1") {
                 player1IsComputer = true;
                 computerOne = std::make_shared<LevelOne>(chess, true, board);
             }/* else if (player1 == "computer2") {
@@ -152,7 +152,7 @@ int main() {
             } else if (player1 == "computer4") {
                 player1IsComputer = true;
                 computerOne = std::make_shared<LevelFour>(chess, true, board);
-            }
+            }*/
             if (player1IsComputer){
                 control->setComputerWhite(computerOne);
                 control->setPlayer1Computer(true);
@@ -161,7 +161,7 @@ int main() {
             if (player2 == "computer1") {
                 player2IsComputer = true;
                 computerTwo = std::make_shared<LevelOne>(chess, true, board);
-            }else if (player2 == "computer2") {
+            }/* else if (player2 == "computer2") {
                 player2IsComputer = true;
                 computerTwo = std::make_shared<LevelTwo>(chess, true, board);
             } else if (player2 == "computer3") {
@@ -170,11 +170,11 @@ int main() {
             } else if (player2 == "computer4") {
                 player2IsComputer = true;
                 computerTwo = std::make_shared<LevelFour>(chess, true, board);
-            }
+            }*/
             if (player2IsComputer) {
                 control->setComputerBlack(computerTwo);
                 control->setPlayer2Computer(true);
-            }*/
+            }
 
             std::string cmd;
             bool gameEnd = false;
@@ -189,14 +189,14 @@ int main() {
                     graphicBoard = std::make_shared<Gui>(chess);
                     chess->attach(textBoard);
                     chess->attach(graphicBoard);
-                    /*if (player1IsComputer) {
+                    if (player1IsComputer) {
                         control->setPlayer1Computer(true);
                         control->setComputerWhite(computerOne);
                     }
                     if (player2IsComputer) {
                         control->setPlayer2Computer(true);
                         control->setComputerBlack(computerTwo);
-                    }*/
+                    }
                     whiteTurn = true;
                     restart = false;
                 }
@@ -220,13 +220,13 @@ int main() {
                     }
                     gameEnd = true;
                 } else if (cmd == "move") {
-                    /*if (whiteTurn && player1IsComputer) {
+                    if (whiteTurn && player1IsComputer) {
                         gameEnd = control->computerMove(whiteTurn);
                         whiteTurn = !whiteTurn;
                     } else if (!whiteTurn && player2IsComputer) {
                         gameEnd = control->computerMove(whiteTurn);
                         whiteTurn = !whiteTurn;
-                    } else {*/
+                    } else {
                         std::string posn1;
                         std::string posn2;
                         Position firstPosn;
@@ -386,5 +386,7 @@ int main() {
             continue;
         }
     }
-    std::cout << sb;
+    std::cout << "Final Score:" << std::endl;
+    std::cout << "White: " << sb->getWhite() << std::endl;
+    std::cout << "Black: " << sb->getBlack() << std::endl;
 }

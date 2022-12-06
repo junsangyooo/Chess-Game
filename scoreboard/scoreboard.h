@@ -13,7 +13,7 @@
 class ScoreBoard {
     float white;
     float black;
-    friend std::ostream &operator<<(std::ostream &out, const ScoreBoard &sb);
+    //friend std::ostream &operator<<(std::ostream &out, const ScoreBoard &sb);
 public:
     ScoreBoard(float white, float black);
     ~ScoreBoard();
@@ -24,7 +24,7 @@ public:
     void addToBlack(float value);
 };
 
-std::ostream& operator<<(std::ostream &out, const ScoreBoard& sb);
+//std::ostream& operator<<(std::ostream &out, const ScoreBoard& sb);
 
 
 #endif
