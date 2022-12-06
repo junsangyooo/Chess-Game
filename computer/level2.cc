@@ -30,6 +30,71 @@ bool LevelTwo::makeMove() {
     std::shared_ptr<Move> move;
     char promoteTo;
     Position new_posn;
+    // Find to way to check first
+    while(!found) {
+        std::random_device rd; // obtain a random number from hardware
+        std::mt19937 gen(rd()); // seed the generator
+        std::uniform_int_distribution<> distr(1, length); // define the range
+        int random = distr(gen);
+
+        Position org_posn = positions.at(random - 1);
+        char piece = board->charAt(org_posn);
+        bool promoted = false;
+        if ((piece == 'p' && 60 <= org_posn && org_posn <= 67) && (piece == 'P' && 10 <= org_posn && org_posn <= 17)) {
+            std::vector<char> promote;
+            int index = 0;
+            if (piece == 'p') {
+                promote.emplace_back('q');
+                promote.emplace_back('r');
+                promote.emplace_back('b');
+                promote.emplace_back('n');
+                index = 9;
+
+            } else {
+                promote.emplace_back('Q');
+                promote.emplace_back('R');
+                promote.emplace_back('B');
+                promote.emplace_back('N');
+                index = -11;
+            }
+            for (int i = index; i <= index + 2; ++i) {
+                Position tmp = Position(org_posn + i);
+                move = std::make_shared<Move>(org_posn, tmp);
+                if (!chess->validMove(move, whiteSide)) {
+                    continue;
+                }
+                for (char c : promote) {
+                    if (i != 10 && i != -10) {
+                        move->setCaptured(board->getPiece(tmp));
+                    }
+                    move->setPromoted(board->getPiece(org_posn));
+                    board->move(move, c);
+                    if ((piece == 'p' && chess->whiteInCheck() != "") && (piece == 'P' && chess->blackInCheck() != "")) {
+                        promoteTo = c;
+                        new_posn = tmp;
+                        found = promotion = true;
+                        board->undoPromoted(move);
+                        move->setCaptured(nullptr);
+                        move->setPromoted(nullptr);
+                        break;
+                    }
+                }
+                if (found) {break;}
+            }
+            if (found) {break;}
+        } else {
+            for (int i = 0; i < 8; i++) {
+                for (int j = 0; j < 8; j++) {
+                    Position tmp = Position(1*10 + j);
+                    char captured = board->charAt(tmp);
+                    if (captured == )
+                }
+            }
+        }
+    }
+
+
+    Position new_posn;
     bool promotion = false;
     while(!found) {
         std::random_device rd; // obtain a random number from hardware
