@@ -41,40 +41,45 @@ bool LevelTwo::makeMove() {
                 if (i != 10 &&i != -10) {
                     move->setCaptured(board->getPiece(tmp));
                 }
+                bool check = false;
                 if (piece == 'p'){
                     move->setPromoted(board->getPiece(org_posn));
                     board->move(move, 'q');
                     if (chess->whiteInCheck() != "") {
-                        board->undoPromoted(move);
-                        move->setCaptured(nullptr);
-                        move->setPromoted(nullptr);
-                        return chess->movePiece(move, whiteSide, 'q');
+                        check = true;
                     }
+                    board->undoPromoted(move);
+                    move->setCaptured(nullptr);
+                    move->setPromoted(nullptr);
+                    if (check) {return chess->movePiece(move, whiteSide, 'q');}
                     move->setPromoted(board->getPiece(org_posn));
                     board->move(move, 'n');
                     if (chess->whiteInCheck() != "") {
-                        board->undoPromoted(move);
-                        move->setCaptured(nullptr);
-                        move->setPromoted(nullptr);
-                        return chess->movePiece(move, whiteSide, 'r');
+                        check = true;
                     }
+                    board->undoPromoted(move);
+                    move->setCaptured(nullptr);
+                    move->setPromoted(nullptr);
+                    if (check) {return chess->movePiece(move, whiteSide, 'n');}
                 } else {
                     move->setPromoted(board->getPiece(org_posn));
                     board->move(move, 'Q');
                     if (chess->blackInCheck() != "") {
-                        board->undoPromoted(move);
-                        move->setCaptured(nullptr);
-                        move->setPromoted(nullptr);
-                        return chess->movePiece(move, whiteSide, 'q');
+                        check = true;
                     }
+                    board->undoPromoted(move);
+                    move->setCaptured(nullptr);
+                    move->setPromoted(nullptr);
+                    if (check) {return chess->movePiece(move, whiteSide, 'Q');}
                     move->setPromoted(board->getPiece(org_posn));
                     board->move(move, 'N');
                     if (chess->blackInCheck() != "") {
-                        board->undoPromoted(move);
-                        move->setCaptured(nullptr);
-                        move->setPromoted(nullptr);
-                        return chess->movePiece(move, whiteSide, 'q');
+                        check = true;
                     }
+                    board->undoPromoted(move);
+                    move->setCaptured(nullptr);
+                    move->setPromoted(nullptr);
+                    if (check) {return chess->movePiece(move, whiteSide, 'n');}
                 }
             }
         } else {
@@ -83,37 +88,34 @@ bool LevelTwo::makeMove() {
                     Position tmp = Position(1*10 + j);
                     char captured = board->charAt(tmp);
                     move = std::make_shared<Move>(org_posn, tmp);
+                    bool valid = false;
                     if (!chess->validMove(move, whiteSide)) {continue;}
                     if (captured == ' ' || captured == '-') {
                         if ((piece == 'p' || piece == 'P') && (org_posn  - (whiteSide * 11) + (!whiteSide * 11) == tmp || org_posn  - (whiteSide * 9) + (!whiteSide * 9) == tmp)) {
                             move->setCaptured(board->getPiece(Position((org_posn / 10) + (tmp % 10))));
                             board->enPassant(move);
-                            if ((whiteSide && chess->blackInCheck() != "") && (!whiteSide && chess->whiteInCheck() != "")) {
-                                board->undoEnPassant(move);
-                                move->setCaptured(nullptr);
-                                return chess->movePiece(move, whiteSide);
-                            }
+                            if ((whiteSide && chess->blackInCheck() != "") || (!whiteSide && chess->whiteInCheck() != "")) {valid = true;}
+                            board->undoEnPassant(move);
+                            move->setCaptured(nullptr);
+                            if (valid) {return chess->movePiece(move, whiteSide);}
                         } else if ((piece == 'k' || piece == 'K') && (tmp + 2 == org_posn || tmp - 2 == org_posn)) {
                             board->castling(move);
-                            if ((whiteSide && chess->blackInCheck() != "") && (!whiteSide && chess->whiteInCheck() != "")) {
-                                board->undoCastling(move);
-                                return chess->movePiece(move, whiteSide);
-                            }
+                            if ((whiteSide && chess->blackInCheck() != "") || (!whiteSide && chess->whiteInCheck() != "")) {valid = true;}
+                            board->undoCastling(move);
+                            if (valid) {return chess->movePiece(move, whiteSide);}
                         } else {
                             board->move(move);
-                            if ((whiteSide && chess->blackInCheck() != "") && (!whiteSide && chess->whiteInCheck() != "")) {
-                                board->undo(move);
-                                return chess->movePiece(move, whiteSide);
-                            }
+                            if ((whiteSide && chess->blackInCheck() != "") || (!whiteSide && chess->whiteInCheck() != "")) {valid = true;}
+                            board->undo(move);
+                            if (valid) {return chess->movePiece(move, whiteSide);}
                         }
-                    } else if ((whiteSide && 'a' <= captured && 'z' <= captured) || (!whiteSide && 'A'  <= captured && captured <= 'Z')) {
+                    } else  {
                         move->setCaptured(board->getPiece(tmp));
                         board->move(move);
-                        if ((whiteSide && chess->blackInCheck() != "") && (!whiteSide && chess->whiteInCheck() != "")) {
-                            board->undo(move);
-                            move->setCaptured(nullptr);
-                            return chess->movePiece(move, whiteSide);
-                        }
+                        if ((whiteSide && chess->blackInCheck() != "") || (!whiteSide && chess->whiteInCheck() != "")) {valid = true;}
+                        board->undo(move);
+                        move->setCaptured(nullptr);
+                        if (valid) {return chess->movePiece(move, whiteSide);}
                     }
                 }
             }
