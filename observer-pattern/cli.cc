@@ -53,11 +53,6 @@ void Cli::notify() {
         std::cout << 8 - i << " ";
         for (int j = 0; j <8;  ++j) {
             int posn = i*10 + j;
-            if ((i + j) % 2 == 0) {
-                std::cout << "█";
-            } else {
-                std::cout << "▒";
-            }
             piece = chess->charAt(Position(posn));
             if (piece == ' ') {
                 std::cout << "█";
@@ -88,17 +83,11 @@ void Cli::notify() {
             } else if (piece == 'k') {
                 std::cout << "♔";
             }
-            if ((i + j) % 2 == 0) {
-                std::cout << "█";
-            } else {
-                std::cout << "▒";
-            }
         }
         std::cout << std::endl;
     }
     std::cout << std::endl;
-    //std::cout << "  abcdefgh" << std::endl;
-    std::cout << "   a  b  c  d  e  f  g  h " << std::endl;
+    std::cout << "  abcdefgh" << std::endl;
 }
 
 Cli::Cli(std::shared_ptr<Chess> chess): chess{chess} {
