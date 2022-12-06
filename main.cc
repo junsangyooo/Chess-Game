@@ -16,8 +16,8 @@
 #include "computer.h"
 #include "level1.h"
 #include "level2.h"
-/*#include "level3.h"
-#include "level4.h"*/
+#include "level3.h"
+#include "level4.h"
 
 enum Position;
 
@@ -207,7 +207,11 @@ int main() {
                 
                 error = false;
                 std::cin >> cmd;
-                if (cmd == "resign") {
+                if (std::cin.eof()) {
+                    gameEnd = true;
+                    restart = false;
+                    continue;
+                } else if (cmd == "resign") {
                     control->resign(whiteTurn);
                     if (whiteTurn) {
                         sb->addToBlack(1);
@@ -303,8 +307,16 @@ int main() {
                 }
             }
             std::cout << "Final Score:" << std::endl;
-            std::cout << "White: " << sb->getWhite() << std::endl;
-            std::cout << "Black: " << sb->getBlack() << std::endl;
+            if (player1IsComputer || player1 == "human") {
+                std::cout << "White: " << sb->getWhite() << std::endl;
+            } else {
+                std::cout << player1 << ": " << sb->getWhite() << std::endl;
+            }
+            if (player2IsComputer || player2 == "human") {
+                std::cout << "Black: " << sb->getBlack() << std::endl;
+            } else {
+                std::cout << player2 << ": " << sb->getBlack() << std::endl;
+            }
             boardExist = false;
         } else if (command == "setup") {
             std::string cmd;

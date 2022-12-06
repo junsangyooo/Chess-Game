@@ -15,7 +15,10 @@ bool Controller::move(Position org_posn, Position new_posn, bool whiteTurn) {
 }
 
 bool Controller::check() {
-    std::string check = chess->checkTest();
+    std::string check = chess->whiteInCheck();
+    if (check == "") {
+        check = chess->blackInCheck();
+    }
     if (check == "") {
         return false;
     } else {

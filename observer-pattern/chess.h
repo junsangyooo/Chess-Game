@@ -39,7 +39,6 @@ public:
     bool movePiece(std::shared_ptr<Move> movement, bool whiteTurn, char promote = '.');
     char charAt(Position posn) const override;
     void undo(bool display);
-    std::string checkTest();
     std::string checkmateTest(bool whiteTurn);
     std::string stalemateTest(bool whiteTurn);
 public:
