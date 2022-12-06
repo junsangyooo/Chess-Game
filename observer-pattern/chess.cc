@@ -159,7 +159,6 @@ bool Chess::validBishop(std::shared_ptr<Move> movement, bool whiteTurn) {
         movement->setCaptured(board->getPiece(new_posn));
         
     }
-    moves.emplace_back(movement);
     board->move(movement);
     if ((whiteTurn && whiteInCheck() != "") || (!whiteTurn && blackInCheck() != "")) {
         board->undo(movement);
@@ -188,7 +187,7 @@ bool Chess::validKing(std::shared_ptr<Move> movement, bool whiteTurn) {
     if (captured != ' ' && captured != '-') {
         movement->setCaptured(board->getPiece(new_posn));
     }
-    moves.emplace_back(movement);
+    
     board->move(movement);
     if ((whiteTurn && whiteInCheck() != "") || (!whiteTurn && blackInCheck() != "")) {
         board->undo(movement);
@@ -224,7 +223,6 @@ bool Chess::validQueen(std::shared_ptr<Move> movement, bool whiteTurn) {
         movement->setCaptured(board->getPiece(new_posn));
         
     }
-    moves.emplace_back(movement);
     board->move(movement);
     if ((whiteTurn && whiteInCheck() != "") || (!whiteTurn && blackInCheck() != "")) {
         board->undo(movement);
@@ -257,7 +255,6 @@ bool Chess::validRook(std::shared_ptr<Move> movement, bool whiteTurn) {
         movement->setCaptured(board->getPiece(new_posn));
         
     }
-    moves.emplace_back(movement);
     board->move(movement);
     if ((whiteTurn && whiteInCheck() != "") || (!whiteTurn && blackInCheck() != "")) {
         board->undo(movement);
@@ -278,7 +275,7 @@ bool Chess::validKnight(std::shared_ptr<Move> movement, bool whiteTurn) {
     if (captured != ' ' && captured != '-') {
         movement->setCaptured(board->getPiece(new_posn));
     }
-    moves.emplace_back(movement);
+
     board->move(movement);
     if ((whiteTurn && whiteInCheck() != "") || (!whiteTurn && blackInCheck() != "")) {
         board->undo(movement);
@@ -337,7 +334,6 @@ bool Chess::validPawn(std::shared_ptr<Move> movement, bool whiteTurn, char promo
         }
     } else {return false;}
 
-    moves.emplace_back(movement);
     board->move(movement);
     if ((whiteTurn && whiteInCheck() != "") || (!whiteTurn && blackInCheck() != "")) {
         board->undo(movement);

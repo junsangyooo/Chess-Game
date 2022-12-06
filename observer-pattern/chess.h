@@ -37,7 +37,6 @@ public:
     std::string blackInCheck();
     bool validMove(std::shared_ptr<Move> movement, bool whiteTurn, char promote = '.');
     bool movePiece(std::shared_ptr<Move> movement, bool whiteTurn, char promote = '.');
-    bool pawnPromote(std::shared_ptr<Move> movement, char piece);
     char charAt(Position posn) const override;
     void undo(bool display);
     std::string checkTest();
