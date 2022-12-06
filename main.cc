@@ -110,25 +110,13 @@ bool validPiece(char piece) {
 int main() {
     std::shared_ptr<ScoreBoard> sb = std::make_shared<ScoreBoard>(0.0, 0.0);
     std::string command;
-    bool boardExist = false;
     bool whiteTurn = true;
-    std::shared_ptr<Board> board;
-    std::shared_ptr<Chess> chess;
-    std::shared_ptr<Controller> control;
-    std::shared_ptr<Gui> graphicBoard;
-    std::shared_ptr<Cli> textBoard;
+    std::shared_ptr<Board> board = std::make_shared<Board>();;
+    std::shared_ptr<Chess> chess = std::make_shared<Chess>(board, sb);
+    std::shared_ptr<Controller> control = std::make_shared<Controller>(chess);
+    std::shared_ptr<Cli> textBoard = std::make_shared<Cli>(chess);
+    std::shared_ptr<Gui> graphicBoard = std::make_shared<Gui>(chess);
     while (std::cin >> command) {
-        if (!boardExist) {
-            board = std::make_shared<Board>();
-            chess = std::make_shared<Chess>(board, sb);
-            control = std::make_shared<Controller>(chess);
-            textBoard = std::make_shared<Cli>(chess);
-            graphicBoard = std::make_shared<Gui>(chess);
-            chess->attach(textBoard);
-            chess->attach(graphicBoard);
-            whiteTurn = true;
-            boardExist = true;
-        }
         if (command == "exit") {
             break;
         } else if (command == "game"){
@@ -175,8 +163,23 @@ int main() {
             }
             std::string cmd;
             bool gameEnd = false;
-            while(std::cin >> cmd) {
-                if (gameEnd) {break;}
+            bool restart = false;
+            while(!gameEnd) {
+                if (restart) {
+                    board = std::make_shared<Board>();;
+                    chess = std::make_shared<Chess>(board, sb);
+                    control = std::make_shared<Controller>(chess);
+                    textBoard = std::make_shared<Cli>(chess);
+                    graphicBoard = std::make_shared<Gui>(chess);
+                    chess->attach(textBoard);
+                    chess->attach(graphicBoard);
+                }
+                std::cin >> cmd;
+                if (whiteTurn) {
+                    std::cout << "---WHITE TURN---" << std::endl;
+                } else {
+                    std::cout << "---BLACK TURN---" << std::endl;
+                }
                 if (cmd == "resign") {
                     control->resign(whiteTurn);
                     if (whiteTurn) {sb->addToBlack(1);}
@@ -244,15 +247,15 @@ int main() {
                     }
                     whiteTurn = !whiteTurn;
                 }
-            }
-            bool response = false;
-            while(!response) {
-                try {
-                    restart = newGame();
-                    response = true;    
-                }
-                catch (std::out_of_range &e) {
-                    std::cerr << e.what() << std::endl;
+                bool response = false;
+                while(!response) {
+                    try {
+                        gameEnd = !newGame();
+                        response = true;    
+                    }
+                    catch (std::out_of_range &e) {
+                        std::cerr << e.what() << std::endl;
+                    }
                 }
             }
         } else if (command == "setup") {
@@ -270,11 +273,9 @@ int main() {
                     for(int i = 0; i < 8; ++i) {
                         for (int j = 0; j < 8; ++j) {
                             char piece = board->charAt(Position(10*i +j));
-                            if (i == 0 || i == 7) {
-                                if (piece == 'p' || piece == 'P') {
-                                    std::cerr << "Pawn cannot start on the first or last row!!!" << std::endl;
-                                    continue;
-                                }
+                            if ((i == 0 || i == 7) && (piece == 'p' || piece == 'P')) {
+                                std::cerr << "Pawn cannot start on the first or last row!!!" << std::endl;
+                                continue;
                             }
                             if (piece == 'k') {blackKing++;}
                             else if (piece == 'K') {whiteKing++;}
@@ -295,11 +296,11 @@ int main() {
                         std::cerr << e.what() << std::endl;
                         continue;
                     }
-                    try {board->replace(piece, posn);}
-                    catch (std::out_of_range &e) {
-                        std::cerr << e.what() << std::endl;
+                    if (!validPiece(piece)) {
+                        std::cerr << "Please provide a valid piece." << std::endl;
                         continue;
                     }
+                    baord->replace(piece, posn);
                     changedPosn = ((posn / 10) * 10) + (posn % 10);
                 } else if (cmd == "-") {
                     std::string position;

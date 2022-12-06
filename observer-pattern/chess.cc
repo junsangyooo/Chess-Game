@@ -544,9 +544,7 @@ bool Chess::movePiece(std::shared_ptr<Move> movement, bool whiteTurn, char promo
     char captured = board->charAt(new_posn);
     
     // Check valid move and move
-    std::cout << 1 << std::endl;
     bool valid = validMove(movement, whiteTurn, promote);
-    std::cout << 2 << std::endl;
     if (!valid) {
         throw std::out_of_range {"Invalid move!"};
     } else if ((piece == 'k' || piece == 'K') && (new_posn + 2 == org_posn || new_posn - 2 == org_posn)) {
@@ -591,7 +589,6 @@ bool Chess::movePiece(std::shared_ptr<Move> movement, bool whiteTurn, char promo
     } else {
         board->move(movement);
     }
-    std::cout << 3 << std::endl;
 
     //Now, we check it's check, checkmate or stalemate
     bool gameEnd = false;;
@@ -602,10 +599,13 @@ bool Chess::movePiece(std::shared_ptr<Move> movement, bool whiteTurn, char promo
         status = whiteInCheck();
     }
     if (status != "") {
+        std::cout << 1 << std::endl;
         std::string checkmate = checkmateTest(!whiteTurn);
         if (checkmate != "") {
+            std::cout << 2 << std::endl;
             status = checkmate;
             gameEnd = true;
+            std::cout << 3 << std::endl;
             if (whiteTurn) {
                 score->addToWhite(1);
             } else {
