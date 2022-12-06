@@ -49,10 +49,7 @@ bool LevelTwo::makeMove() {
                         check = true;
                     }
                     board->undoPromoted(move);
-                    move->setCaptured(nullptr);
-                    move->setPromoted(nullptr);
                     if (check) {return chess->movePiece(move, whiteSide, 'q');}
-                    move->setPromoted(board->getPiece(org_posn));
                     board->move(move, 'n');
                     if (chess->whiteInCheck() != "") {
                         check = true;
@@ -68,10 +65,7 @@ bool LevelTwo::makeMove() {
                         check = true;
                     }
                     board->undoPromoted(move);
-                    move->setCaptured(nullptr);
-                    move->setPromoted(nullptr);
                     if (check) {return chess->movePiece(move, whiteSide, 'Q');}
-                    move->setPromoted(board->getPiece(org_posn));
                     board->move(move, 'N');
                     if (chess->blackInCheck() != "") {
                         check = true;
@@ -152,12 +146,12 @@ bool LevelTwo::makeMove() {
                     char captured = board->charAt(tmp);
                     move = std::make_shared<Move>(org_posn, tmp);
                     if (!chess->validMove(move, whiteSide)) {continue;}
-                    if (captured == ' ' || captured == '-') {
+                    if ((whiteSide && 'a' <= captured && captured <= 'z') || (!whiteSide && 'A' <= captured && captured <= 'Z')) {
+                        return chess->movePiece(move, whiteSide);
+                    } else if (captured == ' ' || captured == '-') {
                         if ((piece == 'p' || piece == 'P') && (org_posn  - (whiteSide * 11) + (!whiteSide * 11) == tmp || org_posn  - (whiteSide * 9) + (!whiteSide * 9) == tmp)) {
                             return chess->movePiece(move, whiteSide);
                         }
-                    } else {
-                        return chess->movePiece(move, whiteSide);
                     }
                 }
             }
@@ -172,6 +166,7 @@ bool LevelTwo::makeMove() {
         std::uniform_int_distribution<> distr(1, length); // define the range
         int random = distr(gen);
 
+        std::cout << "random" << std::endl;
         Position org_posn = positions.at(random - 1);
         char piece = board->charAt(org_posn);
         for (int i = 0; i < 8; ++i) {

@@ -47,11 +47,10 @@ void Controller::resign(bool whiteTurn) {
 }
 
 bool Controller::computerMove(bool whiteTurn) {
-    if (whiteTurn && player1Computer) {
+    if (whiteTurn) {
         return computerWhite->makeMove();
     }
-    else if (!whiteTurn && player2Computer) {
+    else {
         return computerBlack->makeMove();
     }
-    return false;
 }

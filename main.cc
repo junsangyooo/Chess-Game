@@ -158,7 +158,6 @@ int main() {
             }*/
             if (player1IsComputer){
                 control->setComputerWhite(computerOne);
-                control->setPlayer1Computer(true);
             }
             
             if (player2 == "computer1") {
@@ -176,7 +175,6 @@ int main() {
             }*/
             if (player2IsComputer) {
                 control->setComputerBlack(computerTwo);
-                control->setPlayer2Computer(true);
             }
 
             std::string cmd;
@@ -193,11 +191,9 @@ int main() {
                     chess->attach(textBoard);
                     chess->attach(graphicBoard);
                     if (player1IsComputer) {
-                        control->setPlayer1Computer(true);
                         control->setComputerWhite(computerOne);
                     }
                     if (player2IsComputer) {
-                        control->setPlayer2Computer(true);
                         control->setComputerBlack(computerTwo);
                     }
                     whiteTurn = true;

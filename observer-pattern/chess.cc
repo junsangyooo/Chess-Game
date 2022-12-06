@@ -404,7 +404,6 @@ std::string Chess::stalemateTest(bool whiteTurn) {
                 for (int row = 0; row < 8; row++) {
                     for (int col = 0; col < 8; col++) {
                         Position tmp = Position(row*10 + col);
-                        char toPiece = board->charAt(tmp);
                         auto move = std::make_shared<Move>(posn, tmp);
                         if (validMove(move, whiteTurn)) {
                             return "";
@@ -415,7 +414,6 @@ std::string Chess::stalemateTest(bool whiteTurn) {
                 for (int row = 0; row < 8; row++) {
                     for (int col = 0; col < 8; col++) {
                         Position tmp = Position(row*10 + col);
-                        char toPiece = board->charAt(tmp);
                         auto move = std::make_shared<Move>(posn, tmp);
                         if (validMove(move, whiteTurn)) {
                             return "";
