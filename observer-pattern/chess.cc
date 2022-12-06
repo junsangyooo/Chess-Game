@@ -129,8 +129,7 @@ bool Chess::castling(std::shared_ptr<Move> movement, bool whiteTurn) {
         if ((whiteTurn && whiteInCheck() != "") || (!whiteTurn && blackInCheck() != "")) {
             valid = false;
         }
-        tmp_move = std::make_shared<Move>(Position(i), org_posn);
-        board->move(tmp_move);
+        board->undo(tmp_move);
         if (!valid) {return valid;}
         if (i == new_posn) {break;}
         i += index;
@@ -163,10 +162,10 @@ bool Chess::validBishop(std::shared_ptr<Move> movement, bool whiteTurn) {
     moves.emplace_back(movement);
     board->move(movement);
     if ((whiteTurn && whiteInCheck() != "") || (!whiteTurn && blackInCheck() != "")) {
-        undo(false);
+        board->undo(movement);
         return false;
     }
-    undo(false);
+    board->undo(movement);
     return true;
 }
 
@@ -192,10 +191,10 @@ bool Chess::validKing(std::shared_ptr<Move> movement, bool whiteTurn) {
     moves.emplace_back(movement);
     board->move(movement);
     if ((whiteTurn && whiteInCheck() != "") || (!whiteTurn && blackInCheck() != "")) {
-        undo(false);
+        board->undo(movement);
         return false;
     }
-    undo(false);
+    board->undo(movement);
     return true;
 }
 
@@ -228,10 +227,10 @@ bool Chess::validQueen(std::shared_ptr<Move> movement, bool whiteTurn) {
     moves.emplace_back(movement);
     board->move(movement);
     if ((whiteTurn && whiteInCheck() != "") || (!whiteTurn && blackInCheck() != "")) {
-        undo(false);
+        board->undo(movement);
         return false;
     }
-    undo(false);
+    board->undo(movement);
     return true;
 }
 
@@ -261,10 +260,10 @@ bool Chess::validRook(std::shared_ptr<Move> movement, bool whiteTurn) {
     moves.emplace_back(movement);
     board->move(movement);
     if ((whiteTurn && whiteInCheck() != "") || (!whiteTurn && blackInCheck() != "")) {
-        undo(false);
+        board->undo(movement);
         return false;
     }
-    undo(false);
+    board->undo(movement);
     return true;
 }
 
@@ -282,10 +281,10 @@ bool Chess::validKnight(std::shared_ptr<Move> movement, bool whiteTurn) {
     moves.emplace_back(movement);
     board->move(movement);
     if ((whiteTurn && whiteInCheck() != "") || (!whiteTurn && blackInCheck() != "")) {
-        undo(false);
+        board->undo(movement);
         return false;
     }
-    undo(false);
+    board->undo(movement);
     return true;
 }
 
@@ -338,20 +337,13 @@ bool Chess::validPawn(std::shared_ptr<Move> movement, bool whiteTurn, char promo
         }
     } else {return false;}
 
-    std::cout << "one" << std::endl;
     moves.emplace_back(movement);
-    std::cout << "two" << std::endl;
     board->move(movement);
-    std::cout << "three" << std::endl;
     if ((whiteTurn && whiteInCheck() != "") || (!whiteTurn && blackInCheck() != "")) {
-        std::cout << "four" << std::endl;
-        undo(false);
-        std::cout << "five" << std::endl;
+        board->undo(movement);
         return false;
     }
-    std::cout << "four" << std::endl;
-    undo(false);
-    std::cout << "five" << std::endl;
+    board->undo(movement);
     return true;
 }
 
@@ -417,7 +409,6 @@ std::string Chess::stalemateTest(bool whiteTurn) {
                     for (int col = 0; col < 8; col++) {
                         Position tmp = Position(row*10 + col);
                         char toPiece = board->charAt(tmp);
-                        if ('A' <= toPiece && toPiece <= 'Z') {continue;}
                         auto move = std::make_shared<Move>(posn, tmp);
                         if (validMove(move, whiteTurn)) {
                             return "";
@@ -429,7 +420,6 @@ std::string Chess::stalemateTest(bool whiteTurn) {
                     for (int col = 0; col < 8; col++) {
                         Position tmp = Position(row*10 + col);
                         char toPiece = board->charAt(tmp);
-                        if ('a' <= toPiece && toPiece <= 'z') {continue;}
                         auto move = std::make_shared<Move>(posn, tmp);
                         if (validMove(move, whiteTurn)) {
                             return "";

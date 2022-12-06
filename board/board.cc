@@ -120,7 +120,7 @@ void Board::replace(char c, Position posn) {
         }
     } else if (c == 'q' || c == 'Q') {
         newPiece = std::make_shared<Queen>(c);
-    } else {throw std::out_of_range {"Invalid Piece!"};}
+    } else {throw std::out_of_range {"Please provide a valid piece."};}
     remove(posn);
     setPiece(posn, newPiece);
 }

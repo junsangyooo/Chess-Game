@@ -21,62 +21,62 @@ bool LevelTwo::makeMove() {
         }
     }
     int length = positions.size();
-    bool found = false;
     std::shared_ptr<Move> move;
-    char promoteTo;
-    bool promoted = false;
-    
     // Find to way to check first
-    while(!found) {
-        std::random_device rd; // obtain a random number from hardware
-        std::mt19937 gen(rd()); // seed the generator
-        std::uniform_int_distribution<> distr(1, length); // define the range
-        int random = distr(gen);
-
-        Position org_posn = positions.at(random - 1);
+    for (Position org_posn : positions) {
         char piece = board->charAt(org_posn);
-        if ((piece == 'p' && 60 <= org_posn && org_posn <= 67) && (piece == 'P' && 10 <= org_posn && org_posn <= 17)) {
-            std::vector<char> promote;
+        if ((piece == 'p' && 60 <= org_posn && org_posn <= 67) || (piece == 'P' && 10 <= org_posn && org_posn <= 17)) {
             int index = 0;
             if (piece == 'p') {
-                promote.emplace_back('q');
-                promote.emplace_back('r');
-                promote.emplace_back('b');
-                promote.emplace_back('n');
                 index = 9;
-
             } else {
-                promote.emplace_back('Q');
-                promote.emplace_back('R');
-                promote.emplace_back('B');
-                promote.emplace_back('N');
                 index = -11;
             }
             for (int i = index; i <= index + 2; ++i) {
                 Position tmp = Position(org_posn + i);
                 move = std::make_shared<Move>(org_posn, tmp);
-                if (!chess->validMove(move, whiteSide, 'q') && !chess->validMove(move, whiteSide, 'Q')) {
+                if ((piece == 'p' && !chess->validMove(move, whiteSide, 'q')) || (piece == 'P' && !chess->validMove(move, whiteSide, 'Q'))) {
                     continue;
                 }
-                for (char c : promote) {
-                    if (i != 10 && i != -10) {
-                        move->setCaptured(board->getPiece(tmp));
-                    }
+                if (i != 10 &&i != -10) {
+                    move->setCaptured(board->getPiece(tmp));
+                }
+                if (piece == 'p'){
                     move->setPromoted(board->getPiece(org_posn));
-                    board->move(move, c);
-                    if ((piece == 'p' && chess->whiteInCheck() != "") && (piece == 'P' && chess->blackInCheck() != "")) {
-                        promoteTo = c;
-                        //new_posn = tmp;
-                        found = promoted = true;
+                    board->move(move, 'q');
+                    if (chess->whiteInCheck() != "") {
                         board->undoPromoted(move);
                         move->setCaptured(nullptr);
                         move->setPromoted(nullptr);
-                        break;
+                        return chess->movePiece(move, whiteSide, 'q');
+                    }
+                    move->setPromoted(board->getPiece(org_posn));
+                    board->move(move, 'n');
+                    if (chess->whiteInCheck() != "") {
+                        board->undoPromoted(move);
+                        move->setCaptured(nullptr);
+                        move->setPromoted(nullptr);
+                        return chess->movePiece(move, whiteSide, 'r');
+                    }
+                } else {
+                    move->setPromoted(board->getPiece(org_posn));
+                    board->move(move, 'Q');
+                    if (chess->blackInCheck() != "") {
+                        board->undoPromoted(move);
+                        move->setCaptured(nullptr);
+                        move->setPromoted(nullptr);
+                        return chess->movePiece(move, whiteSide, 'q');
+                    }
+                    move->setPromoted(board->getPiece(org_posn));
+                    board->move(move, 'N');
+                    if (chess->blackInCheck() != "") {
+                        board->undoPromoted(move);
+                        move->setCaptured(nullptr);
+                        move->setPromoted(nullptr);
+                        return chess->movePiece(move, whiteSide, 'q');
                     }
                 }
-                if (found) {break;}
             }
-            if (found) {break;}
         } else {
             for (int i = 0; i < 8; i++) {
                 for (int j = 0; j < 8; j++) {
@@ -88,87 +88,61 @@ bool LevelTwo::makeMove() {
                         if ((piece == 'p' || piece == 'P') && (org_posn  - (whiteSide * 11) + (!whiteSide * 11) == tmp || org_posn  - (whiteSide * 9) + (!whiteSide * 9) == tmp)) {
                             move->setCaptured(board->getPiece(Position((org_posn / 10) + (tmp % 10))));
                             board->enPassant(move);
-                            if ((whiteSide && chess->whiteInCheck() != "") && (!whiteSide && chess->blackInCheck() != "")) {
-                                found = true;
+                            if ((whiteSide && chess->blackInCheck() != "") && (!whiteSide && chess->whiteInCheck() != "")) {
                                 board->undoEnPassant(move);
                                 move->setCaptured(nullptr);
-                                break;
+                                return chess->movePiece(move, whiteSide);
                             }
                         } else if ((piece == 'k' || piece == 'K') && (tmp + 2 == org_posn || tmp - 2 == org_posn)) {
                             board->castling(move);
-                            if ((whiteSide && chess->whiteInCheck() != "") && (!whiteSide && chess->blackInCheck() != "")) {
-                                found = true;
+                            if ((whiteSide && chess->blackInCheck() != "") && (!whiteSide && chess->whiteInCheck() != "")) {
                                 board->undoCastling(move);
-                                break;
+                                return chess->movePiece(move, whiteSide);
+                            }
+                        } else {
+                            board->move(move);
+                            if ((whiteSide && chess->blackInCheck() != "") && (!whiteSide && chess->whiteInCheck() != "")) {
+                                board->undo(move);
+                                return chess->movePiece(move, whiteSide);
                             }
                         }
                     } else if ((whiteSide && 'a' <= captured && 'z' <= captured) || (!whiteSide && 'A'  <= captured && captured <= 'Z')) {
                         move->setCaptured(board->getPiece(tmp));
                         board->move(move);
-                        if ((whiteSide && chess->whiteInCheck() != "") && (!whiteSide && chess->blackInCheck() != "")) {
-                            found = true;
+                        if ((whiteSide && chess->blackInCheck() != "") && (!whiteSide && chess->whiteInCheck() != "")) {
                             board->undo(move);
                             move->setCaptured(nullptr);
-                            break;
+                            return chess->movePiece(move, whiteSide);
                         }
                     }
                 }
-                if (found) {break;}
             }
-            if (found) {break;}
         }
-    }
-    if (found && promoted) {
-        return chess->movePiece(move, whiteSide, promoteTo);
-    } else if (found) {
-        return chess->movePiece(move, whiteSide);
     }
 
     //Noe we find capturing move
-    while(!found) {
-        std::random_device rd; // obtain a random number from hardware
-        std::mt19937 gen(rd()); // seed the generator
-        std::uniform_int_distribution<> distr(1, length); // define the range
-        int random = distr(gen);
-
-        Position org_posn = positions.at(random - 1);
+    for (Position org_posn: positions) {
         char piece = board->charAt(org_posn);
-        if ((piece == 'p' && 60 <= org_posn && org_posn <= 67) && (piece == 'P' && 10 <= org_posn && org_posn <= 17)) {
-            std::vector<char> promote;
-            int index = 0;
+        if ((piece == 'p' && 60 <= org_posn && org_posn <= 67) || (piece == 'P' && 10 <= org_posn && org_posn <= 17)) {
             if (piece == 'p') {
-                promote.emplace_back('q');
-                promote.emplace_back('r');
-                promote.emplace_back('b');
-                promote.emplace_back('n');
-                index = 9;
-
-            } else {
-                promote.emplace_back('Q');
-                promote.emplace_back('R');
-                promote.emplace_back('B');
-                promote.emplace_back('N');
-                index = -11;
-            }
-            for (int i = index; i <= index + 2; ++i) {
-                if (i == 10 || i == -10) {
-                    continue;
-                }
-                Position tmp = Position(org_posn + i);
-                move = std::make_shared<Move>(org_posn, tmp);
+                move = std::make_shared<Move>(org_posn, Position(org_posn + 9));
                 if (chess->validMove(move, whiteSide, 'q')) {
-                    promoteTo = 'q';
-                    //new_posn = tmp;
-                    found = promoted = true;
-                    break;
-                } else if (chess->validMove(move, whiteSide, 'Q')) {
-                    promoteTo = 'Q';
-                    //new_posn = tmp;
-                    found = promoted = true;
-                    break;
+                    return chess->movePiece(move, whiteSide, 'q');
+                }
+                move = std::make_shared<Move>(org_posn, Position(org_posn + 11));
+                if (chess->validMove(move, whiteSide, 'q')) {
+                    return chess->movePiece(move, whiteSide, 'q');
+                }
+            } else {
+                move = std::make_shared<Move>(org_posn, Position(org_posn - 9));
+                if (chess->validMove(move, whiteSide, 'Q')) {
+                    return chess->movePiece(move, whiteSide, 'Q');
+                }
+                move = std::make_shared<Move>(org_posn, Position(org_posn - 11));
+                if (chess->validMove(move, whiteSide, 'Q')) {
+                    return chess->movePiece(move, whiteSide, 'Q');
                 }
             }
-            if (found) {break;}
         } else {
             for (int i = 0; i < 8; i++) {
                 for (int j = 0; j < 8; j++) {
@@ -178,25 +152,17 @@ bool LevelTwo::makeMove() {
                     if (!chess->validMove(move, whiteSide)) {continue;}
                     if (captured == ' ' || captured == '-') {
                         if ((piece == 'p' || piece == 'P') && (org_posn  - (whiteSide * 11) + (!whiteSide * 11) == tmp || org_posn  - (whiteSide * 9) + (!whiteSide * 9) == tmp)) {
-                            found = true;
-                            break;
+                            return chess->movePiece(move, whiteSide);
                         }
-                    } else if ((whiteSide && 'a' <= captured && 'z' <= captured) || (!whiteSide && 'A'  <= captured && captured <= 'Z')) {
-                        found = true;
-                        break;
+                    } else {
+                        return chess->movePiece(move, whiteSide);
                     }
                 }
-                if (found) {break;}
             }
-            if (found) {break;}
         }
     }
-    if (found && promoted) {
-        return chess->movePiece(move, whiteSide, promoteTo);
-    } else if (found) {
-        return chess->movePiece(move, whiteSide);
-    }
     
+    bool found = false;
     //Just choose a random move
     while(!found) {
         std::random_device rd; // obtain a random number from hardware
@@ -216,29 +182,25 @@ bool LevelTwo::makeMove() {
                 else if (piece == 'p' || piece == 'P') {
                     if ( 70 - (whiteSide * 70) <= new_posn && new_posn <= 77 - (whiteSide * 70)) {
                         if (chess->validMove(move, whiteSide, 'q')) {
-                            found = true;
-                            promoted = true;
-                            break;
+                            //found = true;
+                            //promoted = true;
+                            if (piece == 'p') {
+                                return chess->movePiece(move, whiteSide, 'q');
+                            }
+                            return chess->movePiece(move, whiteSide, 'q');
                         }
                     } else if (chess->validMove(move, whiteSide)) {
                         found = true;
-                        break;
+                        return chess->movePiece(move, whiteSide);
                     }
                 } else {
                     if (chess->validMove(move, whiteSide)) {
                         found = true;
-                        break;
+                        return chess->movePiece(move, whiteSide);
                     }
                 }
             }
-            if (found) {break;}
         }
-        if (found) {break;}
-    }
-    if (found && promoted) {
-        return chess->movePiece(move, whiteSide, promoteTo);
-    } else if (found) {
-        return chess->movePiece(move, whiteSide);
     }
     return false;
 }
