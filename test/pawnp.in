@@ -1,0 +1,59 @@
+setup
+- a2
+- b2
+- c2
+- d2
+- e2
+- f2
+= g2
+- h2
+- a1
+- b1
+- c1
+- d1
+- e1
+- f1
+- g1
+- h1
+- a7
+- b7
+- c7
+- d7
+- e7
+- f7
+- g7
+- h7
+- a8
+- b8
+- c8
+- d8
+- e8
+- f8
+- g8
+- h8
++ k b7
++ K g2
++ p b2
++ P h7
+= White
+done
+game human human
+move h7 h8 Q
+undo
+move h7 h8 R
+undo 
+move h7 h8 B
+undo 
+move h7 h8 P
+move h7 h8 K
+move h7 h8 N
+move b2 b1 q
+undo
+move b2 b1 r
+undo 
+move b2 b1 b
+undo 
+move b2 b1 n
+resign
+no
+quit
