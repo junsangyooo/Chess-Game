@@ -5,7 +5,7 @@ setup
 - d2
 - e2
 - f2
-= g2
+- g2
 - h2
 - a1
 - b1
@@ -36,3 +36,7 @@ setup
 + Q f7
 = White
 done
+game jun tim
+move f7 c7
+no
+exit
