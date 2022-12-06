@@ -166,6 +166,7 @@ int main() {
             std::string cmd;
             bool gameEnd = false;
             bool restart = false;
+            bool error = false;
             while(!gameEnd) {
                 if (restart) {
                     board = std::make_shared<Board>();
@@ -188,12 +189,13 @@ int main() {
                     whiteTurn = true;
                     restart = false;
                 }
-                if (whiteTurn) {
-                    std::cout << "---WHITE TURN---" << std::endl;
-                } else {
-                    std::cout << "---BLACK TURN---" << std::endl;
+                if (whiteTurn && !error) {
+                    std::cout << "\n\n---WHITE TURN---" << std::endl;
+                } else if (!error) {
+                    std::cout << "\n\n---BLACK TURN---" << std::endl;
                 }
                 
+                error = false;
                 std::cin >> cmd;
                 if (cmd == "resign") {
                     control->resign(whiteTurn);
@@ -205,6 +207,7 @@ int main() {
                         sb->addToWhite(1);
                         std::cout << "White wins!" << std::endl;
                     }
+                    gameEnd = true;
                 } else if (cmd == "move") {
                     if (whiteTurn && player1IsComputer) {
                         gameEnd = control->computerMove(whiteTurn);
@@ -218,49 +221,53 @@ int main() {
                         Position firstPosn;
                         Position secondPosn;
                         std::cin >> posn1 >> posn2;
-                         try {firstPosn = strToPosn(posn1);}
+                        try {firstPosn = strToPosn(posn1);}
                         catch(std::out_of_range &e) {
                             std::cerr << e.what() << std::endl;
+                            error = true;
                             continue;
                         }
                         try {secondPosn = strToPosn(posn2);}
                         catch(std::out_of_range &e) {
                             std::cerr << e.what() << std::endl;
+                            error = true;
                             continue;
                         }
 
                         char piece = board->charAt(firstPosn);
-
                         //Check Pawn Promotion
                         char promoted;
                         if ((piece == 'p' && 60 <= secondPosn && secondPosn <= 67) || (piece == 'P' && 10 <= secondPosn && secondPosn <= 17)) {
                             std::cin >> promoted;
                             if (promoted != 'r' && promoted != 'R' && promoted != 'n' && promoted != 'N' && promoted != 'b' && promoted != 'B' && promoted != 'q' && promoted != 'Q') {
                                 std::cerr << "Please provide a valid piece." << std::endl;
+                                error = true;
                                 continue;
-                            }
-                            if (piece == 'p' && 'A' <= promoted && promoted <= 'Z') {
+                            } else if (piece == 'p' && 'A' <= promoted && promoted <= 'Z') {
                                 std::cerr << "You cannot promote to the opponent's piece." << std::endl;
+                                error = true;
                                 continue;
                             } else if (piece == 'P' && 'a' <= promoted && promoted <= 'z') {
                                 std::cerr << "You cannot promote to the opponent's piece." << std::endl;
+                                error = true;
                                 continue;
                             }
                             try {gameEnd = control->pawnPromote(firstPosn, secondPosn, whiteTurn, piece);}
                             catch (std::out_of_range &e) {
                                 std::cerr << e.what() << std::endl;
+                                error = true;
                                 continue;
                             }
-                            continue;
+                        } else {
+                            try {gameEnd = control->move(firstPosn, secondPosn, whiteTurn);}
+                            catch (std::out_of_range &e) {
+                                std::cerr << e.what() << std::endl;
+                                error = true;
+                                continue;
+                            }
                         }
                     }
-                    try {gameEnd = control->move(firstPosn, secondPosn, whiteTurn);}
-                    catch (std::out_of_range &e) {
-                        std::cerr << e.what() << std::endl;
-                        continue;
-                    }
                     whiteTurn = !whiteTurn;
-                    continue;
                 } else if (cmd == "undo") {
                     try{control->undo();}
                     catch (std::out_of_range &e) {
@@ -270,15 +277,18 @@ int main() {
                     whiteTurn = !whiteTurn;
                 }
                 bool response = false;
-                while(!response) {
-                    try {
-                        gameEnd = !newGame();
-                        response = true;    
-                    }
-                    catch (std::out_of_range &e) {
-                        std::cerr << e.what() << std::endl;
+                if (gameEnd) {
+                    while(!response) {
+                        try {
+                            restart = newGame();
+                            response = true;    
+                        }
+                        catch (std::out_of_range &e) {
+                            std::cerr << e.what() << std::endl;
+                        }
                     }
                 }
+                gameEnd = !restart;
             }
         } else if (command == "setup") {
             std::string cmd;
