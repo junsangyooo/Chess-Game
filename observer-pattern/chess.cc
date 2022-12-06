@@ -26,11 +26,12 @@ void Chess::undo() {
         }
     } else if (piece == 'p' || piece == 'P') {
         std::cout << 11 << std::endl;
-        char tmp = captured->getPiece();
-        std::cout << 22 << std::endl;
-        if ((tmp == 'p' || tmp == 'P') && captured->getEnPassant()) {
-            board->undoEnPassant(move);
-            board->setEnPassant(Position((pre_org_posn * 10) / 10 + (pre_new_posn % 10)), false);
+        if (captured != nullptr) {
+            char tmp = captured->getPiece();
+            if ((tmp == 'p' || tmp == 'P') && captured->getEnPassant()) {
+                board->undoEnPassant(move);
+                board->setEnPassant(Position((pre_org_posn * 10) / 10 + (pre_new_posn % 10)), false);
+            } else {board->undo(move);}
         } else {board->undo(move);}
         std::cout << 33 << std::endl;
     } else if (piece == 'k' || piece == 'K') {
@@ -578,6 +579,7 @@ bool Chess::movePiece(std::shared_ptr<Move> movement, bool whiteTurn, char promo
         } else if (Position(org_posn  - (whiteTurn * 11) + (!whiteTurn * 11)) == new_posn || Position(org_posn  - (whiteTurn * 9) + (!whiteTurn * 9)) == new_posn) {
             if (captured == ' ' || captured == '-') {
                 board->setEnPassant(Position((org_posn / 10) + (new_posn % 10)), true);
+                //board->setEnPassant(org_posn, true);
                 movement->setCell1(((org_posn / 10)*10) + (new_posn % 10));
                 board->enPassant(movement);
             } else {
