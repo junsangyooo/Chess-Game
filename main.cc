@@ -116,6 +116,8 @@ int main() {
     std::shared_ptr<Controller> control = std::make_shared<Controller>(chess);
     std::shared_ptr<Cli> textBoard = std::make_shared<Cli>(chess);
     std::shared_ptr<Gui> graphicBoard = std::make_shared<Gui>(chess);
+    chess->attach(textBoard);
+    chess->attach(graphicBoard);
     while (std::cin >> command) {
         if (command == "exit") {
             break;
