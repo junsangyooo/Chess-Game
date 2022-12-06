@@ -20,8 +20,8 @@
 
 class LevelTwo : public Computer{
     std::shared_ptr<Chess> chess;
-    std::shared_ptr<Board> board;
     bool whiteSide;
+    std::shared_ptr<Board> board;
 public:
     LevelTwo(std::shared_ptr<Chess> chess, bool side, std::shared_ptr<Board> bd);
     ~LevelTwo();

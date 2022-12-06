@@ -605,8 +605,6 @@ bool Chess::movePiece(std::shared_ptr<Move> movement, bool whiteTurn, char promo
     movement->setStatus(status);
     moves.emplace_back(movement);
 
-    int org_changed_posn = (org_posn / 10) * 10 + (org_posn % 10);
-    int new_changed_posn = (new_posn / 10) * 10 + (new_posn % 10);
     //Notify to the observers to display the board.
     drawBoard(status, org_posn, new_posn, movement->getCell1(), movement->getCell2());
     return gameEnd;

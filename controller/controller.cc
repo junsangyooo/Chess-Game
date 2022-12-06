@@ -53,4 +53,5 @@ bool Controller::computerMove(bool whiteTurn) {
     else if (!whiteTurn && player2Computer) {
         return computerBlack->makeMove();
     }
+    return false;
 }

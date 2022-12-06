@@ -118,6 +118,9 @@ int main() {
     std::shared_ptr<Gui> graphicBoard;
     bool boardExist = false;
     while (std::cin >> command) {
+        if (command == "exit") {
+            break;
+        }
         if (!boardExist) {
             whiteTurn = true;
             sb = std::make_shared<ScoreBoard>(0.0, 0.0);
@@ -160,7 +163,7 @@ int main() {
             
             if (player2 == "computer1") {
                 player2IsComputer = true;
-                computerTwo = std::make_shared<LevelOne>(chess, true, board);
+                computerTwo = std::make_shared<LevelOne>(chess, false, board);
             }/* else if (player2 == "computer2") {
                 player2IsComputer = true;
                 computerTwo = std::make_shared<LevelTwo>(chess, true, board);
@@ -222,10 +225,8 @@ int main() {
                 } else if (cmd == "move") {
                     if (whiteTurn && player1IsComputer) {
                         gameEnd = control->computerMove(whiteTurn);
-                        whiteTurn = !whiteTurn;
                     } else if (!whiteTurn && player2IsComputer) {
                         gameEnd = control->computerMove(whiteTurn);
-                        whiteTurn = !whiteTurn;
                     } else {
                         std::string posn1;
                         std::string posn2;
@@ -277,7 +278,7 @@ int main() {
                                 continue;
                             }
                         }
-                    //}
+                    }
                     whiteTurn = !whiteTurn;
                 } else if (cmd == "undo") {
                     try{control->undo();}
@@ -305,6 +306,9 @@ int main() {
                     gameEnd = !restart;
                 }
             }
+            std::cout << "Final Score:" << std::endl;
+            std::cout << "White: " << sb->getWhite() << std::endl;
+            std::cout << "Black: " << sb->getBlack() << std::endl;
             boardExist = false;
         } else if (command == "setup") {
             std::string cmd;
@@ -386,7 +390,4 @@ int main() {
             continue;
         }
     }
-    std::cout << "Final Score:" << std::endl;
-    std::cout << "White: " << sb->getWhite() << std::endl;
-    std::cout << "Black: " << sb->getBlack() << std::endl;
 }

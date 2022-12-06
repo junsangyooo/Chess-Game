@@ -7,7 +7,7 @@
 
 class Computer {
 public:
-    virtual ~Computer() = 0;
+    virtual ~Computer();
     virtual bool makeMove() = 0;
 };
 
