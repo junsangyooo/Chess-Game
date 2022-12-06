@@ -8,7 +8,35 @@ void Cli::drawBoard(std::string value, int posn1, int posn2, int posn3, int posn
         for (int j = 0; j <8;  ++j) {
             int posn = i*10 + j;
             piece = chess->charAt(Position(posn));
-            std::cout << piece;
+            if (piece == ' ') {
+                std::cout << "█";
+            } else if (piece == '-') {
+                std::cout << "▒";
+            } else if (piece == 'P') {
+                std::cout << "♟";
+            } else if (piece == 'p') {
+                std::cout << "♙";
+            } else if (piece == 'R') {
+                std::cout << "♜";
+            } else if (piece == 'r') {
+                std::cout << "♖";
+            } else if (piece == 'N') {
+                std::cout << "♞";
+            } else if (piece == 'n') {
+                std::cout << "♘";
+            } else if (piece == 'B') {
+                std::cout << "♝";
+            } else if (piece == 'b') {
+                std::cout << "♗";
+            } else if (piece == 'Q') {
+                std::cout << "♛";
+            } else if (piece == 'q') {
+                std::cout << "♕";
+            } else if (piece == 'K') {
+                std::cout << "♚";
+            } else if (piece == 'k') {
+                std::cout << "♔";
+            }
         }
         std::cout << std::endl;
     }
@@ -26,7 +54,35 @@ void Cli::notify() {
         for (int j = 0; j <8;  ++j) {
             int posn = i*10 + j;
             piece = chess->charAt(Position(posn));
-            std::cout << piece;
+                        if (piece == ' ') {
+                std::cout << "█";
+            } else if (piece == '-') {
+                std::cout << "▒";
+            } else if (piece == 'P') {
+                std::cout << "♟";
+            } else if (piece == 'p') {
+                std::cout << "♙";
+            } else if (piece == 'R') {
+                std::cout << "♜";
+            } else if (piece == 'r') {
+                std::cout << "♖";
+            } else if (piece == 'N') {
+                std::cout << "♞";
+            } else if (piece == 'n') {
+                std::cout << "♘";
+            } else if (piece == 'B') {
+                std::cout << "♝";
+            } else if (piece == 'b') {
+                std::cout << "♗";
+            } else if (piece == 'Q') {
+                std::cout << "♛";
+            } else if (piece == 'q') {
+                std::cout << "♕";
+            } else if (piece == 'K') {
+                std::cout << "♚";
+            } else if (piece == 'k') {
+                std::cout << "♔";
+            }
         }
         std::cout << std::endl;
     }
