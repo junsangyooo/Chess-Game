@@ -429,41 +429,6 @@ std::string Chess::stalemateTest(bool whiteTurn) {
         }
     }
     return "Stalemate!";
-    /*for (int i = 0; i < 8; ++i) {
-        for (int j = 0; j < 8; ++j) {
-            Position posn = Position(i*10 + j);
-            char piece = board->charAt(posn);
-            if (whiteTurn && 'A' <= piece && piece <= 'Z') {
-                pieces.emplace_back(posn);
-            } else if (!whiteTurn && 'a' <= piece && piece <= 'z') {
-                pieces.emplace_back(posn);
-            }
-        }
-    }
-    int length = pieces.size();
-    for (int index = 0; index < length; ++index) {
-        Position org_posn = pieces[index];
-        std::cout << board->getFirstMove(org_posn) << std::endl;
-        for(int i = 0; i < 8; ++i) {
-            for (int j = 0; j < 8; ++j) {
-                int posn_index = i*10 + j;
-                Position new_posn = Position(posn_index);
-                char c  = board->charAt(new_posn);
-                if (whiteTurn && 'A' <= c && c <= 'Z') {
-                    continue;
-                } else if (!whiteTurn && 'a' <= c && c <= 'z') {
-                    continue;
-                } else {
-                    std::cout << int(org_posn) << " -> " << posn_index << std::endl;
-                    auto move = std::make_shared<Move>(org_posn, new_posn);
-                    if (validMove(move, whiteTurn)) {
-                        return "";
-                    }
-                }
-            }
-        }
-    }
-    return "Stalemate!";*/
 }
 
 std::string Chess::checkmateTest(bool whiteTurn) {
