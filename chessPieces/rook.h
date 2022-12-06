@@ -14,7 +14,7 @@ public:
     ~Rook();
 public:
     char getPiece() const override {return piece;}
-    bool getFirstMove() override {return firstMove;}
+    bool getFirstMove() const override {return firstMove;}
     void setFirstMove(bool value) override {firstMove = value;}
     bool getPromoted() const override {return promoted;}
     void setPromoted(bool value) override {promoted = value;}
