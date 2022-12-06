@@ -94,7 +94,8 @@ bool newGame() {
     std::string response;
     std::cin >> response;
     if (response == "yes") {return true;}
-    else { return false;}
+    else if (response == "no") { return false;}
+    else {throw std::out_of_range {"Invalid response!"};}
 }
 
 
@@ -249,6 +250,10 @@ int main() {
                 break;
             } else {
                 boardExist = false;
+                continue;
+            }
+            catch (std::out_of_range &e) {
+                std::cerr << e.what() << std::endl;
                 continue;
             }
         } else if (command == "setup") {
