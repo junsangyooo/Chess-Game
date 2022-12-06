@@ -91,7 +91,7 @@ Position strToPosn(std::string str) {
 
 
 bool newGame() {
-    std::cout << "Game ended. Do you want to play again? (yes/no)" << std::endl;
+    std::cout << "Game has ended. Do you want to play again? (yes/no)" << std::endl;
     std::string response;
     std::cin >> response;
     if (response == "yes") {return true;}
@@ -216,10 +216,10 @@ int main() {
                             continue;
                         }
                         if (piece == 'p' && 'A' <= promoted && promoted <= 'Z') {
-                            std::cerr << "You cannont promote to the opponent's piece." << std::endl;
+                            std::cerr << "You cannot promote to the opponent's piece." << std::endl;
                             continue;
                         } else if (piece == 'P' && 'a' <= promoted && promoted <= 'z') {
-                            std::cerr << "You cannont promote to the opponent's piece." << std::endl;
+                            std::cerr << "You cannot promote to the opponent's piece." << std::endl;
                             continue;
                         }
                         try {gameEnd = control->pawnPromote(firstPosn, secondPosn, whiteTurn, piece);}
@@ -281,7 +281,7 @@ int main() {
                         }
                     }
                     if (whiteKing != 1 || blackKing != 1) {
-                        std::cerr << "Each side can has only one King!!!" << std::endl;
+                        std::cerr << "Each side can only have one King!!!" << std::endl;
                         continue;
                     }
                     break;
