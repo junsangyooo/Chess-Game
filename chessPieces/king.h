@@ -6,6 +6,7 @@ class King : public Piece {
     char piece;
     bool firstMove = true;
     int whenFirstMove = -1;
+    const int value = 10;
 public:
     King(char piece);
     ~King();
@@ -15,6 +16,7 @@ public:
     void setFirstMove(bool value) override {firstMove = value;}
     void setWhenFirstMove(int value) override {whenFirstMove = value;}
     int getWhenFirstMove() {return whenFirstMove;}
+    int getValue() const override {return value;}
 };
 
 #endif

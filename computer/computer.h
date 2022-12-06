@@ -6,13 +6,9 @@
 #include "chess.h"
 
 class Computer {
-    std::shared_ptr<Chess> chess;
-    std::shared_ptr<Computer> computer;
-    std::string whitePlayer;
-    std::string blackPlayer;
 public:
-    Computer(std::shared_ptr<Chess> chess);
-    ~Computer();
+    virtual ~Computer() = 0;
+    virtual bool makeMove() = 0;
 };
 
 

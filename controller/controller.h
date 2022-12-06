@@ -17,13 +17,13 @@ class Controller {
     std::shared_ptr<Chess> chess;
     std::shared_ptr<Computer> computerWhite;
     std::shared_ptr<Computer> computerBlack;
-    std::string whitePlayer;
-    std::string blackPlayer;
+    bool player1Computer = false;
+    bool player2Computer = false;
 public:
     Controller(std::shared_ptr<Chess> cs);
     ~Controller();
-    void setPlayer1(std::string player) {whitePlayer = player;}
-    void setPlayer2(std::string player) {blackPlayer = player;}
+    void setPlayer1Computer(bool value) {player1Computer = value;}
+    void setPlayer2Computer(bool value) {player2Computer = value;}
     void setComputerWhite(std::shared_ptr<Computer> comp) {computerWhite = comp;}
     void setComputerBlack(std::shared_ptr<Computer> comp) {computerBlack = comp;}
     bool check();

@@ -28,7 +28,7 @@ void Controller::display(int posn) {
 }
 
 void Controller::undo() {
-    try{chess->undo();}
+    try{chess->undo(true);}
     catch(std::out_of_range &e) {
         throw e;
     }
@@ -43,9 +43,14 @@ bool Controller::pawnPromote(Position org_posn, Position new_posn, bool whiteTur
 }
 
 void Controller::resign(bool whiteTurn) {
-    if (whiteTurn) {
-        chess->drawBoard("Resigned!! Black wins!");
-    } else {
-        chess->drawBoard("Resigned!! White wins!");
+    chess = nullptr;
+}
+
+bool Controller::computerMove(bool whiteTurn) {
+    if (whiteTurn && player1Computer) {
+        return computerWhite->makeMove();
+    }
+    else if (!whiteTurn && player2Computer) {
+        return computerBlack->makeMove();
     }
 }

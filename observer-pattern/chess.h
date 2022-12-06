@@ -32,14 +32,14 @@ class Chess : public Subject{
     bool validKnight(std::shared_ptr<Move> movement, bool whiteTurn);
     bool validBishop(std::shared_ptr<Move> movement, bool whiteTurn);
     bool validPawn(std::shared_ptr<Move> movement, bool whiteTurn, char promote = '.');
+public:
     std::string whiteInCheck();
     std::string blackInCheck();
-public:
     bool validMove(std::shared_ptr<Move> movement, bool whiteTurn, char promote = '.');
     bool movePiece(std::shared_ptr<Move> movement, bool whiteTurn, char promote = '.');
     bool pawnPromote(std::shared_ptr<Move> movement, char piece);
     char charAt(Position posn) const override;
-    void undo();
+    void undo(bool display);
     std::string checkTest();
     std::string checkmateTest(bool whiteTurn);
     std::string stalemateTest(bool whiteTurn);

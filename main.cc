@@ -13,11 +13,11 @@
 #include "gui.h"
 #include "cli.h"
 #include "controller.h"
-#include "computer.h"
+/*#include "computer.h"
 #include "level1.h"
 #include "level2.h"
 #include "level3.h"
-#include "level4.h"
+#include "level4.h"*/
 
 enum Position;
 
@@ -108,62 +108,73 @@ bool validPiece(char piece) {
 }
 
 int main() {
-    std::shared_ptr<ScoreBoard> sb = std::make_shared<ScoreBoard>(0.0, 0.0);
+    std::shared_ptr<ScoreBoard> sb;
     std::string command;
     bool whiteTurn = true;
-    std::shared_ptr<Board> board = std::make_shared<Board>();;
-    std::shared_ptr<Chess> chess = std::make_shared<Chess>(board, sb);
-    std::shared_ptr<Controller> control = std::make_shared<Controller>(chess);
-    std::shared_ptr<Cli> textBoard = std::make_shared<Cli>(chess);
-    std::shared_ptr<Gui> graphicBoard = std::make_shared<Gui>(chess);
-    chess->attach(textBoard);
-    chess->attach(graphicBoard);
+    std::shared_ptr<Board> board;
+    std::shared_ptr<Chess> chess;
+    std::shared_ptr<Controller> control;
+    std::shared_ptr<Cli> textBoard;
+    std::shared_ptr<Gui> graphicBoard;
+    bool boardExist = false;
     while (std::cin >> command) {
+        if (!boardExist) {
+            whiteTurn = true;
+            sb = std::make_shared<ScoreBoard>(0.0, 0.0);
+            std::shared_ptr<Board> board = std::make_shared<Board>();;
+            std::shared_ptr<Chess> chess = std::make_shared<Chess>(board, sb);
+            std::shared_ptr<Controller> control = std::make_shared<Controller>(chess);
+            std::shared_ptr<Cli> textBoard = std::make_shared<Cli>(chess);
+            std::shared_ptr<Gui> graphicBoard = std::make_shared<Gui>(chess);
+            chess->attach(textBoard);
+            chess->attach(graphicBoard);
+            boardExist = true;
+        }
         if (command == "exit") {
             break;
         } else if (command == "game"){
             std::string player1;
             std::string player2;
             std::cin >> player1 >> player2;
-            control->setPlayer1(player1);
-            control->setPlayer2(player2);
-            bool player1IsComputer = false;
+            /*bool player1IsComputer = false;
             bool player2IsComputer = false;
             std::shared_ptr<Computer> computerOne;
             std::shared_ptr<Computer> computerTwo;
             if (player1 == "computer1") {
                 player1IsComputer = true;
-                computerOne = std::make_shared<LevelOne>(chess, board);
+                computerOne = std::make_shared<LevelOne>(chess, true, board);
             } else if (player1 == "computer2") {
                 player1IsComputer = true;
-                computerOne = std::make_shared<LevelTwo>(chess, board);
+                computerOne = std::make_shared<LevelTwo>(chess, true, board);
             } else if (player1 == "computer3") {
                 player1IsComputer = true;
-                computerOne = std::make_shared<LevelThree>(chess, board);
+                computerOne = std::make_shared<LevelThree>(chess, true, board);
             } else if (player1 == "computer4") {
                 player1IsComputer = true;
-                computerOne = std::make_shared<LevelFour>(chess, board);
+                computerOne = std::make_shared<LevelFour>(chess, true, board);
             }
             if (player1IsComputer){
                 control->setComputerWhite(computerOne);
+                control->setPlayer1Computer(true);
             }
             
             if (player2 == "computer1") {
                 player2IsComputer = true;
-                computerTwo = std::make_shared<LevelOne>(chess, board);
+                computerTwo = std::make_shared<LevelOne>(chess, true, board);
             } else if (player2 == "computer2") {
                 player2IsComputer = true;
-                computerTwo = std::make_shared<LevelTwo>(chess, board);
+                computerTwo = std::make_shared<LevelTwo>(chess, true, board);
             } else if (player2 == "computer3") {
                 player2IsComputer = true;
-                computerTwo = std::make_shared<LevelThree>(chess, board);
+                computerTwo = std::make_shared<LevelThree>(chess, true, board);
             } else if (player2 == "computer4") {
                 player2IsComputer = true;
-                computerTwo = std::make_shared<LevelFour>(chess, board);
+                computerTwo = std::make_shared<LevelFour>(chess, true, board);
             }
             if (player2IsComputer) {
                 control->setComputerBlack(computerTwo);
-            }
+                control->setPlayer2Computer(true);
+            }*/
 
             std::string cmd;
             bool gameEnd = false;
@@ -178,14 +189,14 @@ int main() {
                     graphicBoard = std::make_shared<Gui>(chess);
                     chess->attach(textBoard);
                     chess->attach(graphicBoard);
-                    control->setPlayer1(player1);
-                    control->setPlayer2(player2);
-                    if (player1IsComputer) {
+                    /*if (player1IsComputer) {
+                        control->setPlayer1Computer(true);
                         control->setComputerWhite(computerOne);
                     }
                     if (player2IsComputer) {
+                        control->setPlayer2Computer(true);
                         control->setComputerBlack(computerTwo);
-                    }
+                    }*/
                     whiteTurn = true;
                     restart = false;
                 }
@@ -209,13 +220,13 @@ int main() {
                     }
                     gameEnd = true;
                 } else if (cmd == "move") {
-                    if (whiteTurn && player1IsComputer) {
+                    /*if (whiteTurn && player1IsComputer) {
                         gameEnd = control->computerMove(whiteTurn);
                         whiteTurn = !whiteTurn;
                     } else if (!whiteTurn && player2IsComputer) {
                         gameEnd = control->computerMove(whiteTurn);
                         whiteTurn = !whiteTurn;
-                    } else {
+                    } else {*/
                         std::string posn1;
                         std::string posn2;
                         Position firstPosn;
@@ -266,7 +277,7 @@ int main() {
                                 continue;
                             }
                         }
-                    }
+                    //}
                     whiteTurn = !whiteTurn;
                 } else if (cmd == "undo") {
                     try{control->undo();}
@@ -287,9 +298,10 @@ int main() {
                             std::cerr << e.what() << std::endl;
                         }
                     }
+                    gameEnd = !restart;
                 }
-                gameEnd = !restart;
             }
+            boardExist = false;
         } else if (command == "setup") {
             std::string cmd;
             int changedPosn;

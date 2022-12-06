@@ -6,6 +6,7 @@ class Knight : public Piece {
     char piece;
     bool promoted = false;
     int whenPromoted = -1;
+    const int value = 3;
 public:
     Knight(char piece);
     ~Knight();
@@ -15,6 +16,7 @@ public:
     void setPromoted(bool value) override {promoted = value;}
     void setWhenPromoted(int value) override {whenPromoted = value;}
     int getWhenPromoted() {return whenPromoted;}
+    int getValue() const override {return value;}
 };
 
 #endif

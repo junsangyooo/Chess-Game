@@ -8,6 +8,7 @@ class Rook : public Piece {
     bool promoted = false;
     int whenPromoted = -1;
     int whenFirstMove = -1;
+    const int value = 5;
 public:
     Rook(char piece);
     ~Rook();
@@ -21,6 +22,7 @@ public:
     int getWhenPromoted() {return whenPromoted;}
     void setWhenFirstMove(int value) override {whenFirstMove = value;}
     int getWhenFirstMove() {return whenFirstMove;}
+    int getValue() const override {return value;}
 };
 
 #endif

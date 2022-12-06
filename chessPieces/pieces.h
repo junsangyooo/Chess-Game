@@ -27,6 +27,7 @@ public:
     virtual int getWhenPromoted() {return -1;}
     virtual void setWhenFirstMove(int value) {}
     virtual int getWhenFirstMove() {return -1;}
+    virtual int getValue() const {return 0;}
 };
 
 #endif
