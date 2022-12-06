@@ -241,7 +241,7 @@ void Gui::drawBoard(std::string value, int posn1, int posn2, int posn3, int posn
 }
 
 void Gui::notify() {
-    for (int i = 0; i < 8; ++i) {
+    /*for (int i = 0; i < 8; ++i) {
         for (int j = 0; j <8;  ++j) {
             int posn = i*10 + j;
             char piece = chess->charAt(Position(posn));
@@ -262,6 +262,21 @@ void Gui::notify() {
                 drawKnight(j ,i, piece);
             } else if (piece == 'p' || piece == 'P'){
                  drawPawn(j, i, piece);
+            }
+        }
+    }*/
+    for (int i = 0; i < 8; ++i) {
+        for (int j = 0; j <8;  ++j) {
+            int posn = i*10 + j;
+            char piece = chess->charAt(Position(posn));
+            if ((i + j) % 2 == 0) {
+                xw.fillRectangle(j*30, i*30, 30, 30, xw.Orange);
+            } else {
+                xw.fillRectangle(j*30, i*30, 30, 30, xw.Brown);
+            }
+            if (piece == ' ' || piece == '-') {continue;}
+            else {
+                xw.drawString(j + 10, i + 10, piece);
             }
         }
     }

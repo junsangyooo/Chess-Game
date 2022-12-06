@@ -94,7 +94,7 @@ bool newGame() {
     std::string response;
     std::cin >> response;
     if (response == "yes") {return true;}
-    else if (response == "no") { return false;}
+    else { return false;}
 }
 
 
