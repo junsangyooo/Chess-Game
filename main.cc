@@ -91,6 +91,7 @@ Position strToPosn(std::string str) {
 
 
 bool newGame() {
+    std::cout << "Game ended. Do you want to play again? (yes/no)" << std::endl;
     std::string response;
     std::cin >> response;
     if (response == "yes") {return true;}
@@ -244,17 +245,15 @@ int main() {
                     whiteTurn = !whiteTurn;
                 }
             }
-            std::cout << "Game ended. Do you want to play again? (yes/no)" << std::endl;
-            bool restart = newGame();
-            if (!restart) {
-                break;
-            } else {
-                boardExist = false;
-                continue;
-            }
-            catch (std::out_of_range &e) {
-                std::cerr << e.what() << std::endl;
-                continue;
+            bool response = false;
+            while(!response) {
+                try {
+                    restart = newGame();
+                    response = true;    
+                }
+                catch (std::out_of_range &e) {
+                    std::cerr << e.what() << std::endl;
+                }
             }
         } else if (command == "setup") {
             std::string cmd;
