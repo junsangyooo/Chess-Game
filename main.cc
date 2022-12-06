@@ -127,110 +127,132 @@ int main() {
             control->setPlayer2(player2);
             bool player1IsComputer = false;
             bool player2IsComputer = false;
-            std::shared_ptr<Computer> computer;
+            std::shared_ptr<Computer> computerOne;
+            std::shared_ptr<Computer> computerTwo;
             if (player1 == "computer1") {
                 player1IsComputer = true;
-                computer = std::make_shared<LevelOne>(chess, board);
-                control->setComputerWhite(computer);
+                computerOne = std::make_shared<LevelOne>(chess, board);
             } else if (player1 == "computer2") {
                 player1IsComputer = true;
-                computer = std::make_shared<LevelTwo>(chess, board);
-                control->setComputerWhite(computer);
+                computerOne = std::make_shared<LevelTwo>(chess, board);
             } else if (player1 == "computer3") {
                 player1IsComputer = true;
-                computer = std::make_shared<LevelThree>(chess, board);
-                control->setComputerWhite(computer);
+                computerOne = std::make_shared<LevelThree>(chess, board);
             } else if (player1 == "computer4") {
                 player1IsComputer = true;
-                computer = std::make_shared<LevelFour>(chess, board);
-                control->setComputerWhite(computer);
-            } else if (player2 == "computer1") {
+                computerOne = std::make_shared<LevelFour>(chess, board);
+            }
+            if (player1IsComputer){
+                control->setComputerWhite(computerOne);
+            }
+            
+            if (player2 == "computer1") {
                 player2IsComputer = true;
-                computer = std::make_shared<LevelOne>(chess, board);
-                control->setComputerBlack(computer);
+                computerTwo = std::make_shared<LevelOne>(chess, board);
             } else if (player2 == "computer2") {
                 player2IsComputer = true;
-                computer = std::make_shared<LevelTwo>(chess, board);
-                control->setComputerBlack(computer);
+                computerTwo = std::make_shared<LevelTwo>(chess, board);
             } else if (player2 == "computer3") {
                 player2IsComputer = true;
-                computer = std::make_shared<LevelThree>(chess, board);
-                control->setComputerBlack(computer);
+                computerTwo = std::make_shared<LevelThree>(chess, board);
             } else if (player2 == "computer4") {
                 player2IsComputer = true;
-                computer = std::make_shared<LevelFour>(chess, board);
-                control->setComputerBlack(computer);
+                computerTwo = std::make_shared<LevelFour>(chess, board);
             }
+            if (player2IsComputer) {
+                control->setComputerBlack(computerTwo);
+            }
+
             std::string cmd;
             bool gameEnd = false;
             bool restart = false;
             while(!gameEnd) {
                 if (restart) {
-                    board = std::make_shared<Board>();;
+                    board = std::make_shared<Board>();
                     chess = std::make_shared<Chess>(board, sb);
                     control = std::make_shared<Controller>(chess);
                     textBoard = std::make_shared<Cli>(chess);
                     graphicBoard = std::make_shared<Gui>(chess);
                     chess->attach(textBoard);
                     chess->attach(graphicBoard);
+                    control->setPlayer1(player1);
+                    control->setPlayer2(player2);
+                    control->setPlayer1(player1);
+                    control->setPlayer2(player2);
+                    if (player1IsComputer) {
+                        control->setComputerWhite(computerOne);
+                    }
+                    if (player2IsComputer) {
+                        control->setComputerBlack(computerTwo);
+                    }
+                    whiteTurn = true;
+                    restart = false;
                 }
-                std::cin >> cmd;
                 if (whiteTurn) {
                     std::cout << "---WHITE TURN---" << std::endl;
                 } else {
                     std::cout << "---BLACK TURN---" << std::endl;
                 }
+                
+                std::cin >> cmd;
                 if (cmd == "resign") {
                     control->resign(whiteTurn);
-                    if (whiteTurn) {sb->addToBlack(1);}
-                    else {sb->addToWhite(1);}
-                    break;
+                    if (whiteTurn) {
+                        sb->addToBlack(1);
+                        std::cout << "Black wins!" << std::endl;
+                    }
+                    else {
+                        sb->addToWhite(1);
+                        std::cout << "White wins!" << std::endl;
+                    }
                 } else if (cmd == "move") {
                     if (whiteTurn && player1IsComputer) {
                         gameEnd = control->computerMove(whiteTurn);
                         whiteTurn = !whiteTurn;
-                        continue;
                     } else if (!whiteTurn && player2IsComputer) {
                         gameEnd = control->computerMove(whiteTurn);
                         whiteTurn = !whiteTurn;
-                        continue;
-                    }
-                    std::string posn1;
-                    std::string posn2;
-                    Position firstPosn;
-                    Position secondPosn;
-                    std::cin >> posn1 >> posn2;
-                    try {firstPosn = strToPosn(posn1);}
-                    catch(std::out_of_range &e) {
-                        std::cerr << e.what() << std::endl;
-                        continue;
-                    }
-                    try {secondPosn = strToPosn(posn2);}
-                    catch(std::out_of_range &e) {
-                        std::cerr << e.what() << std::endl;
-                        continue;
-                    }
-                    char piece = board->charAt(firstPosn);
-                    char promoted;
-                    if ((piece == 'p' && 60 <= secondPosn && secondPosn <= 67) || (piece == 'P' && 10 <= secondPosn && secondPosn <= 17)) {
-                        std::cin >> promoted;
-                        if (promoted != 'r' && promoted != 'R' && promoted != 'n' && promoted != 'N' && promoted != 'b' && promoted != 'B' && promoted != 'q' && promoted != 'Q') {
-                            std::cerr << "Please provide a valid piece." << std::endl;
-                            continue;
-                        }
-                        if (piece == 'p' && 'A' <= promoted && promoted <= 'Z') {
-                            std::cerr << "You cannot promote to the opponent's piece." << std::endl;
-                            continue;
-                        } else if (piece == 'P' && 'a' <= promoted && promoted <= 'z') {
-                            std::cerr << "You cannot promote to the opponent's piece." << std::endl;
-                            continue;
-                        }
-                        try {gameEnd = control->pawnPromote(firstPosn, secondPosn, whiteTurn, piece);}
-                        catch (std::out_of_range &e) {
+                    } else {
+                        std::string posn1;
+                        std::string posn2;
+                        Position firstPosn;
+                        Position secondPosn;
+                        std::cin >> posn1 >> posn2;
+                         try {firstPosn = strToPosn(posn1);}
+                        catch(std::out_of_range &e) {
                             std::cerr << e.what() << std::endl;
                             continue;
                         }
-                        continue;
+                        try {secondPosn = strToPosn(posn2);}
+                        catch(std::out_of_range &e) {
+                            std::cerr << e.what() << std::endl;
+                            continue;
+                        }
+
+                        char piece = board->charAt(firstPosn);
+
+                        //Check Pawn Promotion
+                        char promoted;
+                        if ((piece == 'p' && 60 <= secondPosn && secondPosn <= 67) || (piece == 'P' && 10 <= secondPosn && secondPosn <= 17)) {
+                            std::cin >> promoted;
+                            if (promoted != 'r' && promoted != 'R' && promoted != 'n' && promoted != 'N' && promoted != 'b' && promoted != 'B' && promoted != 'q' && promoted != 'Q') {
+                                std::cerr << "Please provide a valid piece." << std::endl;
+                                continue;
+                            }
+                            if (piece == 'p' && 'A' <= promoted && promoted <= 'Z') {
+                                std::cerr << "You cannot promote to the opponent's piece." << std::endl;
+                                continue;
+                            } else if (piece == 'P' && 'a' <= promoted && promoted <= 'z') {
+                                std::cerr << "You cannot promote to the opponent's piece." << std::endl;
+                                continue;
+                            }
+                            try {gameEnd = control->pawnPromote(firstPosn, secondPosn, whiteTurn, piece);}
+                            catch (std::out_of_range &e) {
+                                std::cerr << e.what() << std::endl;
+                                continue;
+                            }
+                            continue;
+                        }
                     }
                     try {gameEnd = control->move(firstPosn, secondPosn, whiteTurn);}
                     catch (std::out_of_range &e) {
@@ -300,7 +322,7 @@ int main() {
                         std::cerr << "Please provide a valid piece." << std::endl;
                         continue;
                     }
-                    baord->replace(piece, posn);
+                    board->replace(piece, posn);
                     changedPosn = ((posn / 10) * 10) + (posn % 10);
                 } else if (cmd == "-") {
                     std::string position;
