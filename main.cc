@@ -121,11 +121,11 @@ int main() {
         if (!boardExist) {
             whiteTurn = true;
             sb = std::make_shared<ScoreBoard>(0.0, 0.0);
-            std::shared_ptr<Board> board = std::make_shared<Board>();;
-            std::shared_ptr<Chess> chess = std::make_shared<Chess>(board, sb);
-            std::shared_ptr<Controller> control = std::make_shared<Controller>(chess);
-            std::shared_ptr<Cli> textBoard = std::make_shared<Cli>(chess);
-            std::shared_ptr<Gui> graphicBoard = std::make_shared<Gui>(chess);
+            board = std::make_shared<Board>();
+            chess = std::make_shared<Chess>(board, sb);
+            control = std::make_shared<Controller>(chess);
+            textBoard = std::make_shared<Cli>(chess);
+            graphicBoard = std::make_shared<Gui>(chess);
             chess->attach(textBoard);
             chess->attach(graphicBoard);
             boardExist = true;
@@ -136,14 +136,14 @@ int main() {
             std::string player1;
             std::string player2;
             std::cin >> player1 >> player2;
-            /*bool player1IsComputer = false;
+            bool player1IsComputer = false;
             bool player2IsComputer = false;
             std::shared_ptr<Computer> computerOne;
             std::shared_ptr<Computer> computerTwo;
-            if (player1 == "computer1") {
+            /*if (player1 == "computer1") {
                 player1IsComputer = true;
                 computerOne = std::make_shared<LevelOne>(chess, true, board);
-            } else if (player1 == "computer2") {
+            }/* else if (player1 == "computer2") {
                 player1IsComputer = true;
                 computerOne = std::make_shared<LevelTwo>(chess, true, board);
             } else if (player1 == "computer3") {
@@ -161,7 +161,7 @@ int main() {
             if (player2 == "computer1") {
                 player2IsComputer = true;
                 computerTwo = std::make_shared<LevelOne>(chess, true, board);
-            } else if (player2 == "computer2") {
+            }else if (player2 == "computer2") {
                 player2IsComputer = true;
                 computerTwo = std::make_shared<LevelTwo>(chess, true, board);
             } else if (player2 == "computer3") {
