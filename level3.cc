@@ -62,7 +62,6 @@ bool LevelThree::makeMove() {
         }
     }
 
-    bool found = false;
     if (max_value != 0) {
         char piece = board->charAt(avoiding);
         for (int i = 0; i < 8; ++i) {
@@ -80,9 +79,69 @@ bool LevelThree::makeMove() {
                             move->setCaptured(nullptr);
                             move->setPromoted(nullptr);
                             return chess->movePiece(move, whiteSide, 'p');
+                        } else {
+                            board->undoPromoted(move);
+                            move->setCaptured(nullptr);
+                            move->setPromoted(nullptr);
                         }
                     } else {
-
+                        move->setPromoted(board->getPiece(avoiding));
+                        board->move(move, 'q');
+                        if (underAttack(new_posn)) {
+                            board->undoPromoted(move);
+                            move->setPromoted(nullptr);
+                            return chess->movePiece(move, whiteSide, 'p');
+                        } else {
+                            board->undoPromoted(move);
+                            move->setPromoted(nullptr);
+                        }
+                    }
+                } else if ((piece == 'p' || piece == 'P') && (avoiding  - (whiteSide * 11) + (!whiteSide * 11) == new_posn || avoiding  - (whiteSide * 9) + (!whiteSide * 9) == new_posn)) {
+                    char captured = board->charAt(Position(((avoiding / 10) * 10) + (new_posn % 10)));
+                    if (captured == ' ' || captured == '-') {
+                        move->setCaptured(board->getPiece(Position(((avoiding / 10) * 10) + (new_posn % 10))));
+                        board->enPassant(move);
+                        if (underAttack(new_posn)) {
+                            board->undoEnPassant(move);
+                            move->setCaptured(nullptr);
+                            return chess->movePiece(move, whiteSide);
+                        } else {
+                            board->undoEnPassant(move);
+                            move->setCaptured(nullptr);
+                        }
+                    } else {
+                        move->setCaptured(board->getPiece(new_posn));
+                        board->move(move);
+                        if (underAttack(new_posn)) {
+                            board->undo(move);
+                            move->setCaptured(nullptr);
+                            return chess->movePiece(move, whiteSide);
+                        } else {
+                            board->undo(move);
+                            move->setCaptured(nullptr);
+                        }
+                    }
+                } else {
+                    char captured = board->charAt(Position(((avoiding / 10) * 10) + (new_posn % 10)));
+                    if (captured == ' ' || captured == '-') {
+                        board->move(move);
+                        if (underAttack(new_posn)) {
+                            board->undo(move);
+                            return chess->movePiece(move, whiteSide);
+                        } else {
+                            board->undo(move);
+                        }
+                    } else {
+                        move->setCaptured(board->getPiece(new_posn));
+                        board->move(move);
+                        if (underAttack(new_posn)) {
+                            board->undo(move);
+                            move->setCaptured(nullptr);
+                            return chess->movePiece(move, whiteSide);
+                        } else {
+                            board->undo(move);
+                            move->setCaptured(nullptr);
+                        }
                     }
                 }
             }
@@ -257,7 +316,7 @@ bool LevelThree::makeMove() {
             }
         }
     }
-    
+    bool found = false;
     int length = positions.size();
     //Just choose a random move
     while(!found) {
