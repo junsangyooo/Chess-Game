@@ -6,6 +6,26 @@ LevelThree::~LevelThree() {
     board = nullptr;  
 }
 
+bool LevelThree::underAttack(Position avoiding) {
+    std::shared_ptr<Move> attack;
+    for (int i = 0; i < 8; i++) {
+        for (int j = 0; j < 8; j++) {
+            Position posn = Position(i*10 + j);
+            char oppo = board->charAt(posn);
+            if ((whiteSide && 'a' <= oppo && oppo <= 'z') || (!whiteSide && 'A' <= oppo && oppo <= 'Z')) {
+                attack = std::make_shared<Move>(posn, org_posn);
+                if (chess->validMove(attack, !whiteSide)) {
+                    int value = board->getValue(org_posn);
+                    if (value > max_value) {
+                        max_value = value;
+                        avoiding = org_posn;
+                    }
+                }
+            }
+        }
+    }
+}
+
 
 bool LevelThree::makeMove() {
     std::vector<Position> positions;
@@ -56,22 +76,7 @@ bool LevelThree::makeMove() {
                     if (avoiding  - (whiteSide * 11) + (!whiteSide * 11) == new_posn || avoiding  - (whiteSide * 9) + (!whiteSide * 9) == new_posn) {
                         move->setCaptured(board->getPiece(new_posn));
                         board->move(move, 'q');
-                        for (int row = 0; row < 8; row++) {
-                            for (int col = 0; col < 8; col++) {
-                                Position posn = Position(row*10 + col);
-                                char oppo = board->charAt(posn);
-                                if ((whiteSide && 'a' <= oppo && oppo <= 'z') || (!whiteSide && 'A' <= oppo && oppo <= 'Z')) {
-                                    attack = std::make_shared<Move>(posn, org_posn);
-                                    if (chess->validMove(attack, !whiteSide)) {
-                                        int value = board->getValue(org_posn);
-                                        if (value > max_value) {
-                                            max_value = value;
-                                            avoiding = org_posn;
-                                        }
-                                    }
-                                }
-                            }
-                        }
+                        
                     }
                 }
             }

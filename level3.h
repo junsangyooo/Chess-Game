@@ -26,6 +26,7 @@ public:
     LevelThree(std::shared_ptr<Chess> chess, bool side, std::shared_ptr<Board> bd);
     ~LevelThree();
     bool makeMove() override;
+    bool underAttack(Position avoiding);
 };
 
 #endif
