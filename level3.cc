@@ -13,17 +13,14 @@ bool LevelThree::underAttack(Position avoiding) {
             Position posn = Position(i*10 + j);
             char oppo = board->charAt(posn);
             if ((whiteSide && 'a' <= oppo && oppo <= 'z') || (!whiteSide && 'A' <= oppo && oppo <= 'Z')) {
-                attack = std::make_shared<Move>(posn, org_posn);
+                attack = std::make_shared<Move>(posn, avoiding);
                 if (chess->validMove(attack, !whiteSide)) {
-                    int value = board->getValue(org_posn);
-                    if (value > max_value) {
-                        max_value = value;
-                        avoiding = org_posn;
-                    }
+                    return false;
                 }
             }
         }
     }
+    return true;
 }
 
 
@@ -76,7 +73,9 @@ bool LevelThree::makeMove() {
                     if (avoiding  - (whiteSide * 11) + (!whiteSide * 11) == new_posn || avoiding  - (whiteSide * 9) + (!whiteSide * 9) == new_posn) {
                         move->setCaptured(board->getPiece(new_posn));
                         board->move(move, 'q');
-                        
+                        if (underAttack(new_posn)) {
+                            return chess->movePiece(move, whiteSide, 'p');
+                        }
                     }
                 }
             }
