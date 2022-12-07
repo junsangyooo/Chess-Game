@@ -488,7 +488,6 @@ std::string Chess::stalemateTest(bool whiteTurn) {
                 for (int row = 0; row < 8; ++row) {
                     for (int col = 0; col < 8; ++col) {
                         Position tmp = Position(row*10 + col);
-                        if (posn == Position(73)) {std::cout << tmp << std::endl;}
                         auto move = std::make_shared<Move>(posn, tmp);
                         if (validMove(move, whiteTurn)) {
                             return "";
@@ -574,7 +573,6 @@ bool Chess::movePiece(std::shared_ptr<Move> movement, bool whiteTurn, char promo
     int when = moves.size();
     char piece = board->charAt(org_posn);
     char captured = board->charAt(new_posn);
-    
     // Check valid move and move
     bool valid = validMove(movement, whiteTurn, promote);
     if (!valid) {

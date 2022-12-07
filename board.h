@@ -42,6 +42,7 @@ public:
     void undoPromoted(std::shared_ptr<Move> movement);
     void undoEnPassant(std::shared_ptr<Move> movement);
     void undoCastling(std::shared_ptr<Move> movement);
+    int getValue(Position posn);
 };
 
 #endif

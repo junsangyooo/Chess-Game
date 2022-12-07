@@ -264,7 +264,7 @@ int main() {
                                 error = true;
                                 continue;
                             }
-                            try {gameEnd = control->pawnPromote(firstPosn, secondPosn, whiteTurn, piece);}
+                            try {gameEnd = control->pawnPromote(firstPosn, secondPosn, whiteTurn, promoted);}
                             catch (std::out_of_range &e) {
                                 std::cerr << e.what() << std::endl;
                                 error = true;
@@ -330,16 +330,21 @@ int main() {
                         std::cerr << "King should be not in check!!!" << std::endl;
                         continue;
                     }
+                    bool validPawn = true;
                     for(int i = 0; i < 8; ++i) {
                         for (int j = 0; j < 8; ++j) {
                             char piece = board->charAt(Position(10*i +j));
                             if ((i == 0 || i == 7) && (piece == 'p' || piece == 'P')) {
-                                std::cerr << "Pawn cannot start on the first or last row!!!" << std::endl;
-                                continue;
+                                validPawn = false;
                             }
                             if (piece == 'k') {blackKing++;}
                             else if (piece == 'K') {whiteKing++;}
                         }
+                    }
+                    
+                    if (!validPawn) {
+                        std::cerr << "Pawn cannot start on the first or last row!!!" << std::endl;
+                        continue;
                     }
                     if (whiteKing != 1 || blackKing != 1) {
                         std::cerr << "Each side can only have one King!!!" << std::endl;
@@ -359,9 +364,10 @@ int main() {
                     if (!validPiece(piece)) {
                         std::cerr << "Please provide a valid piece." << std::endl;
                         continue;
-                    }
+                    } 
                     board->replace(piece, posn);
                     changedPosn = ((posn / 10) * 10) + (posn % 10);
+                    control->display(changedPosn);
                 } else if (cmd == "-") {
                     std::string position;
                     std::cin >> position;
@@ -371,12 +377,11 @@ int main() {
                         std::cerr << e.what() << std::endl;
                         continue;
                     }
-                    char c = board->charAt(posn);
-                    if (c == ' ' || c == '-') {
-                        continue;
-                    }
-                    board->remove(posn);
-                    changedPosn = ((posn / 10) * 10) + (posn % 10);
+                    if (board->charAt(posn) != ' ' && board->charAt(posn) != '-') {
+                        board->remove(posn);
+                        changedPosn = ((posn / 10) * 10) + (posn % 10);
+                        control->display(changedPosn);
+                    } else {continue;}
                 } else if (cmd == "=") {
                     std::string colour;
                     std::cin >> colour;
@@ -386,12 +391,10 @@ int main() {
                         std::cerr << "Invalid colour!" << std::endl;
                         continue;
                     }
-                    continue;
                 } else {
                     std::cerr << "Please provide a valid command." << std::endl;
                     continue;
                 }
-                control->display(changedPosn);
             }
         } else {
             std::cerr << "Please provide a valid command." << std::endl;

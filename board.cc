@@ -295,3 +295,11 @@ void Board::undoCastling(std::shared_ptr<Move> movement) {
         remove(Position(new_posn - 1));
     }
 }
+
+
+int Board::getValue(Position posn) {
+    int col = posn % 10;
+    int row = posn / 10;
+    return bd[row][col]->getValue();
+}
+
