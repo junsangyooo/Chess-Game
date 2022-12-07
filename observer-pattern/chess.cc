@@ -508,9 +508,8 @@ std::string Chess::stalemateTest(bool whiteTurn) {
 }
 
 std::string Chess::checkmateTest(bool whiteTurn) {
-    std::cout << "checkmate test stalemate" << std::endl;
+    //std::cout << "checkmate test stalemate" << std::endl;
     std::string stalemate = stalemateTest(whiteTurn);
-    std::cout << "done" << std::endl;
     if (stalemate != "" && whiteTurn) {
         return "Checkmate! Black wins!";
     } else if (stalemate != "") {
@@ -682,14 +681,6 @@ char Chess::charAt(Position posn) const {
     return board->charAt(posn);
 }
 
-
-/*std::string Chess::checkTest() {
-    std::string white = whiteInCheck();
-    std::string black = blackInCheck();
-    if (white == "" && black == "") {return "";}
-    else if (black == "") {return white;}
-    return black;
-}*/
 
 Chess::~Chess() {
     int length = moves.size();
