@@ -3,9 +3,11 @@ setup
 + K h8
 + k h7
 done 
-- P a8
-- K h8
-- k h7
+- h7
+done
+- h8
+done
+- a8
 done
 game human1 human2
 resign
