@@ -239,8 +239,8 @@ bool Chess::validKing(std::shared_ptr<Move> movement, bool whiteTurn) {
 bool Chess::validQueen(std::shared_ptr<Move> movement, bool whiteTurn) {
     Position org_posn = movement->getOrg();
     Position new_posn = movement->getNew();
-    int diff = abs(org_posn - new_posn);
-    int org_row = (org_posn / 10) * 10;
+    int diff = abs(org_posn - new_posn);    //8
+    int org_row = (org_posn / 10) * 10; //70
     int tmp = 0;
 
     int index = org_posn;
@@ -286,7 +286,7 @@ bool Chess::validQueen(std::shared_ptr<Move> movement, bool whiteTurn) {
             }
         }
         if (tmp != 11) {return false;}
-    } else if (diff % 10) {tmp = 10;}
+    } else if (diff % 10 == 0) {tmp = 10;}
     else if (org_row <= new_posn && new_posn <= org_row+ 7) {tmp = 1;}
     else {return false;}
 
@@ -348,7 +348,10 @@ bool Chess::validRook(std::shared_ptr<Move> movement, bool whiteTurn) {
 bool Chess::validKnight(std::shared_ptr<Move> movement, bool whiteTurn) {
     Position org_posn = movement->getOrg();
     Position new_posn = movement->getNew();
-    if (new_posn != Position(org_posn - 21) && new_posn != Position(org_posn - 19) && new_posn != Position(org_posn - 12) && new_posn != Position(org_posn - 8) && new_posn != Position(org_posn + 8) && new_posn != Position(org_posn + 12) && new_posn != Position(org_posn + 19) && new_posn != Position(org_posn + 21)) {
+    if (new_posn != Position(org_posn - 21) && new_posn != Position(org_posn - 19) 
+    && new_posn != Position(org_posn - 12) && new_posn != Position(org_posn - 8) 
+    && new_posn != Position(org_posn + 8) && new_posn != Position(org_posn + 12) 
+    && new_posn != Position(org_posn + 19) && new_posn != Position(org_posn + 21)) {
         return false;
     }
 
@@ -481,20 +484,11 @@ std::string Chess::stalemateTest(bool whiteTurn) {
         for (int j = 0; j < 8; ++j) {
             Position posn = Position(i*10 + j);
             char piece = board->charAt(posn);
-            if (whiteTurn && 'A' <= piece && piece <= 'Z') {
-                for (int row = 0; row < 8; row++) {
-                    for (int col = 0; col < 8; col++) {
+            if ((whiteTurn && 'A' <= piece && piece <= 'Z') || (!whiteTurn && 'a' <= piece && piece <= 'z')) {
+                for (int row = 0; row < 8; ++row) {
+                    for (int col = 0; col < 8; ++col) {
                         Position tmp = Position(row*10 + col);
-                        auto move = std::make_shared<Move>(posn, tmp);
-                        if (validMove(move, whiteTurn)) {
-                            return "";
-                        }
-                    }
-                }
-            } else if (!whiteTurn && 'a' <= piece && piece <= 'z') {
-                for (int row = 0; row < 8; row++) {
-                    for (int col = 0; col < 8; col++) {
-                        Position tmp = Position(row*10 + col);
+                        if (posn == Position(73)) {std::cout << tmp << std::endl;}
                         auto move = std::make_shared<Move>(posn, tmp);
                         if (validMove(move, whiteTurn)) {
                             return "";
@@ -508,7 +502,6 @@ std::string Chess::stalemateTest(bool whiteTurn) {
 }
 
 std::string Chess::checkmateTest(bool whiteTurn) {
-    //std::cout << "checkmate test stalemate" << std::endl;
     std::string stalemate = stalemateTest(whiteTurn);
     if (stalemate != "" && whiteTurn) {
         return "Checkmate! Black wins!";
@@ -616,7 +609,6 @@ bool Chess::movePiece(std::shared_ptr<Move> movement, bool whiteTurn, char promo
         } else if (Position(org_posn  - (whiteTurn * 11) + (!whiteTurn * 11)) == new_posn || Position(org_posn  - (whiteTurn * 9) + (!whiteTurn * 9)) == new_posn) {
             if (captured == ' ' || captured == '-') {
                 board->setEnPassant(Position((org_posn / 10) + (new_posn % 10)), true);
-                //board->setEnPassant(org_posn, true);
                 movement->setCell1(((org_posn / 10)*10) + (new_posn % 10));
                 board->enPassant(movement);
             } else {
@@ -634,16 +626,16 @@ bool Chess::movePiece(std::shared_ptr<Move> movement, bool whiteTurn, char promo
     std::string status;
     if (whiteTurn){
         status = blackInCheck();
-        if (status == "Black is in check.") {
+        if (status != "") {
             std::string checkmate = checkmateTest(!whiteTurn);
-            if (checkmate == "Checkmate! White wins!") {
+            if (checkmate != "") {
                 status = checkmate;
                 gameEnd = true;
                 score->addToWhite(1);
             }
         } else {
             status = stalemateTest(!whiteTurn);
-            if (status == "Stalemate!") {
+            if (status != "") {
                 score->addToWhite(0.5);
                 score->addToBlack(0.5);
                 gameEnd = true;
@@ -651,9 +643,9 @@ bool Chess::movePiece(std::shared_ptr<Move> movement, bool whiteTurn, char promo
         }
     } else {
         status = whiteInCheck();
-        if (status == "White is in check.") {
+        if (status != "") {
             std::string checkmate = checkmateTest(!whiteTurn);
-            if (checkmate == "Checkmate! Black wins!") {
+            if (checkmate != "") {
                 status = checkmate;
                 gameEnd = true;
                 score->addToBlack(1);
