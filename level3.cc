@@ -38,7 +38,6 @@ bool LevelThree::makeMove() {
     }
 
     Position avoiding;
-    bool found = false;
     int max_value = 0;
     std::shared_ptr<Move> move;
     for(Position org_posn : positions) {
@@ -62,6 +61,8 @@ bool LevelThree::makeMove() {
             }
         }
     }
+
+    bool found = false;
     if (max_value != 0) {
         char piece = board->charAt(avoiding);
         for (int i = 0; i < 8; ++i) {
@@ -72,10 +73,16 @@ bool LevelThree::makeMove() {
                 if ((piece == 'p' || piece == 'P') && (piece == 'p' && 60 <= avoiding && avoiding <= 67) || (piece == 'P' && 10 <= avoiding && avoiding <= 17)) {
                     if (avoiding  - (whiteSide * 11) + (!whiteSide * 11) == new_posn || avoiding  - (whiteSide * 9) + (!whiteSide * 9) == new_posn) {
                         move->setCaptured(board->getPiece(new_posn));
+                        move->setPromoted(board->getPiece(avoiding));
                         board->move(move, 'q');
                         if (underAttack(new_posn)) {
+                            board->undoPromoted(move);
+                            move->setCaptured(nullptr);
+                            move->setPromoted(nullptr);
                             return chess->movePiece(move, whiteSide, 'p');
                         }
+                    } else {
+
                     }
                 }
             }
@@ -252,7 +259,6 @@ bool LevelThree::makeMove() {
     }
     
     int length = positions.size();
-    bool found = false;
     //Just choose a random move
     while(!found) {
         std::random_device rd; // obtain a random number from hardware
