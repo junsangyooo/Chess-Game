@@ -176,7 +176,6 @@ bool LevelTwo::makeMove() {
         std::uniform_int_distribution<> distr(1, length); // define the range
         int random = distr(gen);
 
-        std::cout << "random" << std::endl;
         Position org_posn = positions.at(random - 1);
         char piece = board->charAt(org_posn);
         for (int i = 0; i < 8; ++i) {
