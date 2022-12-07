@@ -24,6 +24,7 @@ class LevelTwo : public Computer{
     std::shared_ptr<Board> board;
 public:
     LevelTwo(std::shared_ptr<Chess> chess, bool side, std::shared_ptr<Board> bd);
+    bool promotionCheck(std::shared_ptr<Move> move, char promote, bool captured);
     ~LevelTwo();
     bool makeMove() override;
 };

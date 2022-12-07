@@ -398,7 +398,7 @@ bool Chess::validPawn(std::shared_ptr<Move> movement, bool whiteTurn, char promo
     if (promote != '.' && !atTheEdge) {return false;}
     if (Position(org_posn  - (whiteTurn * 11) + (!whiteTurn * 11)) == new_posn || Position(org_posn  - (whiteTurn * 9) + (!whiteTurn * 9)) == new_posn) {
         if (captured == ' ' || captured == '-') {
-            if (Position(40  - (whiteTurn * 10)) <= org_posn || org_posn <= Position(47 - (whiteTurn * 10))) {
+            if (Position(40  - (whiteTurn * 10)) <= org_posn && org_posn <= Position(47 - (whiteTurn * 10))) {
                 return enPassant(movement, whiteTurn);
             } else {
                 return false;
@@ -430,7 +430,6 @@ bool Chess::validPawn(std::shared_ptr<Move> movement, bool whiteTurn, char promo
 bool Chess::validMove(std::shared_ptr<Move> movement, bool whiteTurn, char promote) {
     Position org_posn = movement->getOrg();
     Position new_posn = movement->getNew();
-
      // Check whether the move does not change anything.
     if (org_posn == new_posn) {
         return false;
