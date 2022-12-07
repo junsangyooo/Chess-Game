@@ -1,5 +1,11 @@
 #include "level3.h"
 
-LevelThree::LevelThree(std::shared_ptr<Chess> chess, std::shared_ptr<Computer> computer, std::string whitePlayer, std::string blackPlayer): chess{chess}, computer{computer}, whitePlayer{whitePlayer}, blackPlayer{blackPlayer} {}
+LevelThree::LevelThree(std::shared_ptr<Chess> chess, bool side, std::shared_ptr<Board> bd): chess{chess}, whiteSide{side}, board{bd} {}
+LevelThree::~LevelThree() {
+    chess = nullptr;
+    board = nullptr;  
+}
 
-LevelThree::~LevelThree() {}
+bool LevelThree::makeMove() {
+    return false;
+}

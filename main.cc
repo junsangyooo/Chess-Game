@@ -149,13 +149,13 @@ int main() {
             } else if (player1 == "computer2") {
                 player1IsComputer = true;
                 computerOne = std::make_shared<LevelTwo>(chess, true, board);
-            }/* else if (player1 == "computer3") {
+            } else if (player1 == "computer3") {
                 player1IsComputer = true;
                 computerOne = std::make_shared<LevelThree>(chess, true, board);
             } else if (player1 == "computer4") {
                 player1IsComputer = true;
                 computerOne = std::make_shared<LevelFour>(chess, true, board);
-            }*/
+            }
             if (player1IsComputer){
                 control->setComputerWhite(computerOne);
             }
@@ -166,13 +166,13 @@ int main() {
             } else if (player2 == "computer2") {
                 player2IsComputer = true;
                 computerTwo = std::make_shared<LevelTwo>(chess, false, board);
-            }/* else if (player2 == "computer3") {
+            } else if (player2 == "computer3") {
                 player2IsComputer = true;
                 computerTwo = std::make_shared<LevelThree>(chess, false, board);
             } else if (player2 == "computer4") {
                 player2IsComputer = true;
                 computerTwo = std::make_shared<LevelFour>(chess, false, board);
-            }*/
+            }
             if (player2IsComputer) {
                 control->setComputerBlack(computerTwo);
             }

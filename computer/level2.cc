@@ -4,7 +4,7 @@ LevelTwo::LevelTwo(std::shared_ptr<Chess> chess, bool side, std::shared_ptr<Boar
 
 LevelTwo::~LevelTwo() {
     chess = nullptr;
-    board = nullptr;    
+    board = nullptr;
 }
 
 
