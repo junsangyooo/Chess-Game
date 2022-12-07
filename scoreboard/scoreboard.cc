@@ -21,10 +21,3 @@ void ScoreBoard::addToBlack(float value) {
     black += value;
 }
 
-/*std::ostream& operator<<(std::ostream &out, const ScoreBoard& sb) {
-    out << "Final Score:" << std::endl;
-    out << "White: " << sb.white << std::endl;
-    out << "Black: " << sb.black << std::endl;
-    return out;
-}
-*/
