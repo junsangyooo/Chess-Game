@@ -41,7 +41,6 @@ bool LevelThree::makeMove() {
     int max_value = 0;
     std::shared_ptr<Move> move;
     for(Position org_posn : positions) {
-        char piece = board->charAt(org_posn);
         std::shared_ptr<Position> oopos;
         std::shared_ptr<Move> attack;
         for (int i = 0; i < 8; i++) {
@@ -69,7 +68,7 @@ bool LevelThree::makeMove() {
                 move = std::make_shared<Move>(avoiding, Position(i*10 + j));
                 if (!chess->validMove(move, whiteSide)) {continue;}
                 Position new_posn = Position(i*10 + j);
-                if ((piece == 'p' || piece == 'P') && (piece == 'p' && 60 <= avoiding && avoiding <= 67) || (piece == 'P' && 10 <= avoiding && avoiding <= 17)) {
+                if ((piece == 'p' && 60 <= avoiding && avoiding <= 67) || (piece == 'P' && 10 <= avoiding && avoiding <= 17)) {
                     if (avoiding  - (whiteSide * 11) + (!whiteSide * 11) == new_posn || avoiding  - (whiteSide * 9) + (!whiteSide * 9) == new_posn) {
                         move->setCaptured(board->getPiece(new_posn));
                         move->setPromoted(board->getPiece(avoiding));

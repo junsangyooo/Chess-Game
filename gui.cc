@@ -242,7 +242,7 @@ void Gui::drawBoard(std::string value, int posn1, int posn2, int posn3, int posn
 }
 
 void Gui::notify() {
-    /*for (int i = 0; i < 8; ++i) {
+    for (int i = 0; i < 8; ++i) {
         for (int j = 0; j <8;  ++j) {
             int posn = i*10 + j;
             char piece = chess->charAt(Position(posn));
@@ -265,8 +265,8 @@ void Gui::notify() {
                  drawPawn(j, i, piece);
             }
         }
-    }*/
-    for (int i = 0; i < 8; ++i) {
+    }
+     /*for (int i = 0; i < 8; ++i) {
         for (int j = 0; j <8;  ++j) {
             int posn = i*10 + j;
             char piece = chess->charAt(Position(posn));
@@ -281,7 +281,8 @@ void Gui::notify() {
                 xw.drawString(j*30 + 10, i*30 + 15, tmp);
             }
         }
-    }
+    }*/
+   
 }
 
 Gui::Gui(std::shared_ptr<Chess> chess): chess{chess}, xw{240, 280} {
