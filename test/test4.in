@@ -12,3 +12,7 @@ move g4 d1
 move c4 f7
 move e8 e7
 move c3 d5
+move 
+resign
+no
+exit

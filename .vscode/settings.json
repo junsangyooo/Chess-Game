@@ -48,8 +48,6 @@
         "xstddef": "cpp",
         "xstring": "cpp",
         "xtr1common": "cpp",
-        "xutility": "cpp",
-        "algorithm": "cpp",
-        "random": "cpp"
+        "xutility": "cpp"
     }
 }

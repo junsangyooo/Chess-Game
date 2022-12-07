@@ -1,7 +1,9 @@
 game human human
 move e2 e4
-move e7 e5
-move b8 c6
-move f1 c4
-move g8 f6
-move h5 f7
+resign
+yes
+game Jun computer1
+move e2 e4
+resign
+no
+exit
