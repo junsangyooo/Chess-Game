@@ -141,7 +141,6 @@ bool Chess::validBishop(std::shared_ptr<Move> movement, bool whiteTurn) {
     Position org_posn = movement->getOrg();
     Position new_posn = movement->getNew();
     int diff = abs(org_posn - new_posn);
-    int org_row = (org_posn / 10) * 10;
     int tmp = 0;
 
     int index = org_posn;
