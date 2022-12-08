@@ -140,50 +140,59 @@ bool Chess::castling(std::shared_ptr<Move> movement, bool whiteTurn) {
 bool Chess::validBishop(std::shared_ptr<Move> movement, bool whiteTurn) {
     Position org_posn = movement->getOrg();
     Position new_posn = movement->getNew();
+    int diff = abs(org_posn - new_posn);
+    int org_row = (org_posn / 10) * 10;
     int tmp = 0;
-    bool nine = false;
+
     int index = org_posn;
-    while(true) {
-        if (org_posn > new_posn) {
-            index -= 9;
-            if (index == new_posn) {
-                nine = true;
-                tmp = 9;
-                break;
-            } else if (index % 10 == 7) {
-                break;
-            }
-        } else {
-            index += 9;
-            if (index == new_posn) {
-                nine = true;
-                tmp = 9;
-                break;
-            } else if (index % 10 == 0) {
-                break;
-            }
-        }
-    }
-    while(!nine) {
-        if (org_posn > new_posn) {
-            index -= 11;
-            if (index == new_posn) {
-                tmp = 11;
-                break;
-            } else if (index % 10 == 0) {
-                break;
-            }
-        } else {
-            index += 11;
-            if (index == new_posn) {
-                tmp = 11;
-                break;
-            } else if (index % 10 == 7) {
-                break;
+    if (diff % 9 == 0) {
+        while(true) {
+            if (org_posn > new_posn) {
+                if (index % 10 == 7) {
+                    break;
+                } else if (index == new_posn) {
+                    tmp = 9;
+                    break;
+                } else {
+                    index -= 9;
+                }
+            } else {
+                if (index % 10 == 0) {
+                    break;
+                } else if (index == new_posn) {
+                    tmp = 9;
+                    break;
+                } else {
+                    index += 9;
+                }
             }
         }
+        if (tmp != 9) {return false;}
+    } else if (diff % 11 == 0) {
+        while(true) {
+            if (org_posn > new_posn) {
+                if (index % 10 == 0) {
+                    break;
+                } else if (index == new_posn) {
+                    tmp = 11;
+                    break;
+                } else {
+                    index -= 11;
+                }
+            } else {
+                if (index % 10 == 7) {
+                    break;
+                } else if (index == new_posn) {
+                    tmp = 11;
+                    break;
+                } else {
+                    index += 11;
+                }
+            }
+        }
+        if (tmp != 11) {return false;}
     }
-    if (tmp == 0) {return false;}
+    else {return false;}
 
     for (int i = org_posn - tmp; i > new_posn; i -= tmp) {
         char piece = board->charAt(Position(i));
@@ -239,28 +248,30 @@ bool Chess::validKing(std::shared_ptr<Move> movement, bool whiteTurn) {
 bool Chess::validQueen(std::shared_ptr<Move> movement, bool whiteTurn) {
     Position org_posn = movement->getOrg();
     Position new_posn = movement->getNew();
-    int diff = abs(org_posn - new_posn);    //8
-    int org_row = (org_posn / 10) * 10; //70
+    int diff = abs(org_posn - new_posn);
+    int org_row = (org_posn / 10) * 10;
     int tmp = 0;
 
     int index = org_posn;
     if (diff % 9 == 0) {
         while(true) {
             if (org_posn > new_posn) {
-                index -= 9;
-                if (index == new_posn) {
+                if (index % 10 == 7) {
+                    break;
+                } else if (index == new_posn) {
                     tmp = 9;
                     break;
-                } else if (index % 10 == 7) {
-                    break;
+                } else {
+                    index -= 9;
                 }
             } else {
-                index += 9;
-                if (index == new_posn) {
+                if (index % 10 == 0) {
+                    break;
+                } else if (index == new_posn) {
                     tmp = 9;
                     break;
-                } else if (index % 10 == 0) {
-                    break;
+                } else {
+                    index += 9;
                 }
             }
         }
@@ -268,20 +279,22 @@ bool Chess::validQueen(std::shared_ptr<Move> movement, bool whiteTurn) {
     } else if (diff % 11 == 0) {
         while(true) {
             if (org_posn > new_posn) {
-                index -= 11;
-                if (index == new_posn) {
+                if (index % 10 == 0) {
+                    break;
+                } else if (index == new_posn) {
                     tmp = 11;
                     break;
-                } else if (index % 10 == 0) {
-                    break;
+                } else {
+                    index -= 11;
                 }
             } else {
-                index += 11;
-                if (index == new_posn) {
+                if (index % 10 == 7) {
+                    break;
+                } else if (index == new_posn) {
                     tmp = 11;
                     break;
-                } else if (index % 10 == 7) {
-                    break;
+                } else {
+                    index += 11;
                 }
             }
         }

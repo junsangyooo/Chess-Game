@@ -36,7 +36,6 @@ bool LevelTwo::makeMove() {
         }
     }
     
-    std::cout << "first" << std::endl;
     std::shared_ptr<Move> move;
     // Find to way to check first
     for (Position org_posn : positions) {
@@ -152,7 +151,7 @@ bool LevelTwo::makeMove() {
             }
         }
     }
-    std::cout << "second" << std::endl;
+
     //Noe we find capturing move
     for (Position org_posn: positions) {
         char piece = board->charAt(org_posn);
@@ -201,7 +200,6 @@ bool LevelTwo::makeMove() {
         }
     }
     
-std::cout << "third" << std::endl;
     int length = positions.size();
     bool found = false;
     //Just choose a random move
