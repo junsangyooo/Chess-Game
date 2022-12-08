@@ -179,7 +179,7 @@ bool LevelTwo::makeMove() {
         } else {
             for (int i = 0; i < 8; i++) {
                 for (int j = 0; j < 8; j++) {
-                    Position new_posn = Position(1*10 + j);
+                    Position new_posn = Position(i*10 + j);
                     char tmp = board->charAt(new_posn);
                     move = std::make_shared<Move>(org_posn, new_posn);
                     if ((whiteSide && 'a' <= tmp && tmp <= 'z') || (!whiteSide && 'A' <= tmp && tmp <= 'Z')) {
