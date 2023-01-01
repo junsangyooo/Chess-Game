@@ -7,3 +7,4 @@ Different type of pieces have different available moves, and it can capture the 
 The game can end by either a checkmate, stalemate, or resignation. Checkmate happens when one of the players is threatening the other player's king, and it cannot move to any other squares, cannot be protected by another piece and the checking piece cannot be captured. If all of these conditions are met, the attacking player wins via checkmate. A stalemate is when the player to move has no legal moves but is not in check, it is therefore a draw. If a player chooses to resign, then the opposing player wins.</br></br>
 
 <img align="left" alt="C" width="30px" style="padding-right:10px;" src="https://github.com/junsangyooo/Chess-Game/blob/document/uml.png"/>
+![Alt text](uml.png?raw=true)
