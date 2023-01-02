@@ -8,7 +8,6 @@
 
 ## Description
 This project is to implement a chess game from A to Z using C++ in Linux encvironment.<br/>
-<br/>
 
-For more information about this project, please visit [here](https://github.com/junsangyooo/Chess-Game/blob/main/document/document.md)
+For more information about this project, please visit [here](/document/document.md)
 
