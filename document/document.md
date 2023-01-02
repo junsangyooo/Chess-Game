@@ -11,54 +11,53 @@ Checkmate happens when one of the players is threatening the other player's king
 cannot be protected by another piece and the checking piece cannot be captured. </br>
 If all of these conditions are met, the attacking player wins via checkmate. 
 A stalemate is when the player to move has no legal moves but is not in check, it is therefore a draw. If a player chooses to resign, then the opposing player wins.</br>
+</br>
+
 ## UML
 
 ![uml](https://user-images.githubusercontent.com/70479629/210186831-fa7318ec-01ba-4a34-966b-79a576f4f2e2.png) </br>
 </br>
 
 ## Overview
-The project is a implementation of the game of chess. It includes classes for representing the chess board, individual pieces, moves, and the overall game. </br>
+The project is a implementation of the game of chess. It includes classes for representing the chess board, individual pieces, moves, and the overall game. 
 The project also includes classes for implementing computer players at different levels of difficulty, as well as classes for displaying the game using a command line interface or a graphical user interface.</br>
 </br>
 
 The main class for the chess game is the Chess class, which maintains the state of the game and provides methods for making moves, 
-checking for check or checkmate, and undoing moves.</br>
+checking for check or checkmate, and undoing moves. 
 The Chess class also maintains a Scoreboard object, which tracks the score and any special moves (such as castling or en passant) made during the game.</br>
 </br>
 
-The Pieces class is an abstract base class that defines the common behavior and attributes of all chess pieces. </br>
-It includes methods for checking if a move is valid, as well as for checking for special moves such as castling or en passant.</br>
+The Pieces class is an abstract base class that defines the common behavior and attributes of all chess pieces. 
+It includes methods for checking if a move is valid, as well as for checking for special moves such as castling or en passant. 
 Each specific type of piece (e.g. King, Queen, Rook, etc.) is represented by a subclass of Pieces, which overrides the methods as necessary 
 to implement the unique rules and behavior of that piece.</br>
 </br>
 
 The Move class represents a single move made in the game, and includes information about the original and new positions of the piece, 
-any piece that was captured, and any promotion that occurred.</br>
+any piece that was captured, and any promotion that occurred. 
 The class also maintains a string to track any special status or comments associated with the move.</br>
 </br>
 
 The Controller class provides a high-level interface for playing a game of chess, including methods for moving pieces, checking the game state, 
-undoing moves, and handling pawn promotions.</br>
+undoing moves, and handling pawn promotions. 
 The Controller also has references to Computer objects, which can be used to play against the computer at different levels of difficulty.</br>
 </br>
 
-The Observer classes, Cli and Gui, provide interfaces for displaying the game state and receiving notifications of changes. </br>
+The Observer classes, Cli and Gui, provide interfaces for displaying the game state and receiving notifications of changes. 
 The Cli class implements a command line interface, while the Gui class uses the XWindow library to draw the game board and pieces using graphical elements.</br>
 </br>
 
-The Computer class is an abstract base class that defines the common behavior and attributes of computer players.</br>
+The Computer class is an abstract base class that defines the common behavior and attributes of computer players. 
 It includes methods for selecting a move, as well as for adjusting the difficulty level. 
 The specific levels of difficulty (e.g. Level1, Level2, etc.) are represented by subclasses of Computer, which override the methods as necessary to implement the desired level of AI.</br>
 </br>
 
 Our ‘Board’ class simply represents the 8 × 8 chess board by using a 2D array of characters.</br>
-</br>
 
-The project save the score of all games in the ‘ScoreBoard’ class.</br>\
-</br>
+The project save the score of all games in the ‘ScoreBoard’ class.</br>
 
 The enumeration class ‘Position’ keeps track of all the pieces position on the board.</br>
-</br>
 </br>
 
 ## Design
